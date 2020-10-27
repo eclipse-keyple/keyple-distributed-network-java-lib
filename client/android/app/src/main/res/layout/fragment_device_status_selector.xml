@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/tickets_block_space"
+        android:clipToPadding="false">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <LinearLayout
+            android:id="@+id/not_found_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ticket_btn"
+            android:backgroundTint="@color/light_blue"
+            android:elevation="@dimen/select_ticket_elevation"
+            android:layout_marginTop="@dimen/tickets_block_space"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline"
+            app:layout_constraintBottom_toTopOf="@id/empty_btn"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/device_slct_text_top_margin"
+                android:text="@string/device_not_found"
+                style="@style/buy_text_info_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/empty_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ticket_btn"
+            android:backgroundTint="@color/light_blue"
+            android:elevation="@dimen/select_ticket_elevation"
+            android:layout_marginTop="@dimen/tickets_block_space"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/not_found_btn"
+            app:layout_constraintBottom_toTopOf="@id/tickets_btn"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/device_slct_text_top_margin"
+                android:text="@string/device_empty"
+                style="@style/buy_text_info_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tickets_btn"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ticket_btn"
+            android:backgroundTint="@color/light_blue"
+            android:elevation="@dimen/select_ticket_elevation"
+            android:layout_marginTop="@dimen/tickets_block_space"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/empty_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/device_slct_text_top_margin"
+                android:text="@string/device_with_tickets"
+                style="@style/buy_text_info_bold" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

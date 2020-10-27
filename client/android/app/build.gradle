@@ -1,0 +1,193 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: "androidx.navigation.safeargs"
+
+def versionMajor = 0
+def versionMinor = 0
+def versionPatch = 0
+def versionBeta = 1 //Use 99 if beta is over and going to production.
+
+Properties properties = new Properties()
+if (project.rootProject.file("local.properties").exists()) {
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "org.cna.keyple.demo.sale.android.nfc.slave"
+        //applicationId "org.keyple.examples.wizway"
+
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBeta
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        testInstrumentationRunner "org.cna.keyple.demo.sale.android.nfc.slave.util.TestRunner"
+    }
+
+
+    signingConfigs {
+        //signing config for wizway
+        if (properties.containsKey("path_to_se_registered_keystore")) {
+            release {
+                storeFile file(properties["path_to_se_registered_keystore"])
+                keyAlias 'keyplewizway'
+                keyPassword 'keyplewizway'
+                storePassword 'keyplewizway'
+            }
+        }
+    }
+
+    buildTypes {
+        if (properties.containsKey("path_to_se_registered_keystore")) {
+            debug {
+                signingConfig signingConfigs.release
+            }
+        }
+        debug {
+            versionNameSuffix "-DEBUG"
+            //applicationIdSuffix ".debug"
+            resValue "string", "app_name", "Keyple Demo"
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "Keyple Demo"
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        warningsAsErrors false
+        abortOnError true // Fail early.
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    /* fixes espresso conflict with supportAnnotation and androidSupport new versions */
+    configurations.all {
+        resolutionStrategy {
+            force "com.android.support:support-annotations:$supportLibraryVersion"
+            force "com.android.support:appcompat-v7:$supportLibraryVersion"
+            force "com.android.support:design:$supportLibraryVersion"
+            force "com.android.support:recyclerview-v7:$supportLibraryVersion"
+            force "com.android.support:support-compat:$supportLibraryVersion"
+            force "com.android.support:support-core-ui:$supportLibraryVersion"
+            force "com.android.support:support-core-utils:$supportLibraryVersion"
+            force "com.android.support:support-fragment:$supportLibraryVersion"
+        }
+    }
+    packagingOptions {
+        exclude 'simplelogger.properties'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE.md'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/keyple-core.properties'
+        exclude 'config.properties'
+    }
+}
+
+preBuild.doFirst {
+    println project.name + " - Using keyple_version parameter with value " + keyple_version
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Keyple Java Component
+    implementation group: 'org.eclipse.keyple', name: 'keyple-java-core', version: keyple_version
+    implementation group: 'org.eclipse.keyple', name: 'keyple-java-calypso', version: keyple_version
+    implementation group: 'org.eclipse.keyple', name: 'keyple-java-plugin-remotese', version: keyple_version
+    implementation (group: 'org.eclipse.keyple', name: 'keyple-android-plugin-nfc', version: keyple_version)
+
+//    // example for remotese
+//    implementation (project(path: ":calypso:example-calypso-remotese")){
+//        exclude group: 'org.slf4j'
+//    }
+
+    /*
+     * Add wizway plugin
+     */
+//    implementation (project(path: ':keyple-plugin-android-wizway')){
+//        exclude group: 'org.slf4j'
+//    }
+
+//    implementation project(':nfcLib-1.1.12-release')
+
+    //keyple logging
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.arcao:slf4j-timber:3.1@aar' //SLF4J binding for Timber
+//    implementation ('com.github.tony19:logback-android:1.1.1-12'){
+//        exclude group: 'org.slf4j'
+//    }
+
+    //Navigation
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+
+    // RxJava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroidVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    implementation "org.java-websocket:Java-WebSocket:1.3.9"
+
+    implementation "com.squareup.retrofit2:retrofit:2.4.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.4.0"
+
+    implementation "org.java-websocket:Java-WebSocket:1.3.9"
+
+    // Android Architecture components dependencies
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.1.0'
+
+    // Dagger dependencies
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+
+    // Lottie for animation
+    implementation "com.airbnb.android:lottie:2.5.0"
+
+    // Testing
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexmakerVersion"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+}

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.34" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right_anim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.66" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/big_text"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_anim"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_anim"
+            app:layout_constraintTop_toTopOf="@id/guideline_top"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+
+        <LinearLayout
+            android:id="@+id/card_content_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/card_summary_lateral_margin"
+            android:layout_marginEnd="@dimen/card_summary_lateral_margin"
+            android:backgroundTint="@color/blue"
+            android:elevation="@dimen/select_ticket_elevation"
+            android:background="@drawable/round_rectangle"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/last_validation_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_title"
+                android:textColor="@color/white"
+                android:background="@color/transparent"
+                android:fontFamily="@font/worksans_bold"
+                android:textSize="@dimen/big_text_size"
+                android:gravity="center"
+                android:padding="15dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/card_summary_content_padding"
+                android:paddingBottom="@dimen/card_summary_content_padding">
+
+                <TextView
+                    android:id="@+id/title_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/medium_text_size"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/card_summary_content_padding"/>
+
+                <TextView
+                    android:id="@+id/season_pass_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="@dimen/medium_text_size"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/card_summary_content_padding"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/big_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/big_text_size"
+            android:fontFamily="@font/worksans_bold"
+            app:layout_constraintTop_toBottomOf="@id/animation"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_txt"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_txt"
+            app:layout_constraintBottom_toTopOf="@id/small_desc"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/small_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/worksans_regular"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintTop_toBottomOf="@id/big_text"
+            app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right_txt"
+            app:layout_constraintStart_toStartOf="@id/guideline_left_txt"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:id="@+id/last_validation_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/buy_btn"
+            android:background="@color/light_blue"
+            android:paddingStart="@dimen/card_summary_lateral_margin"
+            android:paddingEnd="@dimen/card_summary_lateral_margin"
+            android:paddingTop="@dimen/last_validation_padding_vertical"
+            android:paddingBottom="@dimen/last_validation_padding_vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/last_validation_title"
+                android:textSize="@dimen/small_text_size"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/worksans_bold"/>
+
+            <TextView
+                android:id="@+id/last_validation_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/smaller_text"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/worksans_regular"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buy_btn"
+            android:text="@string/buy_titles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            style="@style/Bottom_Btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

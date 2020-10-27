@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.cna.keyple.demo.sale.android.nfc.slave.viewModels.SettingsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/tickets_block_space"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/server_ip_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_ip"
+                style="@style/buy_text_info_regular"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <EditText
+                android:id="@+id/server_ip_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.serverIp}"
+                android:singleLine="true"
+                android:gravity="end"
+                style="@style/buy_text_info_medium"
+                android:layout_marginStart="@dimen/settings_margin"
+                android:background="@color/light_blue"
+                android:padding="@dimen/settings_edit_padding"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/server_ip_label"
+                />
+        </androidx.constraintlayout.ConstraintLayout>
+
+        <View
+            android:id="@+id/ip_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_blue"
+            android:layout_marginTop="@dimen/settings_margin"
+            android:layout_marginBottom="@dimen/settings_margin" />
+
+        <androidx.constraintlayout.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/server_port_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_port"
+                style="@style/buy_text_info_regular"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <EditText
+                android:id="@+id/server_port_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@={@={`` + viewModel.serverPort}}"
+                android:inputType="number"
+                android:singleLine="true"
+                android:gravity="end"
+                style="@style/buy_text_info_medium"
+                android:layout_marginStart="@dimen/settings_margin"
+                android:background="@color/light_blue"
+                android:padding="@dimen/settings_edit_padding"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/server_port_label"/>
+
+        </androidx.constraintlayout.ConstraintLayout>
+
+        <View
+            android:id="@+id/port_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_blue"
+            android:layout_marginTop="@dimen/settings_margin"
+            android:layout_marginBottom="@dimen/settings_margin" />
+
+        <androidx.constraintlayout.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/protocol_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/protocol"
+                style="@style/buy_text_info_regular"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <EditText
+                android:id="@+id/protocol_label_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.serverProtocol}"
+                android:singleLine="true"
+                android:gravity="end"
+                style="@style/buy_text_info_medium"
+                android:layout_marginStart="@dimen/settings_margin"
+                android:padding="@dimen/settings_edit_padding"
+                android:background="@color/light_blue"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/protocol_label"/>
+
+        </androidx.constraintlayout.ConstraintLayout>
+
+        <View
+            android:id="@+id/protocol_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_blue"
+            android:layout_marginTop="@dimen/settings_margin"
+            android:layout_marginBottom="@dimen/settings_margin" />
+
+        <androidx.constraintlayout.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/protocol_line">
+
+            <Button
+                android:id="@+id/ping_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ping_action"
+                android:backgroundTint="@color/light_blue"
+                android:elevation="4dp"
+                style="@style/buy_text_info_medium"
+                app:layout_constraintLeft_toLeftOf="parent"
+                 />
+
+            <TextView
+                android:id="@+id/ping_result"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                style="@style/buy_text_info_reg_small"
+                android:gravity="center_horizontal"
+                android:layout_marginStart="@dimen/settings_margin"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/ping_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/restart"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/ping_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/restart"/>
+
+            <Button
+                android:id="@+id/restart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/restart"
+                style="@style/Bottom_Btn"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.ConstraintLayout>
+    </LinearLayout>
+</layout>

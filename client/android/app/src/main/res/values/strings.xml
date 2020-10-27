@@ -1,0 +1,100 @@
+<resources>
+    <string name="card_not_valid_title">Card not valid</string>
+    <string name="transaction_cancelled_title">Transaction cancelled</string>
+    <string name="card_content_title">Card content</string>
+    <string name="charge_card_title">Title loading</string>
+    <string name="payment_validated_title">Payment validated</string>
+    <string name="title_purchase_title">Title purchase</string>
+    <string name="title_loading_title">Title loading</string>
+    <string name="title_loaded_title">Title loaded</string>
+    <string name="device_selection_title">Home</string>
+    <string name="no_title_title">No valid title</string>
+    <string name="error_title">An error occurred</string>
+    <string name="present_card_title">Present card</string>
+    <string name="device_connected_title">Confirmation</string>
+    <string name="device_not_connected_title">Not reachable</string>
+    <string name="device_loading">Loading</string>
+
+    <string name="splash_title">The Open Source SDK for ticketing</string>
+    <string name="present_travel_card_label">Please present a travel card</string>
+    <string name="card_invalid_label">Sorry, this card is not valid on this network</string>
+    <string name="card_invalid_desc">This is a \"%s\" card.</string>
+    <string name="transaction_cancelled_label">Sorry, your title hasn\'t been loaded</string>
+
+    <string name="transaction_cancelled_desc">The transaction has been cancelled.</string>
+    <string name="transaction_cancelled_wrong_card">Please present the same card.</string>
+    <string name="validation_confirmation_label">Your payment has been validated</string>
+    <string name="charging_success_label">Well done!</string>
+    <string name="charging_success_desc">have been loaded.</string>
+    <string name="no_valid_label">You have no valid title on this %s</string>
+    <string name="error_label">An error occurred</string>
+
+    <string name="contactless_card">Contactless card</string>
+    <string name="sim_card">SIM card</string>
+    <string name="bracelet">Bracelet</string>
+    <string name="multi_service_card">Multi-service bank card</string>
+
+    <string name="device_invalid">Device invalid</string>
+    <string name="device_not_found">Device not found</string>
+    <string name="device_empty">Device empty</string>
+    <string name="device_with_tickets">Device with tickets</string>
+
+    <string name="device_connected_description">The %s is connected</string>
+    <string name="device_not_connected_description">The %s is not reachable</string>
+
+    <string name="ticket_selection">You chose :</string>
+    <string name="device_selection">Choose a device</string>
+    <string name="choose_trips">Choose a number of trips</string>
+    <string name="your_title">Your title</string>
+    <string name="season_pass_valid">SEASON pass valid until %s</string>
+    <string name="last_validation_title">Last validation</string>
+    <string name="at_location">at %s</string>
+    <string name="at_date">%s at %s</string>
+    <string name="try_again">Try again</string>
+    <string name="buy_titles">Buy title</string>
+    <string name="load_card">Load my %s</string>
+    <string name="credit_card_details">Credit card details</string>
+    <string name="card_number">Card number</string>
+    <string name="expiry">Expiry</string>
+    <string name="CVV">CVV</string>
+    <string name="pay">Pay</string>
+    <string name="prefill_card">1111 1111 1111 1111</string>
+    <string name="prefill_expiry">06/19</string>
+    <string name="prefill_cvv">123</string>
+
+    <string name="card_reader_label">Home</string>
+    <string name="menu">Menu</string>
+    <string name="action_settings">Settings</string>
+    <string name="scan_another_card">Present a card</string>
+    <string name="select_scenario">Select Scenario</string>
+
+    <string name="present_card">Present your card to charge your tickets</string>
+    <string name="finish_charge">Let\'s travel</string>
+
+    <string name="ticket_price">%d,00 €</string>
+    <plurals name="trips_lefts">
+        <item quantity="zero">No trip left</item>
+        <item quantity="one">%d trip left</item>
+        <item quantity="other">%d trips left</item>
+    </plurals>
+    <plurals name="x_tickets">
+        <item quantity="one">%d trip</item>
+        <item quantity="other">%d trips</item>
+    </plurals>
+    <plurals name="charging_success_description">
+        <item quantity="one">%d trip has been loaded.</item>
+        <item quantity="other">%d trips have been loaded.</item>
+    </plurals>
+    <plurals name="tickets_left">
+        <item quantity="one">You now have %d ticket left.</item>
+        <item quantity="other">You now have %d tickets left.</item>
+    </plurals>
+
+    <!-- Settings -->
+    <string name="server_ip">Server IP</string>
+    <string name="server_port">Server Port</string>
+    <string name="protocol">Protocol</string>
+    <string name="ping_action">Server state</string>
+    <string name="restart">Restart</string>
+
+</resources>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2020 Calypso Networks Association https://www.calypsonet-asso.org/
+  ~
+  ~ See the NOTICE file(s) distributed with this work for additional information
+  ~ regarding copyright ownership.
+  ~
+  ~ This program and the accompanying materials are made available under the terms of the
+  ~ Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0
+  ~
+  ~ SPDX-License-Identifier: EPL-2.0
+  -->
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/appBarLayout" />
+
+    <TextView
+        android:id="@+id/contactlessCardSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contactless_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/contactlessCardGroup"/>
+
+    <RadioGroup
+        android:id="@+id/contactlessCardGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/contactlessCardSetting"
+        app:layout_constraintBottom_toTopOf="@id/firstLine"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/contactlessCardEnable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable"
+            android:onClick="onContactlessRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/contactlessCardDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:onClick="onContactlessRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/contactlessCardHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide"
+            android:onClick="onContactlessRadioButtonClicked"/>
+    </RadioGroup>
+
+    <View
+        android:id="@+id/firstLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_blue"
+        android:layout_marginTop="@dimen/settings_margin"
+        android:layout_marginBottom="@dimen/settings_margin"
+        app:layout_constraintTop_toBottomOf="@id/contactlessCardGroup"
+        app:layout_constraintBottom_toTopOf="@id/simCardSetting"/>
+
+    <TextView
+        android:id="@+id/simCardSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sim_card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstLine"
+        app:layout_constraintBottom_toTopOf="@id/simCardGroup"/>
+
+    <RadioGroup
+        android:id="@+id/simCardGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/simCardSetting"
+        app:layout_constraintBottom_toTopOf="@id/secondLine"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/simCardEnable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable"
+            android:onClick="onSimRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/simCardDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:onClick="onSimRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/simCardHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide"
+            android:onClick="onSimRadioButtonClicked"/>
+    </RadioGroup>
+
+    <View
+        android:id="@+id/secondLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_blue"
+        android:layout_marginTop="@dimen/settings_margin"
+        android:layout_marginBottom="@dimen/settings_margin"
+        app:layout_constraintTop_toBottomOf="@id/simCardGroup"
+        app:layout_constraintBottom_toTopOf="@id/wearableCardSetting"/>
+
+    <TextView
+        android:id="@+id/wearableCardSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wearable"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/secondLine"
+        app:layout_constraintBottom_toTopOf="@id/wearableCardGroup"/>
+
+    <RadioGroup
+        android:id="@+id/wearableCardGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/wearableCardSetting"
+        app:layout_constraintBottom_toTopOf="@id/thirdLine"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/wearableCardEnable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable"
+            android:onClick="onWearableRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/wearableCardDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:onClick="onWearableRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/wearableCardHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide"
+            android:onClick="onWearableRadioButtonClicked"/>
+    </RadioGroup>
+
+    <View
+        android:id="@+id/thirdLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_blue"
+        android:layout_marginTop="@dimen/settings_margin"
+        android:layout_marginBottom="@dimen/settings_margin"
+        app:layout_constraintTop_toBottomOf="@id/wearableCardGroup"
+        app:layout_constraintBottom_toTopOf="@id/embeddedCardSetting"/>
+
+    <TextView
+        android:id="@+id/embeddedCardSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/embedded_secure_elem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/thirdLine"
+        app:layout_constraintBottom_toTopOf="@id/embeddedCardGroup"/>
+
+    <RadioGroup
+        android:id="@+id/embeddedCardGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/embeddedCardSetting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/embeddedCardEnable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enable"
+            android:onClick="onEmbeddedRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/embeddedCardDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:onClick="onEmbeddedRadioButtonClicked"/>
+
+        <RadioButton
+            android:id="@+id/embeddedCardHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hide"
+            android:onClick="onEmbeddedRadioButtonClicked"/>
+    </RadioGroup>
+</androidx.constraintlayout.widget.ConstraintLayout>

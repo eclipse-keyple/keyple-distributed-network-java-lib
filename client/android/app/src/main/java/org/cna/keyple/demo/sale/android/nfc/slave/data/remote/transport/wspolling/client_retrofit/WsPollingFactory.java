@@ -35,7 +35,7 @@ public class WsPollingFactory extends TransportFactory {
   private Integer port = 8000 + new Random().nextInt((100) + 1);
   private String hostname = "0.0.0.0";
   private String protocol = "http://";
-  private String serverNodeId;
+  private final String serverNodeId;
 
   private static final Logger logger = LoggerFactory.getLogger(WsPollingFactory.class);
 

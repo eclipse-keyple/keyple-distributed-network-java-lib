@@ -190,7 +190,7 @@ class TicketingSession(seReader: SeReader, samReader: SeReader?) :
             val poTransaction = if (samReader != null)
                 PoTransaction(
                         SeResource(seReader, calypsoPo),
-                        getSecuritySettings(checkSamAndOpenChannel(samReader!!))
+                        getSecuritySettings(checkSamAndOpenChannel(samReader))
                 )
             else
                 PoTransaction(SeResource(seReader, calypsoPo))
@@ -261,7 +261,7 @@ class TicketingSession(seReader: SeReader, samReader: SeReader?) :
             val poTransaction = if (samReader != null)
                 PoTransaction(
                         SeResource(seReader, calypsoPo),
-                        getSecuritySettings(checkSamAndOpenChannel(samReader!!))
+                        getSecuritySettings(checkSamAndOpenChannel(samReader))
                 )
             else
                 PoTransaction(SeResource(seReader, calypsoPo))
@@ -327,7 +327,7 @@ class TicketingSession(seReader: SeReader, samReader: SeReader?) :
                     if (samReader != null)
                         PoTransaction(
                                 SeResource(seReader, calypsoPo),
-                                getSecuritySettings(checkSamAndOpenChannel(samReader!!))
+                                getSecuritySettings(checkSamAndOpenChannel(samReader))
                         )
                     else
                         PoTransaction(SeResource(seReader, calypsoPo))
@@ -385,7 +385,7 @@ class TicketingSession(seReader: SeReader, samReader: SeReader?) :
             val poTransaction = if (samReader != null)
                 PoTransaction(
                         SeResource(seReader, calypsoPo),
-                        getSecuritySettings(checkSamAndOpenChannel(samReader!!))
+                        getSecuritySettings(checkSamAndOpenChannel(samReader))
                 )
             else
                 PoTransaction(SeResource(seReader, calypsoPo))

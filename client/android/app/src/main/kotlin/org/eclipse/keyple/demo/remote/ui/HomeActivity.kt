@@ -35,6 +35,7 @@ class HomeActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        menuBtn.visibility = View.VISIBLE
         menuBtn.setOnClickListener {
             startActivity(Intent(this, SettingsMenuActivity::class.java))
         }
@@ -59,13 +60,13 @@ class HomeActivity : DaggerAppCompatActivity() {
             SharedPrefData.Companion.Visibility.ENABLE -> {
                 btn.visibility = View.VISIBLE
                 btn.background =
-                    ContextCompat.getDrawable(this, R.drawable.ticket_btn)
+                    ContextCompat.getDrawable(this, R.drawable.white_card)
                 btn.isEnabled = true
             }
             SharedPrefData.Companion.Visibility.DISABLE -> {
                 btn.visibility = View.VISIBLE
                 btn.background =
-                    ContextCompat.getDrawable(this, R.drawable.grey_ticket_btn)
+                    ContextCompat.getDrawable(this, R.drawable.grey_card)
                 btn.isEnabled = false
             }
             SharedPrefData.Companion.Visibility.HIDE -> {

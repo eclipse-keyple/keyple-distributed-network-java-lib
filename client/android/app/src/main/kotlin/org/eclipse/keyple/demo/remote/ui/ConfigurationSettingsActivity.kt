@@ -17,6 +17,7 @@ import android.view.View
 import android.widget.RadioButton
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_configuration_settings.backBtn
 import kotlinx.android.synthetic.main.activity_configuration_settings.contactlessCardDisable
 import kotlinx.android.synthetic.main.activity_configuration_settings.contactlessCardEnable
 import kotlinx.android.synthetic.main.activity_configuration_settings.contactlessCardHide
@@ -40,6 +41,8 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuration_settings)
 
+        backBtn.setOnClickListener { onBackPressed() }
+
         setupRadioBtn(prefData.loadContactlessConfigurationVisibility(), contactlessCardEnable, contactlessCardDisable, contactlessCardHide)
         setupRadioBtn(prefData.loadSimConfigurationVisibility(), simCardEnable, simCardDisable, simCardHide)
         setupRadioBtn(prefData.loadWearableConfigurationVisibility(), wearableCardEnable, wearableCardDisable, wearableCardHide)
@@ -50,18 +53,27 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
         when (visibility) {
             SharedPrefData.Companion.Visibility.ENABLE -> {
                 enableBtn.isChecked = true
+                enableBtn.setTextColor(resources.getColor(R.color.dark_blue))
                 disableBtn.isChecked = false
+                disableBtn.setTextColor(resources.getColor(R.color.light_grey))
                 hideBtn.isChecked = false
+                hideBtn.setTextColor(resources.getColor(R.color.light_grey))
             }
             SharedPrefData.Companion.Visibility.DISABLE -> {
                 enableBtn.isChecked = false
+                enableBtn.setTextColor(resources.getColor(R.color.light_grey))
                 disableBtn.isChecked = true
+                disableBtn.setTextColor(resources.getColor(R.color.dark_blue))
                 hideBtn.isChecked = false
+                hideBtn.setTextColor(resources.getColor(R.color.light_grey))
             }
             SharedPrefData.Companion.Visibility.HIDE -> {
                 enableBtn.isChecked = false
+                enableBtn.setTextColor(resources.getColor(R.color.light_grey))
                 disableBtn.isChecked = false
+                disableBtn.setTextColor(resources.getColor(R.color.light_grey))
                 hideBtn.isChecked = true
+                hideBtn.setTextColor(resources.getColor(R.color.dark_blue))
             }
         }
     }
@@ -86,6 +98,14 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
                         prefData.saveContactlessConfigurationVisibility(SharedPrefData.Companion.Visibility.HIDE)
                     }
             }
+
+            //Update layout
+            setupRadioBtn(
+                prefData.loadContactlessConfigurationVisibility(),
+                contactlessCardEnable,
+                contactlessCardDisable,
+                contactlessCardHide
+            )
         }
     }
 
@@ -109,6 +129,12 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
                         prefData.saveSimConfigurationVisibility(SharedPrefData.Companion.Visibility.HIDE)
                     }
             }
+            setupRadioBtn(
+                prefData.loadSimConfigurationVisibility(),
+                simCardEnable,
+                simCardDisable,
+                simCardHide
+            )
         }
     }
 
@@ -132,6 +158,12 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
                         prefData.saveWearableConfigurationVisibility(SharedPrefData.Companion.Visibility.HIDE)
                     }
             }
+            setupRadioBtn(
+                prefData.loadWearableConfigurationVisibility(),
+                wearableCardEnable,
+                wearableCardDisable,
+                wearableCardHide
+            )
         }
     }
 
@@ -155,6 +187,12 @@ class ConfigurationSettingsActivity : DaggerAppCompatActivity() {
                         prefData.saveEmbeddedConfigurationVisibility(SharedPrefData.Companion.Visibility.HIDE)
                     }
             }
+            setupRadioBtn(
+                prefData.loadEmbeddedConfigurationVisibility(),
+                embeddedCardEnable,
+                embeddedCardDisable,
+                embeddedCardHide
+            )
         }
     }
 }

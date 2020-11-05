@@ -58,7 +58,6 @@
             app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
-            android:id="@+id/serverText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/server_setting"
@@ -108,7 +107,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/configurationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/configuration_setting"

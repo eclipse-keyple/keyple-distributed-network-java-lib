@@ -1,10 +1,7 @@
 <resources>
     <dimen name="splash_title">18sp</dimen>
-    <dimen name="smaller_text">10.7sp</dimen>
-    <dimen name="date">8sp</dimen>
     <dimen name="elevation">4dp</dimen>
 
-    <dimen name="splash_test_size">14.9sp</dimen>
     <dimen name="big_text_size">20sp</dimen>
     <dimen name="medium_text_size">18sp</dimen>
     <dimen name="small_text_size">17.3sp</dimen>
@@ -22,13 +19,9 @@
     <dimen name="device_slct_text_top_margin">10dp</dimen>
 
     <dimen name="select_ticket_elevation">4dp</dimen>
-    <dimen name="card_summary_lateral_margin">5dp</dimen>
     <dimen name="card_summary_desc_top_margin">20dp</dimen>
-    <dimen name="last_validation_padding_vertical">12dp</dimen>
-    <dimen name="card_summary_content_padding">20dp</dimen>
     <dimen name="content_top_margin">20dp</dimen>
     <dimen name="content_last_validation_vertical_margin">10dp</dimen>
-    <dimen name="content_last_validation_elevation">5dp</dimen>
     <dimen name="card_validation_height">32dp</dimen>
     <dimen name="card_validation_horizontal_margin">13dp</dimen>
     <dimen name="card_validation_title_left_margin">13dp</dimen>
@@ -72,7 +65,6 @@
     <dimen name="main_btn_vertical_padding">32dp</dimen>
 
     <dimen name="card_title_item_height">90dp</dimen>
-    <dimen name="card_title_image_margin_start">10dp</dimen>
     <dimen name="card_title_text_width">120dp</dimen>
     <dimen name="card_title_margin_bottom">20dp</dimen>
     <dimen name="content_title_padding">42dp</dimen>

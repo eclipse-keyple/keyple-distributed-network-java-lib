@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.activity_payment_validated.animation
 import kotlinx.android.synthetic.main.activity_payment_validated.chargeBtn
 import org.eclipse.keyple.demo.remote.R
 import org.eclipse.keyple.demo.remote.data.SharedPrefData
-import org.eclipse.keyple.demo.remote.data.model.DeviceEnum
 import org.eclipse.keyple.demo.remote.data.model.DeviceEnum.Companion.getDeviceEnum
 
 class PaymentValidatedActivity : DaggerAppCompatActivity() {

@@ -21,7 +21,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/selectionView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tickets_btn_height"
         android:clickable="true"
@@ -166,7 +165,6 @@
                     app:layout_constraintBottom_toBottomOf="parent" />
 
                 <ImageView
-                    android:id="@+id/iv_cvv_help"
                     android:layout_width="@dimen/cc_help_size"
                     android:layout_height="@dimen/cc_help_size"
                     android:src="@drawable/ic_cvv_help"

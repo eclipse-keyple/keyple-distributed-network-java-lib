@@ -12,26 +12,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="Bottom_Btn">
-        <item name="android:background">@color/green</item>
-        <item name="android:paddingTop">30dp</item>
-        <item name="android:paddingBottom">30dp</item>
-        <item name="android:paddingLeft">42dp</item>
-        <item name="android:paddingRight">42dp</item>
-        <item name="android:textSize">@dimen/big_text_size</item>
-        <item name="android:fontFamily">@font/worksans_extrabold</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Menu_Btn_green" parent="Bottom_Btn">
-        <item name="android:fontFamily">@font/worksans_bold</item>
-        <item name="android:textSize">@dimen/medium_text_size</item>
-    </style>
-
     <style name="buy_text_info_regular">
         <item name="android:fontFamily">@font/worksans_regular</item>
         <item name="android:textSize">@dimen/small_text_size</item>
@@ -108,12 +88,6 @@
         <item name="fontFamily">@font/worksans_regular</item>
         <item name="android:textSize">@dimen/small_text_size</item>
         <item name="android:textColor">@color/dark_blue</item>
-    </style>
-
-    <style name="smallRegularGrey">
-        <item name="fontFamily">@font/worksans_regular</item>
-        <item name="android:textSize">@dimen/small_text_size</item>
-        <item name="android:textColor">@color/light_grey</item>
     </style>
 
     <style name="smallBoldBlue">

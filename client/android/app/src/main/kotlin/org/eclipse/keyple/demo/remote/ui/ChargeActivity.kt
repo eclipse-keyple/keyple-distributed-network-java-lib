@@ -80,11 +80,17 @@ class ChargeActivity : DaggerAppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        cardAnimation.playAnimation()
+    }
+
     private fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
         if (cardReaderResponse != null) {
             if (cardReaderResponse.status == Status.LOADING) {
                 loadingAnimation.visibility = View.VISIBLE
                 loadingAnimation.playAnimation()
+                cardAnimation.cancelAnimation()
                 cardAnimation.visibility = View.GONE
                 presentTxt.text = getString(R.string.read_in_progress)
             } else {

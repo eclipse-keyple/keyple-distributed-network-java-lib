@@ -17,15 +17,15 @@
     <dimen name="big_text_size">27sp</dimen>
     <dimen name="medium_text_size">23sp</dimen>
     <dimen name="small_text_size">20sp</dimen>
-
-    <dimen name="settings_start_ic_size">100dp</dimen>
+    <dimen name="smaller_text_size">15sp</dimen>
+    <dimen name="smallest_text_size">13sp</dimen>
 
     <dimen name="home_text_width">230dp</dimen>
-
-    <dimen name="reading_animation_size">250dp</dimen>
 
     <dimen name="eclipse_logo_width">183dp</dimen>
     <dimen name="eclipse_logo_height">72dp</dimen>
     <dimen name="settings_back_btn_width">30dp</dimen>
+
+    <dimen name="reading_animation_size">250dp</dimen>
 
 </resources>

@@ -32,17 +32,11 @@ class PaymentValidatedActivity : DaggerAppCompatActivity() {
 
         val device = getDeviceEnum(prefData.loadDeviceType()!!)
         val ticketNumber: Int = intent.getIntExtra(TICKETS_NUMBER, 0)
-        chargeBtn.text = getString(R.string.load_card, getString(device.textId))
+        chargeBtn.text = getString(R.string.load_card)
         chargeBtn.setOnClickListener {
-            if (device === DeviceEnum.CONTACTLESS_CARD) {
-                val intent = Intent(this, ChargeCardActivity::class.java)
-                intent.putExtra(TICKETS_NUMBER, ticketNumber)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this, ChargeDeviceActivity::class.java)
-                intent.putExtra(TICKETS_NUMBER, ticketNumber)
-                startActivity(intent)
-            }
+            val intent = Intent(this, ChargeActivity::class.java)
+            intent.putExtra(TICKETS_NUMBER, ticketNumber)
+            startActivity(intent)
         }
     }
 

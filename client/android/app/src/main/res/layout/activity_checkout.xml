@@ -4,68 +4,80 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/appBarLayout" />
+
+    <TextView
+        android:id="@+id/contentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/tickets_block_space"
-        app:layout_constraintTop_toTopOf="parent">
+        android:text="@string/checkout_title"
+        android:gravity="center"
+        style="@style/bigBoldBlack"
+        android:layout_marginBottom="@dimen/content_top_margin"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/selectionView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tickets_btn_height"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/btn_blue_light"
+        android:elevation="@dimen/select_ticket_elevation"
+        android:layout_marginStart="@dimen/content_title_padding"
+        android:layout_marginEnd="@dimen/content_title_padding"
+        app:layout_constraintTop_toBottomOf="@id/contentTitle"
+        app:layout_constraintBottom_toTopOf="@id/paymentDetails"
+        android:gravity="center">
 
         <TextView
-            android:id="@+id/ticket_selection_tv"
-            style="@style/buy_text_info_regular"
+            android:id="@+id/selectionLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/ticket_selection"
+            style="@style/buy_text_info_bold"
+            android:text="@string/ticket_price"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/selectionPrice"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
-            android:id="@+id/ticketNumber"
-            style="@style/buy_text_info_medium"
+            android:id="@+id/selectionPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ticket_selection_tv" />
-
-        <TextView
-            android:id="@+id/ticketPrice"
             style="@style/buy_text_info_reg_small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ticket_selection_tv" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/line_blue"
-            app:layout_constraintTop_toBottomOf="@id/ticketNumber" />
-
+            android:text="@string/ticket_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectionLabel"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/paymentDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/light_blue"
         android:padding="@dimen/tickets_block_space"
-        app:layout_constraintBottom_toTopOf="@id/validateBtn">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/credit_card_details"
-            style="@style/buy_text_info_bold" />
+            style="@style/buy_text_info_bold"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/cc_padding"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             android:background="@drawable/white_rounded_rect"
             android:layout_marginTop="@dimen/cc_padding"
             android:layout_marginBottom="@dimen/cc_padding">
@@ -91,6 +103,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/prefill_card"
                     style="@style/buy_text_info_medium"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -153,8 +167,8 @@
 
                 <ImageView
                     android:id="@+id/iv_cvv_help"
-                    android:layout_width="11dp"
-                    android:layout_height="11dp"
+                    android:layout_width="@dimen/cc_help_size"
+                    android:layout_height="@dimen/cc_help_size"
                     android:src="@drawable/ic_cvv_help"
                     app:layout_constraintLeft_toRightOf="@id/cvv_value"
                     app:layout_constraintRight_toRightOf="parent"
@@ -163,15 +177,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/validateBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/pay"
-        style="@style/Bottom_Btn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:id="@+id/validateBtn"
+            android:text="@string/pay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:paddingTop="@dimen/main_btn_vertical_padding"
+            android:paddingBottom="@dimen/main_btn_vertical_padding"
+            android:layout_marginStart="@dimen/main_btn_horizontal_margin"
+            android:layout_marginEnd="@dimen/main_btn_horizontal_margin"
+            android:layout_marginBottom="@dimen/main_btn_margin_bottom"
+            style="@style/whiteBtnText" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

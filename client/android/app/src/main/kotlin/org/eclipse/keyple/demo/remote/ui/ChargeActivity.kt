@@ -13,32 +13,55 @@ package org.eclipse.keyple.demo.remote.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.airbnb.lottie.LottieDrawable
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_charge_card.caseFail
-import kotlinx.android.synthetic.main.activity_charge_card.caseSuccess
-import kotlinx.android.synthetic.main.activity_charge_card.loadingAnimation
-import org.cna.keyple.demo.sale.android.nfc.slave.data.model.CardReaderResponse
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_card_reader.cardAnimation
+import kotlinx.android.synthetic.main.activity_card_reader.loadingAnimation
+import kotlinx.android.synthetic.main.activity_card_reader.presentTxt
+import kotlinx.android.synthetic.main.activity_charge.caseFail
+import kotlinx.android.synthetic.main.activity_charge.caseSuccess
 import org.eclipse.keyple.demo.remote.data.model.Status
 import org.eclipse.keyple.demo.remote.R
+import org.eclipse.keyple.demo.remote.data.SharedPrefData
+import org.eclipse.keyple.demo.remote.data.model.CardReaderResponse
+import org.eclipse.keyple.demo.remote.data.model.DeviceEnum
 import org.eclipse.keyple.demo.remote.di.scopes.ActivityScoped
 
 @ActivityScoped
-class ChargeDeviceActivity : DaggerAppCompatActivity() {
+class ChargeActivity : DaggerAppCompatActivity() {
     var ticketNumber = 0
+
+    @Inject
+    lateinit var prefData: SharedPrefData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_charge_device)
+        setContentView(R.layout.activity_charge)
         ticketNumber = intent.getIntExtra(PaymentValidatedActivity.TICKETS_NUMBER, 0)
+
+        if (DeviceEnum.getDeviceEnum(prefData.loadDeviceType()!!) != DeviceEnum.CONTACTLESS_CARD) {
+            changeDisplay(
+                CardReaderResponse(
+                    Status.LOADING,
+                    "",
+                    0,
+                    arrayListOf(),
+                    arrayListOf(),
+                    ""
+                )
+            )
+        }
 
         caseSuccess.setOnClickListener {
             changeDisplay(
                 CardReaderResponse(
                     Status.SUCCESS,
+                    "",
                     5,
-                    "",
-                    "",
+                    arrayListOf(),
+                    arrayListOf(),
                     ""
                 )
             )
@@ -48,26 +71,26 @@ class ChargeDeviceActivity : DaggerAppCompatActivity() {
             changeDisplay(
                 CardReaderResponse(
                     Status.ERROR,
+                    "",
                     0,
-                    "",
-                    "",
+                    arrayListOf(),
+                    arrayListOf(),
                     ""
                 )
             )
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadingAnimation.setAnimation("loading_anim.json")
-        loadingAnimation.repeatCount = LottieDrawable.INFINITE
-        loadingAnimation.playAnimation()
-    }
-
-    fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
+    private fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
         if (cardReaderResponse != null) {
-            if (cardReaderResponse.status != Status.LOADING) {
+            if (cardReaderResponse.status == Status.LOADING) {
+                loadingAnimation.visibility = View.VISIBLE
+                loadingAnimation.playAnimation()
+                cardAnimation.visibility = View.GONE
+                presentTxt.text = getString(R.string.read_in_progress)
+            } else {
                 loadingAnimation.cancelAnimation()
+                cardAnimation.cancelAnimation()
                 val intent = Intent(this, ChargeResultActivity::class.java)
                 intent.putExtra(ChargeResultActivity.TICKETS_NUMBER, ticketNumber)
                 intent.putExtra(ChargeResultActivity.STATUS, cardReaderResponse.status.toString())

@@ -18,17 +18,18 @@
     <string name="device_loading">Loading</string>
 
     <string name="splash_title">Open Source API for Smart Ticketing</string>
-    <string name="present_travel_card_label">Please present a travel card</string>
-    <string name="card_invalid_label">Sorry, this card is not valid on this network</string>
-    <string name="card_invalid_desc">This is a \"%s\" card.</string>
-    <string name="transaction_cancelled_label">Sorry, your title hasn\'t been loaded</string>
+    <string name="present_travel_card_label">Please present a contactless support</string>
+    <string name="read_in_progress">Read in progress</string>
+    <string name="card_invalid_label">Not valid on this network</string>
+    <string name="card_invalid_desc">This is a \"%s\".</string>
+    <string name="transaction_cancelled_label">Title not loaded</string>
 
     <string name="transaction_cancelled_desc">The transaction has been cancelled.</string>
     <string name="transaction_cancelled_wrong_card">Please present the same card.</string>
-    <string name="validation_confirmation_label">Your payment has been validated</string>
-    <string name="charging_success_label">Well done!</string>
-    <string name="charging_success_desc">have been loaded.</string>
-    <string name="no_valid_label">You have no valid title on this %s</string>
+    <string name="validation_confirmation_label">Payment validated</string>
+    <string name="charging_success_label">Title loaded</string>
+    <string name="no_valid_label">No title</string>
+    <string name="no_valid_desc">Please load a title</string>
     <string name="error_label">An error occurred</string>
 
     <string name="contactless_card">Contactless card</string>
@@ -48,19 +49,21 @@
 
     <string name="ticket_selection">You chose :</string>
     <string name="device_selection">Choose a device</string>
-    <string name="choose_trips">Choose a number of trips</string>
+    <string name="choose_trips">Choose a type of title</string>
     <string name="your_title">Your title</string>
     <string name="season_pass_valid">SEASON pass valid until %s</string>
-    <string name="last_validation_title">Last validation</string>
     <string name="at_location">at %s</string>
     <string name="at_date">%s at %s</string>
-    <string name="try_again">Try again</string>
+    <string name="try_again">Retry</string>
+    <string name="cancel">Cancel</string>
     <string name="buy_titles">Buy title</string>
-    <string name="load_card">Load my %s</string>
+    <string name="load_card">Load title</string>
+
+    <string name="checkout_title">Basket</string>
     <string name="credit_card_details">Credit card details</string>
     <string name="card_number">Card number</string>
     <string name="expiry">Expiry</string>
-    <string name="CVV">CVV</string>
+    <string name="CVV">CVC</string>
     <string name="pay">Pay</string>
     <string name="prefill_card">1111 1111 1111 1111</string>
     <string name="prefill_expiry">06/19</string>
@@ -70,9 +73,10 @@
     <string name="scan_another_card">Present a card</string>
     <string name="select_scenario">Select Scenario</string>
 
-    <string name="present_card">Present your card to charge your tickets</string>
+    <string name="present_card">Please present the contactless support to load</string>
     <string name="finish_charge">Let\'s travel</string>
 
+    <string name="season_pass_title">Monthly Season Pass</string>
     <string name="ticket_price">%d,00 €</string>
     <plurals name="trips_lefts">
         <item quantity="zero">No trip left</item>
@@ -108,4 +112,12 @@
     <string name="disable">Disable</string>
     <string name="hide">Hide</string>
 
+    <!-- CardContent screen -->
+    <string name="content_title">Content</string>
+    <string name="last_validation_title">Last validation</string>
+    <string name="present_again">Present again</string>
+    <string name="card_content_title_placeholder">Multi Trip</string>
+    <string name="card_content_description_placeholder">From JJ Month YYYY to JJ Month YYYY</string>
+    <string name="card_content_validation_title_placeholder">Multi Trip - Place d\'Italie</string>
+    <string name="card_content_validation_date_placeholder">JJ Month YYYY, HH:MM:SS</string>
 </resources>

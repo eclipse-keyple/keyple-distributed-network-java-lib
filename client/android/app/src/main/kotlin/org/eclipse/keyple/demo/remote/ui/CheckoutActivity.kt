@@ -14,8 +14,8 @@ package org.eclipse.keyple.demo.remote.ui
 import android.content.Intent
 import android.os.Bundle
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_checkout.ticketNumber
-import kotlinx.android.synthetic.main.activity_checkout.ticketPrice
+import kotlinx.android.synthetic.main.activity_checkout.selectionLabel
+import kotlinx.android.synthetic.main.activity_checkout.selectionPrice
 import kotlinx.android.synthetic.main.activity_checkout.validateBtn
 import org.eclipse.keyple.demo.remote.R
 
@@ -25,9 +25,21 @@ class CheckoutActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_checkout)
 
         val ticketNumberCount: Int = intent.getIntExtra(TICKETS_NUMBER, 0)
-        ticketNumber.text =
-            resources.getQuantityString(R.plurals.x_tickets, ticketNumberCount, ticketNumberCount)
-        ticketPrice.text = getString(R.string.ticket_price, ticketNumberCount)
+        val seasonPass: Boolean = intent.getBooleanExtra(SEASON_PASS, false)
+
+        if(seasonPass){
+            selectionLabel.text =
+                getString(R.string.season_pass_title)
+            selectionPrice.text = getString(R.string.ticket_price, 20)
+        } else {
+            selectionLabel.text =
+                resources.getQuantityString(
+                    R.plurals.x_tickets,
+                    ticketNumberCount,
+                    ticketNumberCount
+                )
+            selectionPrice.text = getString(R.string.ticket_price, ticketNumberCount)
+        }
         validateBtn.setOnClickListener {
             val intent = Intent(this, PaymentValidatedActivity::class.java)
             intent.putExtra(TICKETS_NUMBER, ticketNumberCount)
@@ -37,5 +49,6 @@ class CheckoutActivity : DaggerAppCompatActivity() {
 
     companion object {
         const val TICKETS_NUMBER = "ticketsNumber"
+        const val SEASON_PASS = "seasonPass"
     }
 }

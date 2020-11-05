@@ -18,8 +18,7 @@ import dagger.android.ContributesAndroidInjector
 import org.eclipse.keyple.demo.remote.di.scopes.ActivityScoped
 import org.eclipse.keyple.demo.remote.ui.CardReaderActivity
 import org.eclipse.keyple.demo.remote.ui.CardSummaryActivity
-import org.eclipse.keyple.demo.remote.ui.ChargeCardActivity
-import org.eclipse.keyple.demo.remote.ui.ChargeDeviceActivity
+import org.eclipse.keyple.demo.remote.ui.ChargeActivity
 import org.eclipse.keyple.demo.remote.ui.ChargeResultActivity
 import org.eclipse.keyple.demo.remote.ui.CheckoutActivity
 import org.eclipse.keyple.demo.remote.ui.ConfigurationSettingsActivity
@@ -74,11 +73,7 @@ abstract class UIModule {
 
     @ActivityScoped
     @ContributesAndroidInjector
-    abstract fun chargeCardActivity(): ChargeCardActivity?
-
-    @ActivityScoped
-    @ContributesAndroidInjector
-    abstract fun chargeDeviceActivity(): ChargeDeviceActivity?
+    abstract fun chargeCardActivity(): ChargeActivity?
 
     @ActivityScoped
     @ContributesAndroidInjector

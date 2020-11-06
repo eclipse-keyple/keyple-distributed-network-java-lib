@@ -47,6 +47,7 @@
     <dimen name="home_horizontal_margin">38dp</dimen>
     <dimen name="home_block_vertical_margin">20dp</dimen>
     <dimen name="home_choose_margin_top">7dp</dimen>
+    <dimen name="home_device_btn_height">80dp</dimen>
 
     <dimen name="settings_line_top_padding">72dp</dimen>
     <dimen name="settings_btn_padding_horizontal">38dp</dimen>

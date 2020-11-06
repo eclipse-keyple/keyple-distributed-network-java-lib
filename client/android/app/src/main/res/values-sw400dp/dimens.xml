@@ -27,4 +27,5 @@
     <dimen name="reading_animation_size">180dp</dimen>
     <dimen name="card_title_text_width">150dp</dimen>
 
+    <dimen name="home_device_btn_height">90dp</dimen>
 </resources>

@@ -28,4 +28,5 @@
 
     <dimen name="reading_animation_size">250dp</dimen>
 
+    <dimen name="home_device_btn_height">140dp</dimen>
 </resources>

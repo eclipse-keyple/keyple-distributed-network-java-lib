@@ -4,6 +4,7 @@
     <string name="splash_title">Open Source API for Smart Ticketing</string>
     <string name="present_travel_card_label">Please present a contactless support</string>
     <string name="read_in_progress">Read in progress</string>
+    <string name="loading_in_progress">Loading in progress</string>
     <string name="card_invalid_label">Not valid on this network</string>
     <string name="card_invalid_desc">This is a \"%s\".</string>
     <string name="transaction_cancelled_label">Title not loaded</string>
@@ -14,7 +15,7 @@
     <string name="no_valid_desc">Please load a title</string>
     <string name="error_label">An error occurred</string>
 
-    <string name="contactless_card">Contactless card</string>
+    <string name="contactless_card">Contactless support</string>
     <string name="sim_card">SIM card</string>
     <string name="wearable">Wearable</string>
     <string name="embedded_secure_elem">Embedded Secure Element</string>

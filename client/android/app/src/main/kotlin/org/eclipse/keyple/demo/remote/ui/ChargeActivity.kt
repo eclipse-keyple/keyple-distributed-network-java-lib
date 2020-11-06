@@ -15,6 +15,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import dagger.android.support.DaggerAppCompatActivity
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_card_reader.cardAnimation
 import kotlinx.android.synthetic.main.activity_card_reader.loadingAnimation
@@ -34,6 +36,7 @@ class ChargeActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var prefData: SharedPrefData
+    private val timer = Timer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,23 @@ class ChargeActivity : DaggerAppCompatActivity() {
                     ""
                 )
             )
+        } else {
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        changeDisplay(
+                            CardReaderResponse(
+                                Status.LOADING,
+                                "",
+                                0,
+                                arrayListOf(),
+                                arrayListOf(),
+                                ""
+                            )
+                        )
+                    }
+                }
+            }, LOADING_DELAY_MS.toLong())
         }
 
         caseSuccess.setOnClickListener {
@@ -83,6 +103,7 @@ class ChargeActivity : DaggerAppCompatActivity() {
     override fun onResume() {
         super.onResume()
         cardAnimation.playAnimation()
+        loadingAnimation.playAnimation()
     }
 
     private fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
@@ -92,7 +113,7 @@ class ChargeActivity : DaggerAppCompatActivity() {
                 loadingAnimation.playAnimation()
                 cardAnimation.cancelAnimation()
                 cardAnimation.visibility = View.GONE
-                presentTxt.text = getString(R.string.read_in_progress)
+                presentTxt.text = getString(R.string.loading_in_progress)
             } else {
                 loadingAnimation.cancelAnimation()
                 cardAnimation.cancelAnimation()
@@ -102,5 +123,9 @@ class ChargeActivity : DaggerAppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    companion object {
+        private const val LOADING_DELAY_MS = 3000
     }
 }

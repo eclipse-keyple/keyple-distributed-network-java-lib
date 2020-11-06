@@ -17,6 +17,8 @@ import android.view.View
 import dagger.android.support.DaggerAppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_card_reader.cardAnimation
 import kotlinx.android.synthetic.main.activity_card_reader.caseEmpty
@@ -38,6 +40,7 @@ class CardReaderActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var prefData: SharedPrefData
+    private val timer = Timer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +57,23 @@ class CardReaderActivity : DaggerAppCompatActivity() {
                     ""
                 )
             )
+        } else {
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        changeDisplay(
+                            CardReaderResponse(
+                                Status.LOADING,
+                                "",
+                                0,
+                                arrayListOf(),
+                                arrayListOf(),
+                                ""
+                            )
+                        )
+                    }
+                }
+            }, LOADING_DELAY_MS.toLong())
         }
 
         // TODO: implement Keyple reader
@@ -120,6 +140,7 @@ class CardReaderActivity : DaggerAppCompatActivity() {
     override fun onResume() {
         super.onResume()
         cardAnimation.playAnimation()
+        loadingAnimation.playAnimation()
     }
 
     private fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
@@ -138,5 +159,9 @@ class CardReaderActivity : DaggerAppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    companion object {
+        private const val LOADING_DELAY_MS = 3000
     }
 }

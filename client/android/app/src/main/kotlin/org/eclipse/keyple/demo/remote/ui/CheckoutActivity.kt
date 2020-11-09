@@ -14,6 +14,9 @@ package org.eclipse.keyple.demo.remote.ui
 import android.content.Intent
 import android.os.Bundle
 import dagger.android.support.DaggerAppCompatActivity
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import kotlinx.android.synthetic.main.activity_checkout.expiryValue
 import kotlinx.android.synthetic.main.activity_checkout.selectionLabel
 import kotlinx.android.synthetic.main.activity_checkout.selectionPrice
 import kotlinx.android.synthetic.main.activity_checkout.validateBtn
@@ -45,6 +48,10 @@ class CheckoutActivity : DaggerAppCompatActivity() {
             intent.putExtra(TICKETS_NUMBER, ticketNumberCount)
             startActivity(intent)
         }
+
+        val now = Calendar.getInstance().time
+        val sdf = SimpleDateFormat("MM/yy")
+        expiryValue.text = sdf.format(now)
     }
 
     companion object {

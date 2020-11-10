@@ -60,7 +60,7 @@
         android:id="@+id/cardAnimation"
         android:layout_width="@dimen/reading_animation_size"
         android:layout_height="0dp"
-        app:lottie_fileName="cardscan_anim.json"
+        app:lottie_fileName="anim_card_scan.json"
         app:lottie_loop="true"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="@id/guideline_anim_left"

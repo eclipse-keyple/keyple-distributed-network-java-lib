@@ -45,7 +45,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chooseDeviceTv"
         app:layout_constraintBottom_toTopOf="@id/simCardBtn"
-        app:layout_constraintVertical_chainStyle="spread_inside"
         android:gravity="center">
 
         <ImageView
@@ -77,6 +76,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/contactlessCardBtn"
         app:layout_constraintBottom_toTopOf="@id/wearableBtn"
+        android:layout_marginTop="@dimen/home_btn_top_margin"
         android:gravity="center">
 
         <ImageView
@@ -108,6 +108,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/simCardBtn"
         app:layout_constraintBottom_toTopOf="@id/embeddedElemBtn"
+        android:layout_marginTop="@dimen/home_btn_top_margin"
         android:gravity="center">
 
         <ImageView
@@ -138,8 +139,7 @@
         android:elevation="@dimen/select_ticket_elevation"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/wearableBtn"
-        app:layout_constraintBottom_toTopOf="@id/eclipseLogo"
-        android:layout_marginBottom="@dimen/home_element_margin"
+        android:layout_marginTop="@dimen/home_btn_top_margin"
         android:gravity="center">
 
         <ImageView
@@ -155,6 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/device_slct_text_top_margin"
             android:text="@string/embedded_secure_elem"
+            android:gravity="center"
             style="@style/bigBoldDarkBlue" />
     </LinearLayout>
 

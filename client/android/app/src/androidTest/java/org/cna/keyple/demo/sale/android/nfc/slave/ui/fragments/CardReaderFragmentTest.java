@@ -7,6 +7,7 @@ import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.eclipse.keyple.demo.remote.ui.CardReaderActivity;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.model.CardReaderResponse;
@@ -27,11 +28,11 @@ public class CardReaderFragmentTest {
     public ActivityTestRule<SingleFragmentActivity> activityTestRule =
             new ActivityTestRule<>(SingleFragmentActivity.class, true, true);
 
-    private CardReaderViewModel mViewModel = mock(CardReaderViewModel.class);
+    private final CardReaderViewModel mViewModel = mock(CardReaderViewModel.class);
 
     private final LiveEvent<CardReaderResponse> response = new LiveEvent<>();
 
-    private CardReaderFragment fragment = new CardReaderFragment();
+    private final CardReaderActivity fragment = new CardReaderActivity();
 
     @Before
     public void setUp() {

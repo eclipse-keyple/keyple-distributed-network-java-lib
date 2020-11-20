@@ -31,13 +31,15 @@
 
     <string name="contactless_card">Contactless card</string>
     <string name="sim_card">SIM card</string>
-    <string name="bracelet">Bracelet</string>
-    <string name="multi_service_card">Multi-service bank card</string>
+    <string name="wearable">Wearable</string>
+    <string name="embedded_secure_elem">Embedded Secure Element</string>
 
-    <string name="device_invalid">Device invalid</string>
-    <string name="device_not_found">Device not found</string>
-    <string name="device_empty">Device empty</string>
-    <string name="device_with_tickets">Device with tickets</string>
+    <string name="device_invalid">Invalid</string>
+    <string name="device_not_found">Not found</string>
+    <string name="device_empty">Empty</string>
+    <string name="device_with_tickets">Valid</string>
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
 
     <string name="device_connected_description">The %s is connected</string>
     <string name="device_not_connected_description">The %s is not reachable</string>
@@ -63,8 +65,6 @@
     <string name="prefill_cvv">123</string>
 
     <string name="card_reader_label">Home</string>
-    <string name="menu">Menu</string>
-    <string name="action_settings">Settings</string>
     <string name="scan_another_card">Present a card</string>
     <string name="select_scenario">Select Scenario</string>
 
@@ -91,10 +91,19 @@
     </plurals>
 
     <!-- Settings -->
+    <string name="menu">Menu</string>
+    <string name="action_settings">Settings</string>
+    <string name="server_setting">Server</string>
+    <string name="configuration_setting">Configuration</string>
+
     <string name="server_ip">Server IP</string>
     <string name="server_port">Server Port</string>
     <string name="protocol">Protocol</string>
     <string name="ping_action">Server state</string>
     <string name="restart">Restart</string>
+
+    <string name="enable">Enable</string>
+    <string name="disable">Disable</string>
+    <string name="hide">Hide</string>
 
 </resources>

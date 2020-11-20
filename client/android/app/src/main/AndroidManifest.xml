@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="org.cna.keyple.demo.sale.android.nfc.slave">
+    package="org.eclipse.keyple.demo.remote">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,7 +9,6 @@
 
     <!-- Required for wizway agent -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
 
     <uses-feature
         android:name="android.hardware.nfc"
@@ -27,7 +25,7 @@
         android:name=".Application">
 
         <activity
-            android:name=".ui.activities.SplashScreenActivity"
+            android:name=".ui.SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
@@ -40,18 +38,89 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:configChanges="orientation|keyboardHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
         </activity>
-
-        <activity android:name=".testing.SingleFragmentActivity"></activity>
+        <activity
+            android:name=".ui.SettingsMenuActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.ServerSettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.ConfigurationSettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.CardReaderActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.CardSummaryActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.SelectTicketsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.CheckoutActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.PaymentValidatedActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.ChargeCardActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.ChargeDeviceActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
+        <activity
+            android:name=".ui.ChargeResultActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden">
+        </activity>
     </application>
 
 </manifest>

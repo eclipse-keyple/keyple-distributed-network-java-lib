@@ -84,7 +84,9 @@ class TicketingSessionExplicitSelection(seReader: SeReader, samReader: SeReader?
 
             val poTransaction =
                     if (samReader != null)
-                        PoTransaction(SeResource(seReader, calypsoPo), getSecuritySettings(checkSamAndOpenChannel(samReader!!)))
+                        PoTransaction(SeResource(seReader, calypsoPo), getSecuritySettings(checkSamAndOpenChannel(
+                            samReader
+                        )))
                     else
                         PoTransaction(SeResource(seReader, calypsoPo))
 

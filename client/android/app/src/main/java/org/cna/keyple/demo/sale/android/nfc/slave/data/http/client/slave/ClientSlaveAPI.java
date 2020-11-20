@@ -29,13 +29,13 @@ public class ClientSlaveAPI {
     private static final Logger logger = LoggerFactory.getLogger(ClientSlaveAPI.class);
 
     // Web client for reader status
-    private ReaderStateClient readerStateClient;
+    private final ReaderStateClient readerStateClient;
 
     // TransportNode used as to send and receive KeypleDto to Master
-    private WsPRetrofitClientImpl clientNode;
+    private final WsPRetrofitClientImpl clientNode;
 
     // NativeReaderServiceImpl, used to connectReader and disconnect readers
-    private SlaveAPI slaveAPI;
+    private final SlaveAPI slaveAPI;
 
 
     /**

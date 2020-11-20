@@ -3,12 +3,12 @@
  ********************************************************************************/
 package org.cna.keyple.demo.sale.android.nfc.slave.data;
 
+import android.util.Log;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Observer;
 import javax.inject.Inject;
-
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.client.reader.ReaderStateClient;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.client.reader.ReaderStateClientFactory;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.client.slave.ClientSlaveAPI;
@@ -16,15 +16,15 @@ import org.cna.keyple.demo.sale.android.nfc.slave.data.http.client.slave.SaleTra
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.client.slave.TicketingAPI;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.common.ReaderState;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.common.SaleTransaction;
-import org.cna.keyple.demo.sale.android.nfc.slave.data.model.DeviceEnum;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.nfc.AndroidNfcKeypleService;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.remote.transport.wspolling.client_retrofit.WsPollingFactory;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.wizway.WizwaySlaveService;
-import org.cna.keyple.demo.sale.android.nfc.slave.di.scopes.AppScoped;
 import org.eclipse.keyple.core.seproxy.SeReader;
 import org.eclipse.keyple.core.seproxy.exception.KeypleException;
 import org.eclipse.keyple.core.seproxy.exception.KeypleReaderException;
-import android.util.Log;
+import org.eclipse.keyple.demo.remote.data.SharedPrefData;
+import org.eclipse.keyple.demo.remote.data.model.DeviceEnum;
+import org.eclipse.keyple.demo.remote.di.scopes.AppScoped;
 import retrofit2.Callback;
 
 @AppScoped

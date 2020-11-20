@@ -35,7 +35,7 @@ import java.net.InetSocketAddress;
  */
 public class WsPServer implements ServerNode {
 
-  private InetSocketAddress inet;
+  private final InetSocketAddress inet;
   private final String apiUrl;
   private final String pollingUrl;
   private final String serverNodeId;

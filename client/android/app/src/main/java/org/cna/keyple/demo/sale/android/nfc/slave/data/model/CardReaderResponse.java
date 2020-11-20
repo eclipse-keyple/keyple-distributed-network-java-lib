@@ -3,6 +3,8 @@
  ********************************************************************************/
 package org.cna.keyple.demo.sale.android.nfc.slave.data.model;
 
+import org.eclipse.keyple.demo.remote.data.model.Status;
+
 public class CardReaderResponse {
 
     public final Status status;

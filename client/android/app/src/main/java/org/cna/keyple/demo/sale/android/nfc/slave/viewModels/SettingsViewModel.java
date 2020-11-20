@@ -7,14 +7,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import javax.inject.Inject;
-import org.cna.keyple.demo.sale.android.nfc.slave.data.SharedPrefData;
+import org.eclipse.keyple.demo.remote.data.SharedPrefData;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.apiEndpoints.PingApiEndpoint;
-import org.cna.keyple.demo.sale.android.nfc.slave.di.scopes.AppScoped;
-import org.cna.keyple.demo.sale.android.nfc.slave.rx.SchedulerProvider;
 import org.cna.keyple.demo.sale.android.nfc.slave.util.LiveEvent;
 import io.reactivex.Observer;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import org.eclipse.keyple.demo.remote.di.scopes.AppScoped;
+import org.eclipse.keyple.demo.remote.rx.SchedulerProvider;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
@@ -30,13 +30,13 @@ public class SettingsViewModel extends ViewModel {
 
     private final LiveEvent<String> pingResponse = new LiveEvent<>();
 
-    private SharedPrefData sharedPrefData;
+    private final SharedPrefData sharedPrefData;
 
-    private MutableLiveData<String> serverIp = new MutableLiveData<>();
+    private final MutableLiveData<String> serverIp = new MutableLiveData<>();
 
-    private MutableLiveData<Integer> serverPort = new MutableLiveData<>();
+    private final MutableLiveData<Integer> serverPort = new MutableLiveData<>();
 
-    private MutableLiveData<String> serverProtocol = new MutableLiveData<>();
+    private final MutableLiveData<String> serverProtocol = new MutableLiveData<>();
 
 
     @Inject

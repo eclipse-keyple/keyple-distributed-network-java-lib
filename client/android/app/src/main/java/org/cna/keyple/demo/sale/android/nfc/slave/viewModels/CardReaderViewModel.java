@@ -9,9 +9,7 @@ import org.cna.keyple.demo.sale.android.nfc.slave.data.KeypleSlaveAPI;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.common.ReaderState;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.http.common.SaleTransaction;
 import org.cna.keyple.demo.sale.android.nfc.slave.data.model.CardReaderResponse;
-import org.cna.keyple.demo.sale.android.nfc.slave.data.model.Status;
-import org.cna.keyple.demo.sale.android.nfc.slave.di.scopes.AppScoped;
-import org.cna.keyple.demo.sale.android.nfc.slave.rx.SchedulerProvider;
+import org.eclipse.keyple.demo.remote.data.model.Status;
 import org.cna.keyple.demo.sale.android.nfc.slave.util.LiveEvent;
 import org.eclipse.keyple.core.seproxy.SeReader;
 import org.eclipse.keyple.core.seproxy.event.ObservableReader;
@@ -19,13 +17,14 @@ import org.eclipse.keyple.core.seproxy.event.ReaderEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
 import android.app.Activity;
 import android.util.Log;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
+import org.eclipse.keyple.demo.remote.di.scopes.AppScoped;
+import org.eclipse.keyple.demo.remote.rx.SchedulerProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

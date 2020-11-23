@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/appBarLayout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.60" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_anim"
@@ -47,6 +43,28 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.85" />
 
+    <TextView
+        android:id="@+id/contentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/content_title"
+        android:gravity="center"
+        style="@style/bigBoldBlack"
+        android:layout_marginBottom="@dimen/content_top_margin"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/titlesList"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/titlesList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/contentTitle"
+        app:layout_constraintBottom_toTopOf="@id/lastValidationContent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation"
         android:layout_width="0dp"
@@ -55,60 +73,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toEndOf="@id/guideline_right_anim"
         app:layout_constraintStart_toStartOf="@id/guideline_left_anim"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintVertical_chainStyle="spread_inside" />
-
-    <LinearLayout
-        android:id="@+id/cardContentSummary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="@dimen/card_summary_lateral_margin"
-        android:layout_marginEnd="@dimen/card_summary_lateral_margin"
-        android:backgroundTint="@color/blue"
-        android:elevation="@dimen/select_ticket_elevation"
-        android:background="@drawable/round_rectangle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/lastValidationContent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/your_title"
-            android:textColor="@color/white"
-            android:background="@color/transparent"
-            android:fontFamily="@font/worksans_bold"
-            android:textSize="@dimen/big_text_size"
-            android:gravity="center"
-            android:padding="15dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/card_summary_content_padding"
-            android:paddingBottom="@dimen/card_summary_content_padding">
-
-            <TextView
-                android:id="@+id/titleSummary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/medium_text_size"
-                android:textColor="@color/white"
-                android:padding="@dimen/card_summary_content_padding"/>
-
-            <TextView
-                android:id="@+id/seasonPassSummary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="@dimen/medium_text_size"
-                android:textColor="@color/white"
-                android:padding="@dimen/card_summary_content_padding"/>
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
         android:id="@+id/bigText"
@@ -116,11 +82,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:textSize="@dimen/big_text_size"
         android:fontFamily="@font/worksans_bold"
+        android:layout_marginTop="@dimen/card_summary_desc_top_margin"
+        app:layout_constraintBottom_toTopOf="@id/smallDesc"
         app:layout_constraintTop_toBottomOf="@id/animation"
         app:layout_constraintEnd_toEndOf="@id/guideline_right_txt"
         app:layout_constraintStart_toStartOf="@id/guideline_left_txt"
-        app:layout_constraintBottom_toTopOf="@id/smallDesc"
-        app:layout_constraintVertical_chainStyle="spread_inside"
         android:gravity="center" />
 
     <TextView
@@ -129,11 +95,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:fontFamily="@font/worksans_regular"
         android:textSize="@dimen/small_text_size"
+        android:layout_marginTop="@dimen/card_summary_desc_top_margin"
         app:layout_constraintTop_toBottomOf="@id/bigText"
-        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_right_txt"
         app:layout_constraintStart_toStartOf="@id/guideline_left_txt"
-        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:layout_constraintBottom_toTopOf="@id/lastValidationContent"
         android:gravity="center" />
 
     <LinearLayout
@@ -141,40 +107,48 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@id/buyBtn"
         android:background="@color/light_blue"
-        android:paddingStart="@dimen/card_summary_lateral_margin"
-        android:paddingEnd="@dimen/card_summary_lateral_margin"
-        android:paddingTop="@dimen/last_validation_padding_vertical"
-        android:paddingBottom="@dimen/last_validation_padding_vertical"
-        android:visibility="gone">
+        android:gravity="center"
+        android:elevation="@dimen/elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/last_validation_title"
-            android:textSize="@dimen/small_text_size"
-            android:textColor="@color/blue"
-            android:fontFamily="@font/worksans_bold"/>
+            style="@style/smallBoldBlue"
+            android:layout_marginTop="@dimen/content_last_validation_vertical_margin"
+            android:layout_marginBottom="@dimen/content_last_validation_vertical_margin" />
 
-        <TextView
-            android:id="@+id/lastValidationText"
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/blue"
+            android:layout_marginStart="@dimen/card_validation_horizontal_margin"
+            android:layout_marginEnd="@dimen/card_validation_horizontal_margin" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lastValidationList"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/smaller_text"
-            android:textColor="@color/blue"
-            android:fontFamily="@font/worksans_regular"/>
+            android:layout_marginStart="@dimen/card_validation_horizontal_margin"
+            android:layout_marginEnd="@dimen/card_validation_horizontal_margin"
+            android:layout_marginBottom="@dimen/content_last_validation_vertical_margin" />
 
+        <Button
+            android:id="@+id/buyBtn"
+            android:text="@string/buy_titles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_blue"
+            android:paddingTop="@dimen/main_btn_vertical_padding"
+            android:paddingBottom="@dimen/main_btn_vertical_padding"
+            android:layout_marginStart="@dimen/main_btn_horizontal_margin"
+            android:layout_marginEnd="@dimen/main_btn_horizontal_margin"
+            android:layout_marginBottom="@dimen/main_btn_margin_bottom"
+            style="@style/whiteBtnText" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buyBtn"
-        android:text="@string/buy_titles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        style="@style/Bottom_Btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

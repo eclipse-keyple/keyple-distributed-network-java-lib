@@ -46,9 +46,8 @@
         android:layout_height="wrap_content"
         android:text="@string/splash_title"
         android:gravity="center"
-        android:fontFamily="@font/worksans_bold"
-        android:textColor="@color/deep_blue"
-        android:textSize="@dimen/splash_test_size"
+        style="@style/mediumRegularBlue"
+        android:textSize="@dimen/splash_title"
         app:layout_constraintEnd_toEndOf="@id/guideline_right"
         app:layout_constraintStart_toStartOf="@id/guideline_left"
         app:layout_constraintTop_toBottomOf="@id/logo"/>

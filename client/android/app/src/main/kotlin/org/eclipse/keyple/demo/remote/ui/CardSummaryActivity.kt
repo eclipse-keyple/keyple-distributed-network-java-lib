@@ -15,70 +15,88 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_card_summary.animation
 import kotlinx.android.synthetic.main.activity_card_summary.bigText
 import kotlinx.android.synthetic.main.activity_card_summary.buyBtn
-import kotlinx.android.synthetic.main.activity_card_summary.cardContentSummary
+import kotlinx.android.synthetic.main.activity_card_summary.contentTitle
 import kotlinx.android.synthetic.main.activity_card_summary.lastValidationContent
-import kotlinx.android.synthetic.main.activity_card_summary.lastValidationText
-import kotlinx.android.synthetic.main.activity_card_summary.seasonPassSummary
+import kotlinx.android.synthetic.main.activity_card_summary.lastValidationList
 import kotlinx.android.synthetic.main.activity_card_summary.smallDesc
-import kotlinx.android.synthetic.main.activity_card_summary.titleSummary
-import org.eclipse.keyple.demo.remote.data.model.Status
+import kotlinx.android.synthetic.main.activity_card_summary.titlesList
 import org.eclipse.keyple.demo.remote.R
+import org.eclipse.keyple.demo.remote.adapters.TitlesRecyclerAdapter
+import org.eclipse.keyple.demo.remote.adapters.ValidationsRecyclerAdapter
 import org.eclipse.keyple.demo.remote.data.SharedPrefData
-import org.eclipse.keyple.demo.remote.data.model.DeviceEnum.Companion.getDeviceEnum
-import timber.log.Timber
+import org.eclipse.keyple.demo.remote.data.model.CardReaderResponse
+import org.eclipse.keyple.demo.remote.data.model.Status
+import org.eclipse.keyple.demo.remote.setDivider
 
 class CardSummaryActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var prefData: SharedPrefData
 
+    private lateinit var validationLinearLayoutManager: LinearLayoutManager
+    private lateinit var titleLinearLayoutManager: LinearLayoutManager
+    private lateinit var validationsAdapter: ValidationsRecyclerAdapter
+    private lateinit var titlesAdapter: TitlesRecyclerAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_summary)
 
-        val status = Status.getStatus(intent.getStringExtra(STATUS_KEY))
-        val ticketNumber: Int = intent.getIntExtra(TICKETS_KEY, 0)
-        val device = getDeviceEnum(prefData.loadDeviceType()!!)
-        val cardType: String? = intent.getStringExtra(CARD_TYPE)
-        val lastValidation: String? = intent.getStringExtra(LAST_VALIDATION)
-        val seasonPassExpiryDate: String? = intent.getStringExtra(SEASON_PASS_EXPIRY_DATE)
+        val cardContent: CardReaderResponse = intent.getParcelableExtra(CARD_CONTENT)
 
-        when (status) {
+        validationLinearLayoutManager = LinearLayoutManager(this)
+        lastValidationList.layoutManager = validationLinearLayoutManager
+
+        titleLinearLayoutManager = LinearLayoutManager(this)
+        titlesList.layoutManager = titleLinearLayoutManager
+
+        validationsAdapter = ValidationsRecyclerAdapter(cardContent.lastValidationsList)
+        lastValidationList.adapter = validationsAdapter
+        lastValidationList.setDivider(R.drawable.recycler_view_divider)
+
+
+        titlesAdapter = TitlesRecyclerAdapter(cardContent.titlesList)
+        titlesList.adapter = titlesAdapter
+
+        when (cardContent.status) {
             Status.INVALID_CARD -> {
                 animation.setAnimation("error_orange_anim.json")
                 animation.playAnimation()
                 bigText.setText(R.string.card_invalid_label)
                 bigText.setTextColor(resources.getColor(R.color.orange))
-                smallDesc.text = String.format(getString(R.string.card_invalid_desc), cardType)
+                smallDesc.text = String.format(getString(R.string.card_invalid_desc), cardContent.cardType)
                 smallDesc.setTextColor(resources.getColor(R.color.orange))
                 buyBtn.visibility = View.INVISIBLE
-                cardContentSummary.visibility = View.GONE
+                titlesList.visibility = View.GONE
+                lastValidationContent.visibility = View.GONE
+                contentTitle.visibility = View.GONE
             }
             Status.TICKETS_FOUND, Status.SUCCESS -> {
-                cardContentSummary.visibility = View.VISIBLE
-                titleSummary.text = resources.getQuantityString(
-                    R.plurals.trips_lefts,
-                    ticketNumber, ticketNumber
-                )
+                titlesList.visibility = View.VISIBLE
                 animation.visibility = View.GONE
                 bigText.visibility = View.GONE
                 smallDesc.visibility = View.INVISIBLE
                 buyBtn.visibility = View.VISIBLE
-                displaySeasonAndLastValidation(lastValidation, seasonPassExpiryDate)
+                lastValidationContent.visibility = View.VISIBLE
+                contentTitle.visibility = View.VISIBLE
             }
             Status.EMPTY_CARD -> {
                 animation.setAnimation("error_anim.json")
                 animation.playAnimation()
-                bigText.text = getString(R.string.no_valid_label, getString(device.textId))
+                bigText.text = getString(R.string.no_valid_label)
                 bigText.setTextColor(resources.getColor(R.color.red))
-                smallDesc.visibility = View.INVISIBLE
+                smallDesc.visibility = View.VISIBLE
+                smallDesc.setTextColor(resources.getColor(R.color.red))
+                smallDesc.text = getString(R.string.no_valid_desc)
                 buyBtn.visibility = View.VISIBLE
-                cardContentSummary.visibility = View.GONE
-                displaySeasonAndLastValidation(lastValidation, seasonPassExpiryDate)
+                titlesList.visibility = View.GONE
+                lastValidationContent.visibility = View.VISIBLE
+                contentTitle.visibility = View.GONE
             }
             else -> {
                 animation.setAnimation("error_anim.json")
@@ -87,7 +105,9 @@ class CardSummaryActivity : DaggerAppCompatActivity() {
                 bigText.setTextColor(resources.getColor(R.color.red))
                 smallDesc.visibility = View.INVISIBLE
                 buyBtn.visibility = View.INVISIBLE
-                cardContentSummary.visibility = View.GONE
+                titlesList.visibility = View.GONE
+                lastValidationContent.visibility = View.GONE
+                contentTitle.visibility = View.GONE
             }
         }
         animation.playAnimation()
@@ -101,35 +121,8 @@ class CardSummaryActivity : DaggerAppCompatActivity() {
         }
     }
 
-    fun displaySeasonAndLastValidation(lastValidation: String?, seasonPassExpiryDate: String?) {
-        Timber.d(
-            TAG, "lastValidation:" + lastValidation + " - seasonPassExpiryDate:"
-                    + seasonPassExpiryDate
-        )
-        if (lastValidation != null && lastValidation.isNotEmpty()) {
-            lastValidationContent.visibility = View.VISIBLE
-            lastValidationText.text = lastValidation
-        } else {
-            lastValidationContent.visibility = View.GONE
-        }
-        if (seasonPassExpiryDate != null && seasonPassExpiryDate.isNotEmpty()
-            && seasonPassExpiryDate.contains("SEASON")
-        ) {
-            seasonPassSummary.visibility = View.VISIBLE
-            // seasonPassSummary.setText(String.format(getString(R.string.season_pass_valid),
-            // seasonPassExpiryDate));
-            seasonPassSummary.text = String.format(seasonPassExpiryDate)
-        } else {
-            seasonPassSummary.visibility = View.GONE
-        }
-    }
-
     companion object {
         private val TAG: String = CardSummaryActivity::class.java.simpleName
-        const val STATUS_KEY = "status"
-        const val TICKETS_KEY = "tickets"
-        const val LAST_VALIDATION = "lastValidation"
-        const val CARD_TYPE = "cardtype"
-        const val SEASON_PASS_EXPIRY_DATE = "seasonPassExpiryDate"
+        const val CARD_CONTENT = "cardContent"
     }
 }

@@ -14,32 +14,87 @@ package org.eclipse.keyple.demo.remote.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.airbnb.lottie.LottieDrawable
 import dagger.android.support.DaggerAppCompatActivity
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.Timer
+import java.util.TimerTask
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_card_reader.cardAnimation
 import kotlinx.android.synthetic.main.activity_card_reader.caseEmpty
 import kotlinx.android.synthetic.main.activity_card_reader.caseInvalid
 import kotlinx.android.synthetic.main.activity_card_reader.caseValid
 import kotlinx.android.synthetic.main.activity_card_reader.loadingAnimation
 import kotlinx.android.synthetic.main.activity_card_reader.presentTxt
-import org.cna.keyple.demo.sale.android.nfc.slave.data.model.CardReaderResponse
 import org.eclipse.keyple.demo.remote.data.model.Status
 import org.eclipse.keyple.demo.remote.R
+import org.eclipse.keyple.demo.remote.data.SharedPrefData
+import org.eclipse.keyple.demo.remote.data.model.CardReaderResponse
+import org.eclipse.keyple.demo.remote.data.model.CardTitle
+import org.eclipse.keyple.demo.remote.data.model.DeviceEnum
+import org.eclipse.keyple.demo.remote.data.model.Validation
 import org.eclipse.keyple.demo.remote.di.scopes.ActivityScoped
 
 @ActivityScoped
 class CardReaderActivity : DaggerAppCompatActivity() {
 
+    @Inject
+    lateinit var prefData: SharedPrefData
+    private val timer = Timer()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_reader)
 
+        if (DeviceEnum.getDeviceEnum(prefData.loadDeviceType()!!) != DeviceEnum.CONTACTLESS_CARD){
+            changeDisplay(
+                CardReaderResponse(
+                    Status.LOADING,
+                    "",
+                    0,
+                    arrayListOf(),
+                    arrayListOf(),
+                    ""
+                )
+            )
+        } else {
+            timer.schedule(object : TimerTask() {
+                override fun run() {
+                    runOnUiThread {
+                        changeDisplay(
+                            CardReaderResponse(
+                                Status.LOADING,
+                                "",
+                                0,
+                                arrayListOf(),
+                                arrayListOf(),
+                                ""
+                            )
+                        )
+                    }
+                }
+            }, LOADING_DELAY_MS.toLong())
+        }
+
+        // TODO: implement Keyple reader
+
+        // TODO: remove when Keyple implemented
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
         caseEmpty.setOnClickListener {
             changeDisplay(
                 CardReaderResponse(
                     Status.EMPTY_CARD,
+                    "",
                     0,
-                    "",
-                    "",
+                    arrayListOf(),
+                    arrayListOf(
+                        Validation("Titre", "Place d'Italie", parser.parse("2020-05-18T08:27:30")),
+                        Validation(
+                            "Titre",
+                            "Place d'Italie",
+                            parser.parse("2020-01-14T09:55:00")
+                        )
+                    ),
                     ""
                 )
             )
@@ -49,9 +104,10 @@ class CardReaderActivity : DaggerAppCompatActivity() {
             changeDisplay(
                 CardReaderResponse(
                     Status.INVALID_CARD,
-                    0,
                     "invalid card",
-                    "",
+                    0,
+                    arrayListOf(),
+                    arrayListOf(),
                     ""
                 )
             )
@@ -61,32 +117,51 @@ class CardReaderActivity : DaggerAppCompatActivity() {
             changeDisplay(
                 CardReaderResponse(
                     Status.TICKETS_FOUND,
-                    5,
-                    "",
-                    "Place d'italie - 12/10/20 18:05",
-                    "SEASON valid until 31/01/2022"
+                    "valid card",
+                    2,
+                    arrayListOf(
+                        CardTitle("Multi trip", "2 trips left", true),
+                        CardTitle("Season pass", "From 1st April 2020 to 1st August 2020", false)
+                    ),
+                    arrayListOf(
+                        Validation("Titre", "Place d'Italie", parser.parse("2020-05-18T08:27:30")),
+                        Validation(
+                            "Titre",
+                            "Place d'Italie",
+                            parser.parse("2020-01-14T09:55:00")
+                        )
+                    ),
+                    ""
                 )
             )
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        cardAnimation.playAnimation()
+        loadingAnimation.playAnimation()
+    }
+
     private fun changeDisplay(cardReaderResponse: CardReaderResponse?) {
         if (cardReaderResponse != null) {
             if (cardReaderResponse.status == Status.LOADING) {
-                loadingAnimation.setAnimation("loading_anim.json")
+                loadingAnimation.visibility = View.VISIBLE
                 loadingAnimation.playAnimation()
-                loadingAnimation.repeatCount = LottieDrawable.INFINITE
-                presentTxt.visibility = View.INVISIBLE
+                cardAnimation.cancelAnimation()
+                cardAnimation.visibility = View.GONE
+                presentTxt.text = getString(R.string.read_in_progress)
             } else {
                 loadingAnimation.cancelAnimation()
+                cardAnimation.cancelAnimation()
                 val intent = Intent(this, CardSummaryActivity::class.java)
-                intent.putExtra(CardSummaryActivity.STATUS_KEY, cardReaderResponse.status.toString())
-                intent.putExtra(CardSummaryActivity.TICKETS_KEY, cardReaderResponse.ticketsNumber)
-                intent.putExtra(CardSummaryActivity.CARD_TYPE, cardReaderResponse.cardType)
-                intent.putExtra(CardSummaryActivity.LAST_VALIDATION, cardReaderResponse.lastValidation)
-                intent.putExtra(CardSummaryActivity.SEASON_PASS_EXPIRY_DATE, cardReaderResponse.seasonPassExpiryDate)
+                intent.putExtra(CardSummaryActivity.CARD_CONTENT, cardReaderResponse)
                 startActivity(intent)
             }
         }
+    }
+
+    companion object {
+        private const val LOADING_DELAY_MS = 3000
     }
 }

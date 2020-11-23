@@ -11,16 +11,23 @@
  ********************************************************************************/
 package org.cna.keyple.demo.sale.android.nfc.slave.data.ticketing
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Arrays
+import java.util.Date
 import org.eclipse.keyple.calypso.command.po.exception.CalypsoPoCommandException
 import org.eclipse.keyple.calypso.command.sam.exception.CalypsoSamCommandException
 import org.eclipse.keyple.calypso.transaction.CalypsoPo
 import org.eclipse.keyple.calypso.transaction.PoSelectionRequest
 import org.eclipse.keyple.calypso.transaction.PoSelector
 import org.eclipse.keyple.calypso.transaction.PoTransaction
-import org.eclipse.keyple.calypso.transaction.SamResourceManager
 import org.eclipse.keyple.calypso.transaction.exception.CalypsoPoTransactionException
 import org.eclipse.keyple.core.command.AbstractApduCommandBuilder
-import org.eclipse.keyple.core.selection.*
+import org.eclipse.keyple.core.selection.AbstractMatchingSe
+import org.eclipse.keyple.core.selection.AbstractSeSelectionRequest
+import org.eclipse.keyple.core.selection.SeResource
+import org.eclipse.keyple.core.selection.SeSelection
+import org.eclipse.keyple.core.selection.SelectionsResult
 import org.eclipse.keyple.core.seproxy.MultiSeRequestProcessing
 import org.eclipse.keyple.core.seproxy.SeReader
 import org.eclipse.keyple.core.seproxy.SeSelector
@@ -31,9 +38,6 @@ import org.eclipse.keyple.core.seproxy.message.SeResponse
 import org.eclipse.keyple.core.seproxy.protocol.SeCommonProtocols
 import org.eclipse.keyple.core.util.ByteArrayUtil
 import timber.log.Timber
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class TicketingSession(seReader: SeReader, samReader: SeReader?) :
         AbstractTicketingSession(seReader, samReader), ITicketingSession {

@@ -17,7 +17,6 @@ import android.os.Bundle
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_settings_menu.configurationBtn
 import kotlinx.android.synthetic.main.activity_settings_menu.serverBtn
-import kotlinx.android.synthetic.main.toolbar.menuBtn
 import org.eclipse.keyple.demo.remote.R
 
 class SettingsMenuActivity : DaggerAppCompatActivity() {

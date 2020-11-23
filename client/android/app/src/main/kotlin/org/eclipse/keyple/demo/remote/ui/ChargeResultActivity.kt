@@ -21,8 +21,11 @@ import java.util.Timer
 import java.util.TimerTask
 import kotlinx.android.synthetic.main.activity_charge_result.animation
 import kotlinx.android.synthetic.main.activity_charge_result.bigText
-import kotlinx.android.synthetic.main.activity_charge_result.smallDesc
+import kotlinx.android.synthetic.main.activity_charge_result.btnLayout
+import kotlinx.android.synthetic.main.activity_charge_result.cancelBtn
+import kotlinx.android.synthetic.main.activity_charge_result.mainBackground
 import kotlinx.android.synthetic.main.activity_charge_result.tryBtn
+import kotlinx.android.synthetic.main.toolbar.toolbarLogo
 import org.eclipse.keyple.demo.remote.data.model.Status
 import org.eclipse.keyple.demo.remote.R
 
@@ -32,30 +35,31 @@ class ChargeResultActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_charge_result)
+        toolbarLogo.setImageResource(R.drawable.ic_logo_white)
+
         val status = Status.getStatus(intent.getStringExtra(STATUS))
-        val ticketNumber: Int = intent.getIntExtra(TICKETS_NUMBER, 0)
+
         tryBtn.setOnClickListener { onBackPressed() }
+        cancelBtn.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+
         when (status) {
             Status.LOADING -> {
                 animation.setAnimation("loading_anim.json")
                 animation.repeatCount = LottieDrawable.INFINITE
                 bigText.visibility = View.INVISIBLE
-                smallDesc.visibility = View.INVISIBLE
-                tryBtn.visibility = View.INVISIBLE
+                btnLayout.visibility = View.INVISIBLE
             }
             Status.SUCCESS -> {
-                animation.setAnimation("tick_anim.json")
+                mainBackground.setBackgroundColor(resources.getColor(R.color.green))
+                animation.setAnimation("tick_white.json")
                 animation.repeatCount = 0
                 animation.playAnimation()
                 bigText.setText(R.string.charging_success_label)
                 bigText.visibility = View.VISIBLE
-                bigText.setTextColor(resources.getColor(R.color.green))
-                smallDesc.text = resources.getQuantityString(
-                    R.plurals.charging_success_description, ticketNumber, ticketNumber
-                )
-                smallDesc.setTextColor(resources.getColor(R.color.green))
-                smallDesc.visibility = View.VISIBLE
-                tryBtn.visibility = View.INVISIBLE
+                btnLayout.visibility = View.INVISIBLE
                 val intent = Intent(this, HomeActivity::class.java)
                 timer.schedule(object : TimerTask() {
                     override fun run() {
@@ -66,16 +70,13 @@ class ChargeResultActivity : DaggerAppCompatActivity() {
                 }, RETURN_DELAY_MS.toLong())
             }
             else -> {
-                animation.setAnimation("error_anim.json")
+                mainBackground.setBackgroundColor(resources.getColor(R.color.red))
+                animation.setAnimation("error_white.json")
                 animation.repeatCount = 0
                 animation.playAnimation()
                 bigText.setText(R.string.transaction_cancelled_label)
                 bigText.visibility = View.VISIBLE
-                bigText.setTextColor(resources.getColor(R.color.red))
-                smallDesc.setText(R.string.transaction_cancelled_desc)
-                smallDesc.setTextColor(resources.getColor(R.color.red))
-                smallDesc.visibility = View.VISIBLE
-                tryBtn.visibility = View.VISIBLE
+                btnLayout.visibility = View.VISIBLE
             }
         }
 

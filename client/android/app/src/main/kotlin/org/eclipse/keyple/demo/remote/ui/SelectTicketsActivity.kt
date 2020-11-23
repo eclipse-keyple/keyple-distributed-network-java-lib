@@ -14,6 +14,8 @@ package org.eclipse.keyple.demo.remote.ui
 import android.content.Intent
 import android.os.Bundle
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.android.synthetic.main.activity_select_tickets.seasonPassBtn
+import kotlinx.android.synthetic.main.activity_select_tickets.seasonPassPrice
 import kotlinx.android.synthetic.main.activity_select_tickets.ticket1Btn
 import kotlinx.android.synthetic.main.activity_select_tickets.ticket1Label
 import kotlinx.android.synthetic.main.activity_select_tickets.ticket1Price
@@ -41,6 +43,8 @@ class SelectTicketsActivity : DaggerAppCompatActivity() {
         ticket2Price.text = getString(R.string.ticket_price, 2)
         ticket3Price.text = getString(R.string.ticket_price, 3)
         ticket4Price.text = getString(R.string.ticket_price, 4)
+        seasonPassPrice.text = getString(R.string.ticket_price, 20)
+
         ticket1Btn.setOnClickListener {
             val intent = Intent(this, CheckoutActivity::class.java)
             intent.putExtra(CheckoutActivity.TICKETS_NUMBER, 1)
@@ -59,6 +63,12 @@ class SelectTicketsActivity : DaggerAppCompatActivity() {
         ticket4Btn.setOnClickListener {
             val intent = Intent(this, CheckoutActivity::class.java)
             intent.putExtra(CheckoutActivity.TICKETS_NUMBER, 4)
+            startActivity(intent)
+        }
+
+        seasonPassBtn.setOnClickListener {
+            val intent = Intent(this, CheckoutActivity::class.java)
+            intent.putExtra(CheckoutActivity.SEASON_PASS, true)
             startActivity(intent)
         }
     }

@@ -18,19 +18,18 @@
     app:elevation="0dp">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/transparent"
         android:layout_marginTop="@dimen/toolbar_margin_top">
 
         <ImageView
-            android:id="@+id/serverStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_connection_wait"
             android:layout_gravity="start"
-            android:layout_marginEnd="10dp" />
+            android:layout_marginEnd="10dp"
+            android:elevation="@dimen/elevation"/>
 
         <ImageView
             android:id="@+id/toolbarLogo"
@@ -44,15 +43,14 @@
 
         <ImageView
             android:id="@+id/menuBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/toolbar_menu_width"
+            android:layout_height="@dimen/toolbar_menu_width"
             android:src="@drawable/ic_menu"
             android:layout_gravity="end"
             android:clickable="true"
             android:focusable="true"
-            android:padding="5dp"
-            android:layout_marginEnd="10dp" />
-
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"/>
 
     </androidx.appcompat.widget.Toolbar>
 

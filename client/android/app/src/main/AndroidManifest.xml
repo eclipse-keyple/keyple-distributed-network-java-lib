@@ -101,14 +101,7 @@
             android:configChanges="orientation|keyboardHidden">
         </activity>
         <activity
-            android:name=".ui.ChargeCardActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop"
-            android:configChanges="orientation|keyboardHidden">
-        </activity>
-        <activity
-            android:name=".ui.ChargeDeviceActivity"
+            android:name=".ui.ChargeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"

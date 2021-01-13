@@ -9,23 +9,25 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  ************************************************************************************** */
-package org.cna.keyple.demo.remote.server.model;
+package org.cna.keyple.demo.remote.server.dto;
+
+import org.cna.keyple.demo.sale.data.model.ContractStructureDto;
 
 import java.util.List;
 
 /**
- * Output of compatible title endpoint
+ * Output of Compatible Contract endpoint
  */
-public class CompatibleTitleOutput {
+public class CompatibleContractOutput {
 
   private Boolean isSamReady;
-  private List<Title> compatibleTitles;
+  private List<ContractStructureDto> compatibleTitles;
 
-  public List<Title> getCompatibleTitles() {
+  public List<ContractStructureDto> getCompatibleTitles() {
     return compatibleTitles;
   }
 
-  public CompatibleTitleOutput setCompatibleTitles(List<Title> compatibleTitles) {
+  public CompatibleContractOutput setCompatibleTitles(List<ContractStructureDto> compatibleTitles) {
     this.compatibleTitles = compatibleTitles;
     return this;
   }
@@ -34,7 +36,7 @@ public class CompatibleTitleOutput {
     return isSamReady;
   }
 
-  public CompatibleTitleOutput setSamReady(Boolean isSamReady) {
+  public CompatibleContractOutput setSamReady(Boolean isSamReady) {
     isSamReady = isSamReady;
     return this;
   }

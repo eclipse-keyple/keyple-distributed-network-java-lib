@@ -9,3 +9,6 @@ pluginManagement {
     }
 }
 rootProject.name = 'keyple-java-demo-remote-server'
+
+include ':common'
+project(':common').projectDir = file("../common")

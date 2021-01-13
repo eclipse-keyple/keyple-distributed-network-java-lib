@@ -11,38 +11,61 @@
  ************************************************************************************** */
 package org.cna.keyple.demo.remote.server;
 
+import java.util.concurrent.Executors;
+import javax.enterprise.context.ApplicationScoped;
+
 import io.quarkus.runtime.Startup;
-import org.cna.keyple.demo.remote.server.model.CompatibleTitleOutput;
-import org.cna.keyple.demo.remote.server.model.Title;
-import org.cna.keyple.demo.remote.server.model.WriteTitleOutput;
+import org.cna.keyple.demo.remote.server.dto.CompatibleContractInput;
+import org.cna.keyple.demo.remote.server.dto.CompatibleContractOutput;
+import org.cna.keyple.demo.remote.server.dto.WriteTitleOutput;
 import org.eclipse.keyple.calypso.transaction.CalypsoPo;
+import org.eclipse.keyple.calypso.transaction.sammanager.SamResourceManager;
 import org.eclipse.keyple.core.service.SmartCardService;
 import org.eclipse.keyple.core.service.event.ObservablePlugin;
 import org.eclipse.keyple.core.service.event.PluginEvent;
 import org.eclipse.keyple.distributed.RemotePluginServer;
 import org.eclipse.keyple.distributed.RemoteReaderServer;
-import org.cna.keyple.demo.remote.server.model.CompatibleTitleInput;
+import org.eclipse.keyple.distributed.impl.RemotePluginServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.enterprise.context.ApplicationScoped;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *{@link RemotePluginServer} observer.
  *
  * <p>It contains the business logic of the remote service execution.
  * <ul>
- *     <li>GET_COMPATIBLE_TITLE : returns the list of compatible title with the calypsoPo inserted</li>
+ *     <li>GET_COMPATIBLE_CONTRACT : returns the list of compatible title with the calypsoPo inserted</li>
+ *      <li>WRITE_CONTRACT : returns the list of compatible title with the calypsoPo inserted</li>
  * </ul>
  *
  */
 @ApplicationScoped
 @Startup
-public class RemoteServiceObserver implements ObservablePlugin.PluginObserver {
+public class RemoteServerPluginConfig implements ObservablePlugin.PluginObserver {
 
-  private static final Logger logger = LoggerFactory.getLogger(RemoteServiceObserver.class);
+  private static final Logger logger = LoggerFactory.getLogger(RemoteServerPluginConfig.class);
+
+  private SamResourceManager samResourceManager;
+
+  public RemoteServerPluginConfig(SamResourceManager samResourceManager){
+    logger.info("Init RemoteServerPluginConfig...");
+
+    // Init the remote plugin factory with a sync node and a remote plugin observer.
+    RemotePluginServerFactory factory =
+            RemotePluginServerFactory.builder()
+                    .withDefaultPluginName()
+                    .withSyncNode()
+                    .withPluginObserver(this)
+                    .usingEventNotificationPool(
+                            Executors.newCachedThreadPool(r -> new Thread(r, "server-pool")))
+                    .build();
+
+    // Register the remote plugin to the smart card service using the factory.
+    SmartCardService.getInstance().registerPlugin(factory);
+
+    samResourceManager = samResourceManager;
+    assert samResourceManager != null;
+  }
 
   /** {@inheritDoc} */
   @Override
@@ -51,14 +74,14 @@ public class RemoteServiceObserver implements ObservablePlugin.PluginObserver {
     // For a RemotePluginServer, the events can only be of type READER_CONNECTED.
     // So there is no need to analyze the event type.
     logger.info(
-        "Event received {} {} {}",
-        event.getEventType(),
-        event.getPluginName(),
-        event.getReaderNames().first());
+            "Event received {} {} {}",
+            event.getEventType(),
+            event.getPluginName(),
+            event.getReaderNames().first());
 
     // Retrieves the remote plugin using the plugin name contains in the event.
     RemotePluginServer plugin =
-        (RemotePluginServer) SmartCardService.getInstance().getPlugin(event.getPluginName());
+            (RemotePluginServer) SmartCardService.getInstance().getPlugin(event.getPluginName());
 
     // Retrieves the name of the remote reader using the first reader name contains in the event.
     // Note that for a RemotePluginServer, there can be only one reader per event.
@@ -70,10 +93,10 @@ public class RemoteServiceObserver implements ObservablePlugin.PluginObserver {
     // Analyses the Service ID contains in the reader to find which business service to execute.
     // The Service ID was specified by the client when executing the remote service.
     Object userOutputData;
-    if ("GET_COMPATIBLE_TITLE".equals(reader.getServiceId())) {
+    if ("GET_COMPATIBLE_CONTRACT".equals(reader.getServiceId())) {
 
       // Executes the business service using the remote reader.
-      userOutputData = getCompatibleTitle(reader);
+      userOutputData = getCompatibleContract(reader);
 
     } else if ("WRITE_TITLE".equals(reader.getServiceId())) {
 
@@ -93,16 +116,16 @@ public class RemoteServiceObserver implements ObservablePlugin.PluginObserver {
    * @param reader The remote reader on where to execute the business logic.
    * @return a nullable reference to the user output data to transmit to the client.
    */
-  private CompatibleTitleOutput getCompatibleTitle(RemoteReaderServer reader) {
+  private CompatibleContractOutput getCompatibleContract(RemoteReaderServer reader) {
 
     /*
-     * Retrieves the compatibleTitleInput and initial calypsoPO specified by the client when executing the remote service.
+     * Retrieves the compatibleContractInput and initial calypsoPO specified by the client when executing the remote service.
      */
-    CompatibleTitleInput compatibleTitleInput = reader.getUserInputData(CompatibleTitleInput.class);
+    CompatibleContractInput compatibleContractInput = reader.getUserInputData(CompatibleContractInput.class);
     CalypsoPo calypsoPo = reader.getInitialCardContent(CalypsoPo.class);
 
     //TODO
-    return new CompatibleTitleOutput();
+    return new CompatibleContractOutput();
   }
 
   /**
@@ -115,7 +138,7 @@ public class RemoteServiceObserver implements ObservablePlugin.PluginObserver {
     /*
      * Retrieves the userInputData and initial calypsoPO specified by the client when executing the remote service.
      */
-    CompatibleTitleInput userInputData = reader.getUserInputData(CompatibleTitleInput.class);
+    CompatibleContractInput userInputData = reader.getUserInputData(CompatibleContractInput.class);
     CalypsoPo calypsoPo = reader.getInitialCardContent(CalypsoPo.class);
 
     //TODO

@@ -28,6 +28,9 @@ dependencies {
     implementation group: 'org.eclipse.keyple', name: 'keyple-java-plugin-stub', version: keyple_v
     implementation group: 'org.eclipse.keyple', name: 'keyple-java-plugin-pcsc', version: keyple_v
 
+    /* Common lib */
+    implementation project(":common")
+
     /* Quarkus */
     implementation 'io.quarkus:quarkus-resteasy-jsonb'
     implementation 'io.quarkus:quarkus-resteasy'

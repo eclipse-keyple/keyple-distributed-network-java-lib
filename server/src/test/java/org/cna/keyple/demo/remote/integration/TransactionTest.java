@@ -3,10 +3,10 @@ package org.cna.keyple.demo.remote.integration;
 import io.quarkus.test.junit.QuarkusTest;
 import org.cna.keyple.demo.remote.integration.client.EndpointClient;
 import org.cna.keyple.demo.remote.integration.client.HeartbeatClient;
-import org.cna.keyple.demo.remote.server.model.CompatibleTitleInput;
-import org.cna.keyple.demo.remote.server.model.CompatibleTitleOutput;
-import org.cna.keyple.demo.remote.server.model.WriteTitleInput;
-import org.cna.keyple.demo.remote.server.model.WriteTitleOutput;
+import org.cna.keyple.demo.remote.server.dto.CompatibleContractInput;
+import org.cna.keyple.demo.remote.server.dto.CompatibleContractOutput;
+import org.cna.keyple.demo.remote.server.dto.WriteTitleInput;
+import org.cna.keyple.demo.remote.server.dto.WriteTitleOutput;
 import org.eclipse.keyple.calypso.transaction.CalypsoPo;
 import org.eclipse.keyple.calypso.transaction.PoSelection;
 import org.eclipse.keyple.calypso.transaction.PoSelector;
@@ -23,7 +23,6 @@ import org.eclipse.keyple.distributed.impl.LocalServiceClientFactory;
 import org.eclipse.keyple.plugin.pcsc.PcscReader;
 import org.eclipse.keyple.plugin.pcsc.PcscSupportedContactlessProtocols;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -74,15 +73,15 @@ public class TransactionTest {
                         .getService();
 
         /* Execute Remote Service : Get Compatible Title */
-        CompatibleTitleOutput compatibleTitleOutput = localService.executeRemoteService(
+        CompatibleContractOutput compatibleContractOutput = localService.executeRemoteService(
                 RemoteServiceParameters
-                        .builder("GET_COMPATIBLE_TITLE", poReader)
-                        .withUserInputData(new CompatibleTitleInput())
+                        .builder("GET_COMPATIBLE_CONTRACT", poReader)
+                        .withUserInputData(new CompatibleContractInput())
                         .withInitialCardContent(calypsoPo)
                         .build(),
-                CompatibleTitleOutput.class);
+                CompatibleContractOutput.class);
 
-        assertNotNull(compatibleTitleOutput);
+        assertNotNull(compatibleContractOutput);
 
         /*
          * User select the title....

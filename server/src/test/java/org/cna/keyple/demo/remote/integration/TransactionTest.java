@@ -3,16 +3,17 @@ package org.cna.keyple.demo.remote.integration;
 import io.quarkus.test.junit.QuarkusTest;
 import org.cna.keyple.demo.remote.integration.client.EndpointClient;
 import org.cna.keyple.demo.remote.integration.client.HeartbeatClient;
-import org.cna.keyple.demo.remote.server.dto.CompatibleContractInput;
-import org.cna.keyple.demo.remote.server.dto.CompatibleContractOutput;
-import org.cna.keyple.demo.remote.server.dto.WriteTitleInput;
-import org.cna.keyple.demo.remote.server.dto.WriteTitleOutput;
+import org.cna.keyple.demo.remote.server.util.CalypsoClassicInfo;
+import org.cna.keyple.demo.sale.data.endpoint.CompatibleContractInput;
+import org.cna.keyple.demo.sale.data.endpoint.CompatibleContractOutput;
+import org.cna.keyple.demo.sale.data.endpoint.WriteTitleInput;
+import org.cna.keyple.demo.sale.data.endpoint.WriteTitleOutput;
+import org.cna.keyple.demo.sale.data.model.type.PriorityCode;
 import org.eclipse.keyple.calypso.transaction.CalypsoPo;
 import org.eclipse.keyple.calypso.transaction.PoSelection;
 import org.eclipse.keyple.calypso.transaction.PoSelector;
 import org.eclipse.keyple.core.card.selection.CardSelectionsService;
 import org.eclipse.keyple.core.card.selection.CardSelector;
-import org.eclipse.keyple.core.service.Plugin;
 import org.eclipse.keyple.core.service.Reader;
 import org.eclipse.keyple.core.service.SmartCardService;
 import org.eclipse.keyple.core.service.exception.KeypleReaderNotFoundException;
@@ -25,14 +26,10 @@ import org.eclipse.keyple.plugin.pcsc.PcscSupportedContactlessProtocols;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class TransactionTest {
@@ -46,7 +43,6 @@ public class TransactionTest {
     static Reader poReader;
 
     private static String poReaderFilter = ".*(ASK|ACS).*";
-    private static String AID = "315449432E49434131";
 
     @Test
     public void basicTest() {
@@ -72,40 +68,49 @@ public class TransactionTest {
                         .withoutReaderObservation()
                         .getService();
 
+        CompatibleContractInput compatibleContractInput = new CompatibleContractInput().setPluginType("Android NFC");
+
         /* Execute Remote Service : Get Compatible Title */
         CompatibleContractOutput compatibleContractOutput = localService.executeRemoteService(
                 RemoteServiceParameters
                         .builder("GET_COMPATIBLE_CONTRACT", poReader)
-                        .withUserInputData(new CompatibleContractInput())
+                        .withUserInputData(compatibleContractInput)
                         .withInitialCardContent(calypsoPo)
                         .build(),
                 CompatibleContractOutput.class);
 
         assertNotNull(compatibleContractOutput);
+        assertEquals(0, compatibleContractOutput.getStatusCode());
 
         /*
          * User select the title....
          */
+
+        WriteTitleInput writeTitleInput =
+                new WriteTitleInput().setContractTariff(PriorityCode.SEASON_PASS);
+
+        //example..
+        WriteTitleInput writeTitleInput2 =
+                new WriteTitleInput().setContractTariff(PriorityCode.MULTI_TRIP_TICKET)
+                        .setTicketToLoad(10);
 
         /* Execute Remote Service : Write Title */
         WriteTitleOutput writeTitleOutput = localService.executeRemoteService(
                 RemoteServiceParameters
                         .builder("WRITE_TITLE", poReader)
                         .withInitialCardContent(calypsoPo)
-                        .withUserInputData(new WriteTitleInput())
+                        .withUserInputData(writeTitleInput)
                         .build(),
                 WriteTitleOutput.class);
 
         assertNotNull(writeTitleOutput);
-
+        assertEquals(0, compatibleContractOutput.getStatusCode());
 
     }
 
     private static Reader initPoReader() {
         Pattern p = Pattern.compile(poReaderFilter);
-        Plugin plugin = SmartCardService.getInstance().getPlugin("PcscPlugin");
-        Collection<Reader> readers = plugin.getReaders().values();
-        for (Reader reader : readers) {
+        for (Reader reader : SmartCardService.getInstance().getPlugin("PcscPlugin").getReaders().values()) {
             if (p.matcher(reader.getName()).matches()) {
 
                 // Get and configure the PO reader
@@ -135,7 +140,27 @@ public class TransactionTest {
         }
 
         // Prepare a Calypso PO selection
-        CardSelectionsService cardSelectionsService = getPoCardSelection();
+         CardSelectionsService cardSelectionsService = new CardSelectionsService();
+
+         // Setting of an AID based selection of a Calypso REV3 PO
+         // Select the first application matching the selection AID whatever the card communication
+         // protocol keep the logical channel open after the selection
+
+         // Calypso selection: configures a PoSelection with all the desired attributes to
+         // make the selection and read additional information afterwards
+         PoSelection poSelection =
+                 new PoSelection(
+                         PoSelector.builder()
+                                 .cardProtocol(ContactlessCardCommonProtocols.ISO_14443_4.name())
+                                 .aidSelector(
+                                         CardSelector.AidSelector.builder().aidToSelect(CalypsoClassicInfo.AID).build())
+                                 .invalidatedPo(PoSelector.InvalidatedPo.REJECT)
+                                 .build());
+
+
+         // Add the selection case to the current selection
+         // (we could have added other cases here)
+         cardSelectionsService.prepareSelection(poSelection);
 
         // Actual PO communication: operate through a single request the Calypso PO selection
         // and the file read
@@ -145,31 +170,4 @@ public class TransactionTest {
         return calypsoPo;
     }
 
-    private static CardSelectionsService getPoCardSelection() {
-        // Prepare a Calypso PO selection
-        CardSelectionsService cardSelectionsService = new CardSelectionsService();
-
-        // Setting of an AID based selection of a Calypso REV3 PO
-        // Select the first application matching the selection AID whatever the card communication
-        // protocol keep the logical channel open after the selection
-
-        // Calypso selection: configures a PoSelection with all the desired attributes to
-        // make the selection and read additional information afterwards
-        PoSelection poSelection =
-                new PoSelection(
-                        PoSelector.builder()
-                                .cardProtocol(ContactlessCardCommonProtocols.ISO_14443_4.name())
-                                .aidSelector(
-                                        CardSelector.AidSelector.builder().aidToSelect(AID).build())
-                                .invalidatedPo(PoSelector.InvalidatedPo.REJECT)
-                                .build());
-
-        // Prepare the reading of the Environment and Holder file.
-
-        // Add the selection case to the current selection
-        // (we could have added other cases here)
-        cardSelectionsService.prepareSelection(poSelection);
-
-        return cardSelectionsService;
-    }
 }

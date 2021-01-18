@@ -9,13 +9,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  ************************************************************************************** */
-package org.cna.keyple.demo.remote.server.dto;
+package org.cna.keyple.demo.sale.data.endpoint;
 
 /**
  * Input of Compatible Contract Endpoint
  */
 public class CompatibleContractInput {
 
+  //mandatory
   private String pluginType;
 
   public String getPluginType() {

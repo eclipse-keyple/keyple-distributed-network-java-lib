@@ -11,13 +11,10 @@
  ************************************************************************************** */
 package org.cna.keyple.demo.remote.server;
 
-import java.util.concurrent.Executors;
-import javax.enterprise.context.ApplicationScoped;
-
 import io.quarkus.runtime.Startup;
-import org.cna.keyple.demo.remote.server.dto.CompatibleContractInput;
-import org.cna.keyple.demo.remote.server.dto.CompatibleContractOutput;
-import org.cna.keyple.demo.remote.server.dto.WriteTitleOutput;
+import org.cna.keyple.demo.sale.data.endpoint.CompatibleContractInput;
+import org.cna.keyple.demo.sale.data.endpoint.CompatibleContractOutput;
+import org.cna.keyple.demo.sale.data.endpoint.WriteTitleOutput;
 import org.eclipse.keyple.calypso.transaction.CalypsoPo;
 import org.eclipse.keyple.calypso.transaction.sammanager.SamResourceManager;
 import org.eclipse.keyple.core.service.SmartCardService;
@@ -28,6 +25,9 @@ import org.eclipse.keyple.distributed.RemoteReaderServer;
 import org.eclipse.keyple.distributed.impl.RemotePluginServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.Executors;
 
 /**
  *{@link RemotePluginServer} observer.

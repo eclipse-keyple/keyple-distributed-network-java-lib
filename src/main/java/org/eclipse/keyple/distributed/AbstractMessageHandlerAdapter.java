@@ -11,10 +11,7 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed;
 
-import com.google.gson.JsonObject;
 import java.util.UUID;
-import org.eclipse.keyple.core.util.json.BodyError;
-import org.eclipse.keyple.core.util.json.JsonUtil;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointClientSpi;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
@@ -105,26 +102,6 @@ abstract class AbstractMessageHandlerAdapter {
    */
   final AbstractNodeAdapter getNode() {
     return node;
-  }
-
-  /**
-   * (package-private)<br>
-   * If message contains an error, throws the embedded exception.
-   *
-   * @param message not null instance
-   * @since 2.0
-   */
-  final void checkError(MessageDto message)
-      throws Exception { // TODO move to LocalServiceClientAdapter and remove gson dependencies
-    if (message.getBody() == null || message.getBody().isEmpty()) {
-      return;
-    }
-    JsonObject output = JsonUtil.getParser().fromJson(message.getBody(), JsonObject.class);
-    if (output.has("ERROR")) {
-      BodyError body =
-          JsonUtil.getParser().fromJson(output.get("ERROR").getAsString(), BodyError.class);
-      throw body.getException();
-    }
   }
 
   /**

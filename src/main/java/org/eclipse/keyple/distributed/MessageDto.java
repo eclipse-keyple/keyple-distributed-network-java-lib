@@ -114,6 +114,36 @@ public class MessageDto {
   }
 
   /**
+   * (package-private)<br>
+   * Enumeration of all available common JSON properties.
+   *
+   * @since 2.0
+   */
+  enum JsonProperty {
+
+    /** @since 2.0 */
+    INITIAL_CARD_CONTENT,
+
+    /** @since 2.0 */
+    INITIAL_CARD_CONTENT_CLASS_NAME,
+
+    /** @since 2.0 */
+    IS_READER_OBSERVABLE,
+
+    /** @since 2.0 */
+    READER_EVENT,
+
+    /** @since 2.0 */
+    SERVICE_ID,
+
+    /** @since 2.0 */
+    USER_INPUT_DATA,
+
+    /** @since 2.0 */
+    USER_OUTPUT_DATA
+  }
+
+  /**
    * Constructor.
    *
    * @since 2.0

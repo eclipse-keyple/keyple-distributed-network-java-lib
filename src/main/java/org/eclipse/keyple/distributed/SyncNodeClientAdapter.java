@@ -79,17 +79,17 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  MessageDto sendRequest(MessageDto msg) {
+  MessageDto sendRequest(MessageDto message) {
 
-    msg.setClientNodeId(getNodeId());
-    List<MessageDto> responses = endpoint.sendRequest(msg);
+    message.setClientNodeId(getNodeId());
+    List<MessageDto> responses = endpoint.sendRequest(message);
 
     if (responses == null || responses.isEmpty()) {
       return null;
     } else if (responses.size() == 1) {
       MessageDto response = responses.get(0);
       Assert.getInstance()
-          .notNull(response, "msg")
+          .notNull(response, "message")
           .notEmpty(response.getSessionId(), "sessionId")
           .notEmpty(response.getAction(), "action")
           .notEmpty(response.getClientNodeId(), "clientNodeId")
@@ -109,9 +109,9 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void sendMessage(MessageDto msg) {
-    msg.setClientNodeId(getNodeId());
-    endpoint.sendRequest(msg);
+  void sendMessage(MessageDto message) {
+    message.setClientNodeId(getNodeId());
+    endpoint.sendRequest(message);
   }
 
   /**
@@ -193,7 +193,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
 
     private final ServerPushEventStrategyAdapter strategy;
     private final MessageDto.Action action;
-    private final MessageDto msg;
+    private final MessageDto message;
     private final Thread thread;
 
     /**
@@ -206,7 +206,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     private EventObserver(ServerPushEventStrategyAdapter strategy, MessageDto.Action action) {
       this.strategy = strategy;
       this.action = action;
-      this.msg = buildMessage();
+      this.message = buildMessage();
       if (strategy.getType() == ServerPushEventStrategyAdapter.Type.POLLING) {
         this.thread = new PollingEventObserver();
       } else {
@@ -287,7 +287,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     private void checkForEvents() {
       List<MessageDto> responses;
       try {
-        responses = endpoint.sendRequest(msg);
+        responses = endpoint.sendRequest(message);
       } catch (Exception e) {
         logger.error("Server connection error", e);
         responses = retryRequest();
@@ -341,7 +341,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
      */
     private List<MessageDto> sendRequestSilently() {
       try {
-        return endpoint.sendRequest(msg);
+        return endpoint.sendRequest(message);
       } catch (Exception e) {
         return null;
       }

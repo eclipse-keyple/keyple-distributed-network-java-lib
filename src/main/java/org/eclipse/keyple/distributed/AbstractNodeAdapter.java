@@ -71,20 +71,20 @@ abstract class AbstractNodeAdapter {
    * (package-private)<br>
    * Sends a request and return a response (for internal use only).
    *
-   * @param msg The message to send.
+   * @param message The message to send.
    * @return null if there is no response.
    * @since 2.0
    */
-  abstract MessageDto sendRequest(MessageDto msg);
+  abstract MessageDto sendRequest(MessageDto message);
 
   /**
    * (package-private)<br>
    * Sends a message (for internal use only).
    *
-   * @param msg The message to send.
+   * @param message The message to send.
    * @since 2.0
    */
-  abstract void sendMessage(MessageDto msg);
+  abstract void sendMessage(MessageDto message);
 
   /**
    * (package-private)<br>

@@ -12,6 +12,8 @@
 package org.eclipse.keyple.distributed;
 
 import java.util.UUID;
+import org.eclipse.keyple.core.util.json.BodyError;
+import org.eclipse.keyple.core.util.json.JsonUtil;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointClientSpi;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
@@ -36,6 +38,31 @@ abstract class AbstractMessageHandlerAdapter {
    * @since 2.0
    */
   AbstractMessageHandlerAdapter() {}
+
+  /**
+   * (package-private)<br>
+   * Generates a unique session ID.
+   *
+   * @return A not empty value.
+   * @since 2.0
+   */
+  static String generateSessionId() {
+    return UUID.randomUUID().toString();
+  }
+
+  /**
+   * (package-private)<br>
+   * Checks if the provided message contains an error.
+   *
+   * @param message The message to check.
+   * @throws RuntimeException If the message contains an error.
+   */
+  static void checkError(MessageDto message) {
+    if (message.getAction().equals(MessageDto.Action.ERROR.name())) {
+      throw new RuntimeException( // NOSONAR
+          JsonUtil.getParser().fromJson(message.getBody(), BodyError.class).getException());
+    }
+  }
 
   /**
    * (package-private)<br>
@@ -106,22 +133,11 @@ abstract class AbstractMessageHandlerAdapter {
 
   /**
    * (package-private)<br>
-   * Generates a unique session ID.
-   *
-   * @return A not empty value.
-   * @since 2.0
-   */
-  final String generateSessionId() {
-    return UUID.randomUUID().toString();
-  }
-
-  /**
-   * (package-private)<br>
    * Processes an incoming message.<br>
    * It should be invoked by a node following the reception of a {@link MessageDto}.
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    * @since 2.0
    */
-  abstract void onMessage(MessageDto msg);
+  abstract void onMessage(MessageDto message);
 }

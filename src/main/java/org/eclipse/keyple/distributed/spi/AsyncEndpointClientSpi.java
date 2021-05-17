@@ -55,10 +55,10 @@ public interface AsyncEndpointClientSpi {
    *   <li>Serialize and send the {@link MessageDto} to the server.
    * </ul>
    *
-   * @param msg The message to send.
+   * @param message The message to send.
    * @since 2.0
    */
-  void sendMessage(MessageDto msg);
+  void sendMessage(MessageDto message);
 
   /**
    * Invoked by the {@link AsyncNodeClient} node to close a communication session with the server

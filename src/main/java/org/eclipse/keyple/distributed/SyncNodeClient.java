@@ -29,7 +29,6 @@ import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
  * <ul>
  *   <li>{@code LocalServiceClient}
  *   <li>{@code RemotePluginClient}
- *   <li>{@code PoolRemotePluginClient}
  * </ul>
  *
  * To create it, you must only bind a <b>sync</b> node during the initialization process and you

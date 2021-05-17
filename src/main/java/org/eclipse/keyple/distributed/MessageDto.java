@@ -43,7 +43,7 @@ public class MessageDto {
    *
    * @since 2.0
    */
-  enum Action { // TODO remove unused values
+  enum Action {
 
     /**
      * Executes a Keyple plugin/reader service remotely.
@@ -58,6 +58,20 @@ public class MessageDto {
      * @since 2.0
      */
     RESP,
+
+    /**
+     * Starts the observation of all local plugins.
+     *
+     * @since 2.0
+     */
+    START_PLUGINS_OBSERVATION,
+
+    /**
+     * Stops the observation of all local plugins.
+     *
+     * @since 2.0
+     */
+    STOP_PLUGINS_OBSERVATION,
 
     /**
      * Message containing a plugin event.

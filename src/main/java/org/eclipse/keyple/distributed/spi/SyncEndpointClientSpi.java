@@ -32,9 +32,9 @@ public interface SyncEndpointClientSpi {
    * You have to serialize and send the provided {@link MessageDto} to the server, then retry the
    * response which is a list of {@link MessageDto}.
    *
-   * @param msg The message to send.
+   * @param message The message to send.
    * @return a null or empty list if there is no result.
    * @since 2.0
    */
-  List<MessageDto> sendRequest(MessageDto msg);
+  List<MessageDto> sendRequest(MessageDto message);
 }

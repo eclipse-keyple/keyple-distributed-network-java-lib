@@ -29,7 +29,6 @@ import org.eclipse.keyple.distributed.spi.AsyncEndpointClientSpi;
  * <ul>
  *   <li>{@code LocalServiceClient}
  *   <li>{@code RemotePluginClient}
- *   <li>{@code PoolRemotePluginClient}
  * </ul>
  *
  * To create it, you should only bind an <b>async</b> node during the initialization process.<br>
@@ -54,10 +53,10 @@ public interface AsyncNodeClient {
    * Must be invoked by the {@link AsyncEndpointClientSpi} endpoint following the reception and
    * deserialization of a {@link MessageDto} from the server.
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    * @since 2.0
    */
-  void onMessage(MessageDto msg);
+  void onMessage(MessageDto message);
 
   /**
    * Must be invoked by the {@link AsyncEndpointClientSpi} endpoint following the closing of a

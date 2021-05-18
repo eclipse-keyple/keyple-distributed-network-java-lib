@@ -49,10 +49,10 @@ public interface SyncNodeServer {
    *   <li>Serialize the result en return it to the client.
    * </ul>
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    * @return not null but empty list if there is no result.
    * @throws IllegalArgumentException if some arguments are incorrect.
    * @since 2.0
    */
-  List<MessageDto> onRequest(MessageDto msg);
+  List<MessageDto> onRequest(MessageDto message);
 }

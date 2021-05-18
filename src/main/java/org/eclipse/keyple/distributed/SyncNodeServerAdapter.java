@@ -65,26 +65,26 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  public List<MessageDto> onRequest(MessageDto msg) {
+  public List<MessageDto> onRequest(MessageDto message) {
 
     // Check mandatory fields
     Assert.getInstance()
-        .notNull(msg, "msg")
-        .notEmpty(msg.getSessionId(), "sessionId")
-        .notEmpty(msg.getAction(), "action")
-        .notEmpty(msg.getClientNodeId(), "clientNodeId");
+        .notNull(message, "message")
+        .notEmpty(message.getSessionId(), "sessionId")
+        .notEmpty(message.getAction(), "action")
+        .notEmpty(message.getClientNodeId(), "clientNodeId");
 
     List<MessageDto> responses;
-    MessageDto.Action action = MessageDto.Action.valueOf(msg.getAction());
+    MessageDto.Action action = MessageDto.Action.valueOf(message.getAction());
     switch (action) {
       case CHECK_PLUGIN_EVENT:
-        responses = checkEvents(msg, pluginManagers);
+        responses = checkEvents(message, pluginManagers);
         break;
       case CHECK_READER_EVENT:
-        responses = checkEvents(msg, readerManagers);
+        responses = checkEvents(message, readerManagers);
         break;
       default:
-        responses = processOnRequest(msg);
+        responses = processOnRequest(message);
     }
     return responses != null ? responses : Collections.<MessageDto>emptyList();
   }
@@ -93,14 +93,14 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * (private)<br>
    * Check on client request if some events are present in the associated sendbox.
    *
-   * @param msg The client message containing all client info (node id, strategy, ...)
+   * @param message The client message containing all client info (node id, strategy, ...)
    * @param eventManagers The event managers map.
    * @return A null list or a not empty list
    */
   private List<MessageDto> checkEvents(
-      MessageDto msg, Map<String, ServerPushEventManager> eventManagers) {
-    ServerPushEventManager manager = getEventManager(msg, eventManagers);
-    return manager.checkEvents(msg);
+      MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
+    ServerPushEventManager manager = getEventManager(message, eventManagers);
+    return manager.checkEvents(message);
   }
 
   /**
@@ -108,16 +108,16 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * Processes onRequest for standard transaction call.<br>
    * Create a new session manager if needed.
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    * @return A nullable list or which contains at most one element.
    */
-  private List<MessageDto> processOnRequest(MessageDto msg) {
-    SessionManager manager = sessionManagers.get(msg.getSessionId());
+  private List<MessageDto> processOnRequest(MessageDto message) {
+    SessionManager manager = sessionManagers.get(message.getSessionId());
     if (manager == null) {
-      manager = new SessionManager(msg.getSessionId());
-      sessionManagers.put(msg.getSessionId(), manager);
+      manager = new SessionManager(message.getSessionId());
+      sessionManagers.put(message.getSessionId(), manager);
     }
-    MessageDto response = manager.onRequest(msg);
+    MessageDto response = manager.onRequest(message);
     return response != null ? Collections.singletonList(response) : null;
   }
 
@@ -127,13 +127,13 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  MessageDto sendRequest(MessageDto msg) {
-    msg.setServerNodeId(getNodeId());
-    SessionManager manager = sessionManagers.get(msg.getSessionId());
+  MessageDto sendRequest(MessageDto message) {
+    message.setServerNodeId(getNodeId());
+    SessionManager manager = sessionManagers.get(message.getSessionId());
     try {
-      return manager.sendRequest(msg);
+      return manager.sendRequest(message);
     } catch (RuntimeException e) {
-      sessionManagers.remove(msg.getSessionId());
+      sessionManagers.remove(message.getSessionId());
       throw e;
     }
   }
@@ -144,18 +144,18 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void sendMessage(MessageDto msg) {
-    msg.setServerNodeId(getNodeId());
-    MessageDto.Action action = MessageDto.Action.valueOf(msg.getAction());
+  void sendMessage(MessageDto message) {
+    message.setServerNodeId(getNodeId());
+    MessageDto.Action action = MessageDto.Action.valueOf(message.getAction());
     switch (action) {
       case PLUGIN_EVENT:
-        postEvent(msg, pluginManagers);
+        postEvent(message, pluginManagers);
         break;
       case READER_EVENT:
-        postEvent(msg, readerManagers);
+        postEvent(message, readerManagers);
         break;
       default:
-        processSendMessage(msg);
+        processSendMessage(message);
     }
   }
 
@@ -214,28 +214,28 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * Post an event into the sendbox, analyse the client strategy, and eventually try to wake up the
    * pending client task in case of long polling strategy.
    *
-   * @param msg The message containing the event to post.
+   * @param message The message containing the event to post.
    * @param eventManagers The event managers map.
    */
-  private void postEvent(MessageDto msg, Map<String, ServerPushEventManager> eventManagers) {
-    ServerPushEventManager manager = getEventManager(msg, eventManagers);
-    manager.postEvent(msg);
+  private void postEvent(MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
+    ServerPushEventManager manager = getEventManager(message, eventManagers);
+    manager.postEvent(message);
   }
 
   /**
    * (private)<br>
    * Get or create an event manager associated to a client node id.
    *
-   * @param msg The message containing the client's information
+   * @param message The message containing the client's information
    * @param eventManagers The event managers map.
    * @return a not null reference.
    */
   private ServerPushEventManager getEventManager(
-      MessageDto msg, Map<String, ServerPushEventManager> eventManagers) {
-    ServerPushEventManager manager = eventManagers.get(msg.getClientNodeId());
+      MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
+    ServerPushEventManager manager = eventManagers.get(message.getClientNodeId());
     if (manager == null) {
-      manager = new ServerPushEventManager(msg.getClientNodeId());
-      eventManagers.put(msg.getClientNodeId(), manager);
+      manager = new ServerPushEventManager(message.getClientNodeId());
+      eventManagers.put(message.getClientNodeId(), manager);
     }
     return manager;
   }
@@ -245,17 +245,17 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * Processes sendMessage for standard transaction call.<br>
    * Note that the associated session is also closed.
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    */
-  private void processSendMessage(MessageDto msg) {
-    SessionManager manager = sessionManagers.get(msg.getSessionId());
+  private void processSendMessage(MessageDto message) {
+    SessionManager manager = sessionManagers.get(message.getSessionId());
     if (manager == null) {
       throw new IllegalStateException("Session is closed");
     }
     try {
-      manager.sendMessage(msg);
+      manager.sendMessage(message);
     } finally {
-      sessionManagers.remove(msg.getSessionId());
+      sessionManagers.remove(message.getSessionId());
     }
   }
 
@@ -290,19 +290,19 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * (private)<br>
      * Invoked by the endpoint when a new client request is received.
      *
-     * @param msg The message to process.
+     * @param message The message to process.
      * @return a not null reference on a message to return to the client.
      */
-    private synchronized MessageDto onRequest(MessageDto msg) {
+    private synchronized MessageDto onRequest(MessageDto message) {
       checkState(SessionManagerState.INITIALIZED, SessionManagerState.SEND_REQUEST_BEGIN);
       if (state == SessionManagerState.INITIALIZED) {
         // Process the message as a client request
         state = SessionManagerState.ON_REQUEST;
-        getHandler().onMessage(msg);
+        getHandler().onMessage(message);
       } else {
         // State is SEND_REQUEST_BEGIN
         // Process the message as a client response
-        postMessageAndNotify(msg, SessionManagerState.SEND_REQUEST_END);
+        postMessageAndNotify(message, SessionManagerState.SEND_REQUEST_END);
       }
       waitForState(SessionManagerState.SEND_MESSAGE, SessionManagerState.SEND_REQUEST_BEGIN);
       return response;
@@ -312,11 +312,11 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * (private)<br>
      * Invoked by the handler to send a request to the endpoint and await a response.
      *
-     * @param msg The message to send.
+     * @param message The message to send.
      * @return The response.
      */
-    private synchronized MessageDto sendRequest(MessageDto msg) {
-      postMessageAndNotify(msg, SessionManagerState.SEND_REQUEST_BEGIN);
+    private synchronized MessageDto sendRequest(MessageDto message) {
+      postMessageAndNotify(message, SessionManagerState.SEND_REQUEST_BEGIN);
       waitForState(SessionManagerState.SEND_REQUEST_END);
       return response;
     }
@@ -325,22 +325,22 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * (private)<br>
      * Invoked by the handler to send a message to the endpoint.
      *
-     * @param msg The message to send.
+     * @param message The message to send.
      */
-    private synchronized void sendMessage(MessageDto msg) {
-      postMessageAndNotify(msg, SessionManagerState.SEND_MESSAGE);
+    private synchronized void sendMessage(MessageDto message) {
+      postMessageAndNotify(message, SessionManagerState.SEND_MESSAGE);
     }
 
     /**
      * (private)<br>
      * Posts a message and try to wake up the waiting task.
      *
-     * @param msg The message to post.
+     * @param message The message to post.
      * @param targetState The new state to set before to notify the waiting task.
      */
     private synchronized void postMessageAndNotify(
-        MessageDto msg, SessionManagerState targetState) {
-      response = msg;
+        MessageDto message, SessionManagerState targetState) {
+      response = message;
       state = targetState;
       notifyAll();
     }
@@ -374,15 +374,15 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * Posts an event into the sendbox, analyse the client strategy, and eventually try to wake up
      * the pending client task in case of long polling strategy.
      *
-     * @param msg The message containing the event to post.
+     * @param message The message containing the event to post.
      */
-    private synchronized void postEvent(MessageDto msg) {
+    private synchronized void postEvent(MessageDto message) {
 
       // Post the event
       if (events == null) {
         events = new ArrayList<MessageDto>(1);
       }
-      events.add(msg);
+      events.add(message);
 
       // Gets the client's strategy
       // If strategy is long polling, then try to wake up the associated awaiting task.
@@ -396,10 +396,10 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * (private)<br>
      * Checks on client request if some events are present in the associated sandbox.
      *
-     * @param msg The client message containing all client info (node id, strategy, ...)
+     * @param message The client message containing all client info (node id, strategy, ...)
      * @return a null list or a not empty list
      */
-    private synchronized List<MessageDto> checkEvents(MessageDto msg) {
+    private synchronized List<MessageDto> checkEvents(MessageDto message) {
       try {
         // We're checking to see if any events are already present
         if (events != null) {
@@ -407,7 +407,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
         }
 
         // If none, then gets the client's strategy
-        registerClientStrategy(msg);
+        registerClientStrategy(message);
 
         // If is a long polling strategy, then await for an event notification.
         if (strategy.getType() == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
@@ -423,10 +423,10 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
      * (private)<br>
      * Registers the client strategy in case of first client invocation.
      *
-     * @param msg The client message containing all client info (node id, strategy, ...)
+     * @param message The client message containing all client info (node id, strategy, ...)
      * @throws IllegalArgumentException in case of first client invocation with bad arguments.
      */
-    private void registerClientStrategy(MessageDto msg) {
+    private void registerClientStrategy(MessageDto message) {
 
       // Gets the client registered strategy if exists.
       if (strategy == null) {
@@ -435,7 +435,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
         JsonObject body;
         ServerPushEventStrategyAdapter.Type type;
         try {
-          body = jsonParser.parse(msg.getBody()).getAsJsonObject();
+          body = jsonParser.parse(message.getBody()).getAsJsonObject();
           type = ServerPushEventStrategyAdapter.Type.valueOf(body.get("strategy").getAsString());
         } catch (Exception e) {
           throw new IllegalArgumentException("body", e);

@@ -79,10 +79,10 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
    * @since 2.0
    */
   @Override
-  MessageDto sendRequest(MessageDto msg) {
-    msg.setClientNodeId(getNodeId());
-    SessionManager manager = sessionManagers.get(msg.getSessionId());
-    return manager.sendRequest(msg);
+  MessageDto sendRequest(MessageDto message) {
+    message.setClientNodeId(getNodeId());
+    SessionManager manager = sessionManagers.get(message.getSessionId());
+    return manager.sendRequest(message);
   }
 
   /**
@@ -91,10 +91,10 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
    * @since 2.0
    */
   @Override
-  void sendMessage(MessageDto msg) {
-    msg.setClientNodeId(getNodeId());
-    SessionManager manager = sessionManagers.get(msg.getSessionId());
-    manager.sendMessage(msg);
+  void sendMessage(MessageDto message) {
+    message.setClientNodeId(getNodeId());
+    SessionManager manager = sessionManagers.get(message.getSessionId());
+    manager.sendMessage(message);
   }
 
   /**
@@ -103,25 +103,25 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
    * @since 2.0
    */
   @Override
-  public void onMessage(MessageDto msg) {
+  public void onMessage(MessageDto message) {
 
     Assert.getInstance()
-        .notNull(msg, "msg")
-        .notEmpty(msg.getSessionId(), SESSION_ID)
-        .notEmpty(msg.getAction(), "action")
-        .notEmpty(msg.getClientNodeId(), "clientNodeId")
-        .notEmpty(msg.getServerNodeId(), "serverNodeId");
+        .notNull(message, "message")
+        .notEmpty(message.getSessionId(), SESSION_ID)
+        .notEmpty(message.getAction(), "action")
+        .notEmpty(message.getClientNodeId(), "clientNodeId")
+        .notEmpty(message.getServerNodeId(), "serverNodeId");
 
-    SessionManager manager = getManagerForEndpoint(msg.getSessionId());
+    SessionManager manager = getManagerForEndpoint(message.getSessionId());
     if (manager != null) {
-      MessageDto.Action action = MessageDto.Action.valueOf(msg.getAction());
+      MessageDto.Action action = MessageDto.Action.valueOf(message.getAction());
       switch (action) {
         case PLUGIN_EVENT:
         case READER_EVENT:
-          manager.onEvent(msg);
+          manager.onEvent(message);
           break;
         default:
-          manager.onResponse(msg);
+          manager.onResponse(message);
       }
     }
   }
@@ -282,14 +282,14 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
      * (private)<br>
      * Invoked by the handler to send a request to the endpoint and await a response.
      *
-     * @param msg The message to send.
+     * @param message The message to send.
      * @return The response.
      */
-    private synchronized MessageDto sendRequest(MessageDto msg) {
+    private synchronized MessageDto sendRequest(MessageDto message) {
       checkIfExternalErrorOccurred();
       state = SessionManagerState.SEND_REQUEST_BEGIN;
       response = null;
-      endpoint.sendMessage(msg);
+      endpoint.sendMessage(message);
       waitForState(SessionManagerState.SEND_REQUEST_END);
       return response;
     }
@@ -298,12 +298,12 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
      * (private)<br>
      * Invoked by the endpoint and notify the awaiting thread if necessary.
      *
-     * @param msg The response received from the endpoint.
+     * @param message The response received from the endpoint.
      * @throws IllegalStateException in case of bad use.
      */
-    private synchronized void onResponse(MessageDto msg) {
+    private synchronized void onResponse(MessageDto message) {
       checkState(SessionManagerState.SEND_REQUEST_BEGIN);
-      response = msg;
+      response = message;
       state = SessionManagerState.SEND_REQUEST_END;
       notifyAll();
     }
@@ -312,23 +312,23 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
      * (private)<br>
      * Invoked by the endpoint to transmit an event to the handler.
      *
-     * @param msg The event received from the endpoint.
+     * @param message The event received from the endpoint.
      */
-    private void onEvent(MessageDto msg) {
-      getHandler().onMessage(msg);
+    private void onEvent(MessageDto message) {
+      getHandler().onMessage(message);
     }
 
     /**
      * (private)<br>
      * Invoked by the handler to send a message to the endpoint.
      *
-     * @param msg The message to send.
+     * @param message The message to send.
      * @throws RuntimeException if an error occurs.
      */
-    private synchronized void sendMessage(MessageDto msg) {
+    private synchronized void sendMessage(MessageDto message) {
       checkIfExternalErrorOccurred();
       state = SessionManagerState.SEND_MESSAGE;
-      endpoint.sendMessage(msg);
+      endpoint.sendMessage(message);
       checkIfExternalErrorOccurred();
     }
 

@@ -44,10 +44,10 @@ public interface AsyncNodeServer {
    * Must be invoked by the {@link AsyncEndpointServerSpi} endpoint following the reception and
    * deserialization of a {@link MessageDto} from the client.
    *
-   * @param msg The message to process.
+   * @param message The message to process.
    * @since 2.0
    */
-  void onMessage(MessageDto msg);
+  void onMessage(MessageDto message);
 
   /**
    * Must be invoked by the {@link AsyncEndpointServerSpi} endpoint following the closing of a

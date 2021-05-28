@@ -81,7 +81,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   /**
    * (private)<br>
-   * Check on client request if some events are present in the associated sandbox.
+   * Check on client request if some events are present in the associated send box.
    *
    * @param message The client message containing all client info (node id, strategy, ...)
    * @param eventManagers The event managers map.
@@ -151,7 +151,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   /**
    * (private)<br>
-   * Post an event into the sandbox, analyse the client strategy, and eventually try to wake up the
+   * Post an event into the send box, analyse the client strategy, and eventually try to wake up the
    * pending client task in case of long polling strategy.
    *
    * @param message The message containing the event to post.
@@ -311,7 +311,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     /**
      * (private)<br>
-     * Posts an event into the sandbox, analyse the client strategy, and eventually try to wake up
+     * Posts an event into the send box, analyse the client strategy, and eventually try to wake up
      * the pending client task in case of long polling strategy.
      *
      * @param message The message containing the event to post.
@@ -334,7 +334,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     /**
      * (private)<br>
-     * Checks on client request if some events are present in the associated sandbox.
+     * Checks on client request if some events are present in the associated send box.
      *
      * @param message The client message containing all client info (node id, strategy, ...)
      * @return a null list or a not empty list

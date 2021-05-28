@@ -147,46 +147,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
    * @since 2.0
    */
   @Override
-  void startPluginsObservation() {
-    // NOP
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopPluginsObservation() {
-    // NOP
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startReadersObservation() {
-    // NOP
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopReadersObservation() {
-    // NOP
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
   public void onClose(String sessionId) {
     Assert.getInstance().notEmpty(sessionId, SESSION_ID);
     SessionManager manager = getManagerForEndpoint(sessionId);

@@ -50,16 +50,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
    * @since 2.0
    */
   @Override
-  void openSession(String sessionId) {
-    throw new UnsupportedOperationException("openSession");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
   MessageDto sendRequest(MessageDto message) {
     message.setServerNodeId(getNodeId());
     SessionManager manager = getManagerForHandler(message.getSessionId());
@@ -76,56 +66,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     message.setServerNodeId(getNodeId());
     SessionManager manager = getManagerForHandler(message.getSessionId());
     manager.sendMessage(message);
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void closeSession(String sessionId) {
-    throw new UnsupportedOperationException("closeSession");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startPluginsObservation() {
-    throw new UnsupportedOperationException("startPluginsObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopPluginsObservation() {
-    throw new UnsupportedOperationException("stopPluginsObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startReadersObservation() {
-    throw new UnsupportedOperationException("startReadersObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopReadersObservation() {
-    throw new UnsupportedOperationException("stopReadersObservation");
   }
 
   /**

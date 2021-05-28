@@ -60,20 +60,6 @@ public class MessageDto {
     RESP,
 
     /**
-     * Starts the observation of all local plugins.
-     *
-     * @since 2.0
-     */
-    START_PLUGINS_OBSERVATION,
-
-    /**
-     * Stops the observation of all local plugins.
-     *
-     * @since 2.0
-     */
-    STOP_PLUGINS_OBSERVATION,
-
-    /**
      * Message containing a plugin event.
      *
      * @since 2.0
@@ -142,19 +128,13 @@ public class MessageDto {
     INITIAL_CARD_CONTENT_CLASS_NAME,
 
     /** @since 2.0 */
-    IS_READER_OBSERVABLE,
+    INPUT_DATA,
 
     /** @since 2.0 */
-    READER_EVENT,
+    OUTPUT_DATA,
 
     /** @since 2.0 */
-    SERVICE_ID,
-
-    /** @since 2.0 */
-    USER_INPUT_DATA,
-
-    /** @since 2.0 */
-    USER_OUTPUT_DATA
+    SERVICE_ID
   }
 
   /**

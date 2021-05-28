@@ -34,9 +34,12 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
 
   private final ServerPushEventStrategyAdapter pluginObservationStrategy;
   private EventObserver pluginEventObserver;
+  private final Object pluginMonitor;
 
   private final ServerPushEventStrategyAdapter readerObservationStrategy;
   private EventObserver readerEventObserver;
+  private final Object readerMonitor;
+  private volatile int nbOfObservedReaders;
 
   /**
    * (package-private)<br>
@@ -60,17 +63,10 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     super(handler, 0);
     this.endpoint = endpoint;
     this.pluginObservationStrategy = pluginObservationStrategy;
+    this.pluginMonitor = new Object();
     this.readerObservationStrategy = readerObservationStrategy;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void openSession(String sessionId) {
-    // NOP
+    this.readerMonitor = new Object();
+    this.nbOfObservedReaders = 0;
   }
 
   /**
@@ -120,24 +116,16 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void closeSession(String sessionId) {
-    // NOP
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startPluginsObservation() {
+  void onStartPluginsObservation() {
     if (pluginObservationStrategy == null) {
       throw new IllegalStateException("The plugin observation strategy is not set.");
     }
-    if (pluginEventObserver == null) {
-      pluginEventObserver =
-          new EventObserver(pluginObservationStrategy, MessageDto.Action.CHECK_PLUGIN_EVENT);
-      pluginEventObserver.start();
+    synchronized (pluginMonitor) {
+      if (pluginEventObserver == null) {
+        pluginEventObserver =
+            new EventObserver(pluginObservationStrategy, MessageDto.Action.CHECK_PLUGIN_EVENT);
+        pluginEventObserver.start();
+      }
     }
   }
 
@@ -147,10 +135,12 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void stopPluginsObservation() {
-    if (pluginEventObserver != null) {
-      pluginEventObserver.stop();
-      pluginEventObserver = null;
+  void onStopPluginsObservation() {
+    synchronized (pluginMonitor) {
+      if (pluginEventObserver != null) {
+        pluginEventObserver.stop();
+        pluginEventObserver = null;
+      }
     }
   }
 
@@ -160,14 +150,17 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void startReadersObservation() {
+  void onStartReaderObservation() {
     if (readerObservationStrategy == null) {
       throw new IllegalStateException("The reader observation strategy is not set.");
     }
-    if (readerEventObserver == null) {
-      readerEventObserver =
-          new EventObserver(readerObservationStrategy, MessageDto.Action.CHECK_READER_EVENT);
-      readerEventObserver.start();
+    synchronized (readerMonitor) {
+      nbOfObservedReaders++;
+      if (readerEventObserver == null) {
+        readerEventObserver =
+            new EventObserver(readerObservationStrategy, MessageDto.Action.CHECK_READER_EVENT);
+        readerEventObserver.start();
+      }
     }
   }
 
@@ -177,10 +170,15 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void stopReadersObservation() {
-    if (readerEventObserver != null) {
-      readerEventObserver.stop();
-      readerEventObserver = null;
+  void onStopReaderObservation() {
+    synchronized (readerMonitor) {
+      if (nbOfObservedReaders > 0) {
+        nbOfObservedReaders--;
+      }
+      if (nbOfObservedReaders == 0 && readerEventObserver != null) {
+        readerEventObserver.stop();
+        readerEventObserver = null;
+      }
     }
   }
 
@@ -343,7 +341,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       try {
         return endpoint.sendRequest(message);
       } catch (Exception e) {
-        return null;
+        return null; // NOSONAR Null is a functional value
       }
     }
 

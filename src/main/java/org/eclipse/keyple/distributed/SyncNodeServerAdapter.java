@@ -55,16 +55,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @since 2.0
    */
   @Override
-  void openSession(String sessionId) {
-    throw new UnsupportedOperationException("openSession");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
   public List<MessageDto> onRequest(MessageDto message) {
 
     // Check mandatory fields
@@ -91,7 +81,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   /**
    * (private)<br>
-   * Check on client request if some events are present in the associated sendbox.
+   * Check on client request if some events are present in the associated sandbox.
    *
    * @param message The client message containing all client info (node id, strategy, ...)
    * @param eventManagers The event managers map.
@@ -160,58 +150,8 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void closeSession(String sessionId) {
-    throw new UnsupportedOperationException("closeSession");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startPluginsObservation() {
-    throw new UnsupportedOperationException("startPluginsObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopPluginsObservation() {
-    throw new UnsupportedOperationException("stopPluginsObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void startReadersObservation() {
-    throw new UnsupportedOperationException("startReadersObservation");
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since 2.0
-   */
-  @Override
-  void stopReadersObservation() {
-    throw new UnsupportedOperationException("stopReadersObservation");
-  }
-
-  /**
    * (private)<br>
-   * Post an event into the sendbox, analyse the client strategy, and eventually try to wake up the
+   * Post an event into the sandbox, analyse the client strategy, and eventually try to wake up the
    * pending client task in case of long polling strategy.
    *
    * @param message The message containing the event to post.
@@ -371,7 +311,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     /**
      * (private)<br>
-     * Posts an event into the sendbox, analyse the client strategy, and eventually try to wake up
+     * Posts an event into the sandbox, analyse the client strategy, and eventually try to wake up
      * the pending client task in case of long polling strategy.
      *
      * @param message The message containing the event to post.

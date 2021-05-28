@@ -60,12 +60,36 @@ abstract class AbstractNodeAdapter {
 
   /**
    * (package-private)<br>
+   * Gets the node ID.
+   *
+   * @return A not empty string.
+   * @since 2.0
+   */
+  final String getNodeId() {
+    return nodeId;
+  }
+
+  /**
+   * (package-private)<br>
+   * Gets the associated handler.
+   *
+   * @return A not null reference.
+   * @since 2.0
+   */
+  final AbstractMessageHandlerAdapter getHandler() {
+    return handler;
+  }
+
+  /**
+   * (package-private)<br>
    * Opens a new session on the endpoint (for internal use only).
    *
    * @param sessionId The session id.
    * @since 2.0
    */
-  abstract void openSession(String sessionId);
+  void openSession(String sessionId) {
+    // NOP
+  }
 
   /**
    * (package-private)<br>
@@ -93,39 +117,9 @@ abstract class AbstractNodeAdapter {
    * @param sessionId The session id.
    * @since 2.0
    */
-  abstract void closeSession(String sessionId);
-
-  /**
-   * (package-private)<br>
-   * Starts the background observation of all remote plugins events using the configured strategy.
-   *
-   * @since 2.0
-   */
-  abstract void startPluginsObservation();
-
-  /**
-   * (package-private)<br>
-   * Stops the background observation of all remote plugins events.
-   *
-   * @since 2.0
-   */
-  abstract void stopPluginsObservation();
-
-  /**
-   * (package-private)<br>
-   * Starts the background observation of all remote readers events using the configured strategy.
-   *
-   * @since 2.0
-   */
-  abstract void startReadersObservation();
-
-  /**
-   * (package-private)<br>
-   * Stops the background observation of all remote readers events.
-   *
-   * @since 2.0
-   */
-  abstract void stopReadersObservation();
+  void closeSession(String sessionId) {
+    // NOP
+  }
 
   /**
    * (package-private)<br>
@@ -148,24 +142,44 @@ abstract class AbstractNodeAdapter {
 
   /**
    * (package-private)<br>
-   * Gets the node ID.
+   * Starts if needed the background observation of all remote plugins events using the configured
+   * strategy.
    *
-   * @return A not empty string.
    * @since 2.0
    */
-  final String getNodeId() {
-    return nodeId;
+  void onStartPluginsObservation() {
+    // NOP
   }
 
   /**
    * (package-private)<br>
-   * Gets the associated handler.
+   * Stops the background observation of all remote plugins events.
    *
-   * @return A not null reference.
    * @since 2.0
    */
-  final AbstractMessageHandlerAdapter getHandler() {
-    return handler;
+  void onStopPluginsObservation() {
+    // NOP
+  }
+
+  /**
+   * (package-private)<br>
+   * Starts if needed the background observation of all remote readers events using the configured
+   * strategy.
+   *
+   * @since 2.0
+   */
+  void onStartReaderObservation() {
+    // NOP
+  }
+
+  /**
+   * (package-private)<br>
+   * Stops the background observation of all remote readers events.
+   *
+   * @since 2.0
+   */
+  void onStopReaderObservation() {
+    // NOP
   }
 
   /**

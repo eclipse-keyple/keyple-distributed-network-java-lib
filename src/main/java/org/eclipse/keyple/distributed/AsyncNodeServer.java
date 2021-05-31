@@ -29,7 +29,6 @@ import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
  * <ul>
  *   <li>{@code RemotePluginServer}
  *   <li>{@code LocalServiceServer}
- *   <li>{@code PoolLocalServiceServer}
  * </ul>
  *
  * To create it, you must only bind an <b>async</b> node during the initialization process.<br>

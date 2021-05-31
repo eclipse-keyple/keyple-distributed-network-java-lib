@@ -26,7 +26,6 @@ import java.util.List;
  * <ul>
  *   <li>{@code RemotePluginServer}
  *   <li>{@code LocalServiceServer}
- *   <li>{@code PoolLocalServiceServer}
  * </ul>
  *
  * To create it, you must only bind a <b>sync</b> node during the initialization process.<br>

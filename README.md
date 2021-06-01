@@ -4,7 +4,7 @@
 
 The **Keyple Distributed Network** Java library contains the common network elements used by the [Keyple Java Distributed Local](https://github.com/eclipse/keyple-java-distributed-local) and [Keyple Java Distributed Remote](https://github.com/eclipse/keyple-java-distributed-remote) libraries provided by the **Keyple Distributed** solution.
 
-This library **should not be import explicitly** because it's imported by transitivity by the main libraries.
+This library **should be imported explicitly** by the main application.
 
 ## User Guide & Download Information
 

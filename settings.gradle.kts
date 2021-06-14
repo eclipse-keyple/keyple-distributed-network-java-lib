@@ -1,1 +1,1 @@
-rootProject.name = "keyple-java-distributed-network"
+rootProject.name = "keyple-distributed-network-java-lib"

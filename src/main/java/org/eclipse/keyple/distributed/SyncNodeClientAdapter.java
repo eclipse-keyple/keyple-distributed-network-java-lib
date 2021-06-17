@@ -11,6 +11,8 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed;
 
+import static org.eclipse.keyple.distributed.MessageDto.*;
+
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -222,9 +224,9 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
      */
     private MessageDto buildMessage() {
       JsonObject body = new JsonObject();
-      body.addProperty("strategy", strategy.getType().name());
+      body.addProperty(JsonProperty.STRATEGY.name(), strategy.getType().name());
       if (strategy.getType() == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
-        body.addProperty("duration", strategy.getDurationMillis());
+        body.addProperty(JsonProperty.DURATION.name(), strategy.getDurationMillis());
       }
       return new MessageDto()
           .setSessionId(UUID.randomUUID().toString())

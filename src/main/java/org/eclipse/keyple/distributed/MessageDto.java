@@ -134,7 +134,13 @@ public class MessageDto {
     OUTPUT_DATA,
 
     /** @since 2.0 */
-    SERVICE_ID
+    SERVICE_ID,
+
+    /** @since 2.0 */
+    STRATEGY,
+
+    /** @since 2.0 */
+    DURATION
   }
 
   /**

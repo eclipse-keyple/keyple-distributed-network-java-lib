@@ -11,6 +11,8 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed;
 
+import static org.eclipse.keyple.distributed.MessageDto.*;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.*;
@@ -376,7 +378,9 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
         ServerPushEventStrategyAdapter.Type type;
         try {
           body = jsonParser.parse(message.getBody()).getAsJsonObject();
-          type = ServerPushEventStrategyAdapter.Type.valueOf(body.get("strategy").getAsString());
+          type =
+              ServerPushEventStrategyAdapter.Type.valueOf(
+                  body.get(JsonProperty.STRATEGY.name()).getAsString());
         } catch (Exception e) {
           throw new IllegalArgumentException("body", e);
         }
@@ -384,7 +388,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
         int durationSeconds = 0;
         if (type == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
           try {
-            durationSeconds = body.get("duration").getAsInt();
+            durationSeconds = body.get(JsonProperty.DURATION.name()).getAsInt();
           } catch (Exception e) {
             throw new IllegalArgumentException("long polling duration", e);
           }

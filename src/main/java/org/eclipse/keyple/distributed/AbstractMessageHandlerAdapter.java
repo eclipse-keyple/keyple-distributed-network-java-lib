@@ -26,11 +26,8 @@ import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
  */
 abstract class AbstractMessageHandlerAdapter {
 
-  /**
-   * (private)<br>
-   * The bounded node.
-   */
   private AbstractNodeAdapter node;
+  private boolean isBoundToSyncNode;
 
   /**
    * (package-private)<br>
@@ -83,6 +80,7 @@ abstract class AbstractMessageHandlerAdapter {
     node =
         new SyncNodeClientAdapter(
             this, endpoint, pluginObservationStrategy, readerObservationStrategy);
+    isBoundToSyncNode = true;
   }
 
   /**
@@ -94,6 +92,7 @@ abstract class AbstractMessageHandlerAdapter {
    */
   final void bindSyncNodeServer() {
     node = new SyncNodeServerAdapter(this, 20);
+    isBoundToSyncNode = true;
   }
 
   /**
@@ -107,6 +106,7 @@ abstract class AbstractMessageHandlerAdapter {
    */
   final void bindAsyncNodeClient(AsyncEndpointClientSpi endpoint, int timeoutSeconds) {
     node = new AsyncNodeClientAdapter(this, endpoint, timeoutSeconds);
+    isBoundToSyncNode = false;
   }
 
   /**
@@ -119,6 +119,7 @@ abstract class AbstractMessageHandlerAdapter {
    */
   final void bindAsyncNodeServer(AsyncEndpointServerSpi endpoint) {
     node = new AsyncNodeServerAdapter(this, endpoint, 20);
+    isBoundToSyncNode = false;
   }
 
   /**
@@ -126,9 +127,21 @@ abstract class AbstractMessageHandlerAdapter {
    * Gets the bound {@link AbstractNodeAdapter}.
    *
    * @return Null if no one of the "bind...()" methods has been invoked.
+   * @since 2.0
    */
   final AbstractNodeAdapter getNode() {
     return node;
+  }
+
+  /**
+   * (package-private)<br>
+   * Is handler bound to a synchronous node ?
+   *
+   * @return false by default until the binding of the node.
+   * @since 2.0
+   */
+  final boolean isBoundToSyncNode() {
+    return isBoundToSyncNode;
   }
 
   /**

@@ -16,7 +16,6 @@ import static org.eclipse.keyple.distributed.MessageDto.*;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.eclipse.keyple.core.util.Assert;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
 import org.slf4j.Logger;
@@ -229,7 +228,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
         body.addProperty(JsonProperty.DURATION.name(), strategy.getDurationMillis());
       }
       return new MessageDto()
-          .setSessionId(UUID.randomUUID().toString())
+          .setSessionId(AbstractMessageHandlerAdapter.generateSessionId())
           .setAction(action.name())
           .setClientNodeId(getNodeId())
           .setBody(body.toString());

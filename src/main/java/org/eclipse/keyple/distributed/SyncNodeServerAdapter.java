@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.keyple.core.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,9 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   private final Map<String, ServerPushEventManager> readerManagers;
   private final JsonParser jsonParser;
 
+  private long lastCleanDatetime;
+  private final Object cleanMonitor;
+
   /**
    * (package-private)<br>
    *
@@ -45,10 +49,11 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    */
   SyncNodeServerAdapter(AbstractMessageHandlerAdapter handler, int timeoutSeconds) {
     super(handler, timeoutSeconds);
-    jsonParser = new JsonParser();
+    this.jsonParser = new JsonParser();
     this.sessionManagers = new ConcurrentHashMap<String, SessionManager>();
     this.pluginManagers = new ConcurrentHashMap<String, ServerPushEventManager>();
     this.readerManagers = new ConcurrentHashMap<String, ServerPushEventManager>();
+    this.cleanMonitor = new Object();
   }
 
   /**
@@ -83,7 +88,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   /**
    * (private)<br>
-   * Check on client request if some events are present in the associated send box.
+   * Check on client request if some events are present in the associated sandbox.
    *
    * @param message The client message containing all client info (node id, strategy, ...)
    * @param eventManagers The event managers map.
@@ -153,15 +158,54 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   /**
    * (private)<br>
-   * Post an event into the send box, analyse the client strategy, and eventually try to wake up the
+   * Post an event into the sandbox, analyse the client strategy, and eventually try to wake up the
    * pending client task in case of long polling strategy.
    *
    * @param message The message containing the event to post.
    * @param eventManagers The event managers map.
    */
   private void postEvent(MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
+    checkEventManagers(eventManagers, message.getClientNodeId());
     ServerPushEventManager manager = getEventManager(message, eventManagers);
     manager.postEvent(message);
+  }
+
+  /**
+   * (private)<br>
+   * Check and clean the old unused event managers.
+   *
+   * @param eventManagers The event manager map.
+   * @param clientNodeId The current client node ID.
+   * @throws IllegalStateException If the current client node ID is removed.
+   */
+  private void checkEventManagers(
+      Map<String, ServerPushEventManager> eventManagers, String clientNodeId) {
+
+    // Clean if needed all managers no longer used.
+    Set<String> unusedClientNodeIds = new HashSet<String>();
+    if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
+      synchronized (cleanMonitor) {
+        if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
+          long limitDatetime = lastCleanDatetime;
+          lastCleanDatetime = System.currentTimeMillis();
+          for (Map.Entry<String, ServerPushEventManager> entry : eventManagers.entrySet()) {
+            if (entry.getValue().lastCheckDatetime < limitDatetime) {
+              unusedClientNodeIds.add(entry.getKey());
+            }
+          }
+          for (String key : unusedClientNodeIds) {
+            eventManagers.remove(key);
+          }
+        }
+      }
+    }
+
+    // Check the current client node ID.
+    if (unusedClientNodeIds.contains(clientNodeId)) {
+      throw new IllegalStateException(
+          String.format(
+              "Client node ID '%s' removed because not used for at least 1 day", clientNodeId));
+    }
   }
 
   /**
@@ -298,6 +342,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     private List<MessageDto> events;
     private ServerPushEventStrategyAdapter strategy;
+    private long lastCheckDatetime;
 
     /**
      * (private)<br>
@@ -309,11 +354,12 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
       this.clientNodeId = clientNodeId;
       this.events = null;
       this.strategy = null;
+      this.lastCheckDatetime = System.currentTimeMillis();
     }
 
     /**
      * (private)<br>
-     * Posts an event into the send box, analyse the client strategy, and eventually try to wake up
+     * Posts an event into the sandbox, analyse the client strategy, and eventually try to wake up
      * the pending client task in case of long polling strategy.
      *
      * @param message The message containing the event to post.
@@ -336,13 +382,15 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     /**
      * (private)<br>
-     * Checks on client request if some events are present in the associated send box.
+     * Checks on client request if some events are present in the associated sandbox.
      *
      * @param message The client message containing all client info (node id, strategy, ...)
      * @return a null list or a not empty list
      */
     private synchronized List<MessageDto> checkEvents(MessageDto message) {
       try {
+        lastCheckDatetime = System.currentTimeMillis();
+
         // We're checking to see if any events are already present
         if (events != null) {
           return events;

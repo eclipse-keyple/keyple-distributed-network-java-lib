@@ -34,6 +34,6 @@ import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
  * To create it, you must only bind a <b>sync</b> node during the initialization process and you
  * never have to access it.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public interface SyncNodeClient {}

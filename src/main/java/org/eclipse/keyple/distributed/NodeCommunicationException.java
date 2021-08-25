@@ -16,13 +16,13 @@ package org.eclipse.keyple.distributed;
  *
  * <p>This can happen, for example, if the remote node is unreachable or takes too long to respond.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public class NodeCommunicationException extends RuntimeException {
 
   /**
    * @param message The message to identify the exception context.
-   * @since 2.0
+   * @since 2.0.0
    */
   public NodeCommunicationException(String message) {
     super(message);
@@ -33,7 +33,7 @@ public class NodeCommunicationException extends RuntimeException {
    *
    * @param message The message to identify the exception context.
    * @param cause The cause.
-   * @since 2.0
+   * @since 2.0.0
    */
   public NodeCommunicationException(String message, Throwable cause) {
     super(message, cause);

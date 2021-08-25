@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * (package-private)<br>
  * Async Node Client implementation.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncNodeClient {
 
@@ -38,7 +38,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
    * @param handler The associated handler.
    * @param endpoint The user client async endpoint.
    * @param timeoutSeconds The default timeout (in seconds) to use.
-   * @since 2.0
+   * @since 2.0.0
    */
   AsyncNodeClientAdapter(
       AbstractMessageHandlerAdapter handler, AsyncEndpointClientSpi endpoint, int timeoutSeconds) {
@@ -50,7 +50,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void openSession(String sessionId) {
@@ -62,7 +62,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onOpen(String sessionId) {
@@ -76,7 +76,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   MessageDto sendRequest(MessageDto message) {
@@ -88,7 +88,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void sendMessage(MessageDto message) {
@@ -100,7 +100,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onMessage(MessageDto message) {
@@ -129,7 +129,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void closeSession(String sessionId) {
@@ -144,7 +144,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onClose(String sessionId) {
@@ -158,7 +158,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onError(String sessionId, Throwable error) {
@@ -206,7 +206,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     /**
      * {@inheritDoc}
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     @Override
     void checkIfExternalErrorOccurred() {

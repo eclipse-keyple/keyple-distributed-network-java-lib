@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * (package-private)<br>
  * Sync Node Client implementation.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNodeClient {
 
@@ -53,7 +53,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @param readerObservationStrategy The server push event strategy associated to the reader
    *     observation (null if must not be activate).<br>
    *     This parameter can be used only for <b>Reader Server Side</b> use case.
-   * @since 2.0
+   * @since 2.0.0
    */
   SyncNodeClientAdapter(
       AbstractMessageHandlerAdapter handler,
@@ -73,7 +73,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   MessageDto sendRequest(MessageDto message) {
@@ -103,7 +103,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void sendMessage(MessageDto message) {
@@ -114,7 +114,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void onStartPluginsObservation() {
@@ -133,7 +133,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void onStopPluginsObservation() {
@@ -148,7 +148,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void onStartReaderObservation() {
@@ -168,7 +168,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void onStopReaderObservation() {

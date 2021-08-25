@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * (package-private)<br>
  * Sync Node Server implementation.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNodeServer {
 
@@ -45,7 +45,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    *
    * @param handler The associated handler.
    * @param timeoutSeconds The default timeout (in seconds) to use.
-   * @since 2.0
+   * @since 2.0.0
    */
   SyncNodeServerAdapter(AbstractMessageHandlerAdapter handler, int timeoutSeconds) {
     super(handler, timeoutSeconds);
@@ -59,7 +59,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public List<MessageDto> onRequest(MessageDto message) {
@@ -121,7 +121,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   MessageDto sendRequest(MessageDto message) {
@@ -138,7 +138,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void sendMessage(MessageDto message) {
@@ -265,7 +265,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     /**
      * {@inheritDoc}
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     @Override
     void checkIfExternalErrorOccurred() {

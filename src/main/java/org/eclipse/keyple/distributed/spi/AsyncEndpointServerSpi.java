@@ -36,7 +36,7 @@ import org.eclipse.keyple.distributed.MessageDto;
  * <p>This endpoint interacts locally with a {@link AsyncNodeServer} node and remotely with a {@link
  * AsyncEndpointClientSpi} endpoint.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public interface AsyncEndpointServerSpi {
 
@@ -51,7 +51,7 @@ public interface AsyncEndpointServerSpi {
    * </ul>
    *
    * @param message The message to send.
-   * @since 2.0
+   * @since 2.0.0
    */
   void sendMessage(MessageDto message);
 }

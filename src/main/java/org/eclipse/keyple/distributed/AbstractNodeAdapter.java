@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * (package-private)<br>
  * Abstract Node.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 abstract class AbstractNodeAdapter {
 
@@ -50,7 +50,7 @@ abstract class AbstractNodeAdapter {
    *
    * @param handler The associated handler.
    * @param timeoutSeconds The default timeout (in seconds) to use.
-   * @since 2.0
+   * @since 2.0.0
    */
   AbstractNodeAdapter(AbstractMessageHandlerAdapter handler, int timeoutSeconds) {
     this.nodeId = UUID.randomUUID().toString();
@@ -63,7 +63,7 @@ abstract class AbstractNodeAdapter {
    * Gets the node ID.
    *
    * @return A not empty string.
-   * @since 2.0
+   * @since 2.0.0
    */
   final String getNodeId() {
     return nodeId;
@@ -74,7 +74,7 @@ abstract class AbstractNodeAdapter {
    * Gets the associated handler.
    *
    * @return A not null reference.
-   * @since 2.0
+   * @since 2.0.0
    */
   final AbstractMessageHandlerAdapter getHandler() {
     return handler;
@@ -85,7 +85,7 @@ abstract class AbstractNodeAdapter {
    * Opens a new session on the endpoint (for internal use only).
    *
    * @param sessionId The session id.
-   * @since 2.0
+   * @since 2.0.0
    */
   void openSession(String sessionId) {
     // NOP
@@ -97,7 +97,7 @@ abstract class AbstractNodeAdapter {
    *
    * @param message The message to send.
    * @return null if there is no response.
-   * @since 2.0
+   * @since 2.0.0
    */
   abstract MessageDto sendRequest(MessageDto message);
 
@@ -106,7 +106,7 @@ abstract class AbstractNodeAdapter {
    * Sends a message (for internal use only).
    *
    * @param message The message to send.
-   * @since 2.0
+   * @since 2.0.0
    */
   abstract void sendMessage(MessageDto message);
 
@@ -115,7 +115,7 @@ abstract class AbstractNodeAdapter {
    * Closes the session having the provided session id (for internal use only).
    *
    * @param sessionId The session id.
-   * @since 2.0
+   * @since 2.0.0
    */
   void closeSession(String sessionId) {
     // NOP
@@ -126,7 +126,7 @@ abstract class AbstractNodeAdapter {
    * Closes the session silently (without throwing exceptions)
    *
    * @param sessionId The session id.
-   * @since 2.0
+   * @since 2.0.0
    */
   final void closeSessionSilently(String sessionId) {
     try {
@@ -145,7 +145,7 @@ abstract class AbstractNodeAdapter {
    * Starts if needed the background observation of all remote plugins events using the configured
    * strategy.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   void onStartPluginsObservation() {
     // NOP
@@ -155,7 +155,7 @@ abstract class AbstractNodeAdapter {
    * (package-private)<br>
    * Stops the background observation of all remote plugins events.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   void onStopPluginsObservation() {
     // NOP
@@ -166,7 +166,7 @@ abstract class AbstractNodeAdapter {
    * Starts if needed the background observation of all remote readers events using the configured
    * strategy.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   void onStartReaderObservation() {
     // NOP
@@ -176,7 +176,7 @@ abstract class AbstractNodeAdapter {
    * (package-private)<br>
    * Stops the background observation of all remote readers events.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   void onStopReaderObservation() {
     // NOP
@@ -186,91 +186,91 @@ abstract class AbstractNodeAdapter {
    * (package-private)<br>
    * The session manager state enum.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   enum SessionManagerState {
 
     /**
      * Manager initialized.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     INITIALIZED,
 
     /**
      * The open session process has started.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     OPEN_SESSION_BEGIN,
 
     /**
      * The open session process is complete.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     OPEN_SESSION_END,
 
     /**
      * An incoming request-type message is processing.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     ON_REQUEST,
 
     /**
      * An incoming event-type message is processing.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     ON_MESSAGE,
 
     /**
      * An outgoing request-type message is processing.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     SEND_REQUEST_BEGIN,
 
     /**
      * An outgoing request-type message is complete.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     SEND_REQUEST_END,
 
     /**
      * An outgoing event-type message was performed.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     SEND_MESSAGE,
 
     /**
      * An external error was received.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     EXTERNAL_ERROR_OCCURRED,
 
     /**
      * The close session process has started.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     CLOSE_SESSION_BEGIN,
 
     /**
      * The close session process is complete.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     CLOSE_SESSION_END,
 
     /**
      * The current session is aborted due to an unexpected error.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     ABORTED_SESSION
   }
@@ -280,35 +280,35 @@ abstract class AbstractNodeAdapter {
    * The inner session manager abstract class.<br>
    * There is one manager by session id.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   abstract class AbstractSessionManager {
 
     /**
      * (package-private)<br>
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     final String sessionId;
 
     /**
      * (package-private)<br>
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     volatile SessionManagerState state;
 
     /**
      * (package-private)<br>
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     MessageDto response;
 
     /**
      * (package-private)<br>
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     Throwable error;
 
@@ -317,7 +317,7 @@ abstract class AbstractNodeAdapter {
      * Constructor
      *
      * @param sessionId The session id to manage.
-     * @since 2.0
+     * @since 2.0.0
      */
     AbstractSessionManager(String sessionId) {
       this.sessionId = sessionId;
@@ -332,7 +332,7 @@ abstract class AbstractNodeAdapter {
      * wake up by another thread.<br>
      *
      * @param targetStates The target states.
-     * @since 2.0
+     * @since 2.0.0
      */
     synchronized void waitForState(SessionManagerState... targetStates) {
       for (SessionManagerState targetState : targetStates) {
@@ -368,7 +368,7 @@ abstract class AbstractNodeAdapter {
      * current state, and then request the cancelling of the session and throws an exception.
      *
      * @throws NodeCommunicationException with the original cause if an error exists.
-     * @since 2.0
+     * @since 2.0.0
      */
     abstract void checkIfExternalErrorOccurred();
 
@@ -378,7 +378,7 @@ abstract class AbstractNodeAdapter {
      *
      * @param targetStates The target states to test.
      * @throws IllegalStateException if the current state does not match any of the states provided.
-     * @since 2.0
+     * @since 2.0.0
      */
     void checkState(SessionManagerState... targetStates) {
       for (SessionManagerState targetState : targetStates) {
@@ -397,7 +397,7 @@ abstract class AbstractNodeAdapter {
      * The timeout case : request the cancelling of the session and throws an exception.
      *
      * @throws NodeCommunicationException the thrown exception.
-     * @since 2.0
+     * @since 2.0.0
      */
     void timeoutOccurred() {
       state = SessionManagerState.ABORTED_SESSION;

@@ -23,7 +23,7 @@ import org.eclipse.keyple.distributed.SyncNodeClient;
  *
  * <p>This endpoint interacts only with a remote server controller.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public interface SyncEndpointClientSpi {
 
@@ -34,7 +34,7 @@ public interface SyncEndpointClientSpi {
    *
    * @param message The message to send.
    * @return a null or empty list if there is no result.
-   * @since 2.0
+   * @since 2.0.0
    */
   List<MessageDto> sendRequest(MessageDto message);
 }

@@ -35,7 +35,7 @@ import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
  * Then, you can access it everywhere on the server's side using the <b>getAsyncNode()</b> method of
  * the associated above distributed component.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public interface AsyncNodeServer {
 
@@ -44,7 +44,7 @@ public interface AsyncNodeServer {
    * deserialization of a {@link MessageDto} from the client.
    *
    * @param message The message to process.
-   * @since 2.0
+   * @since 2.0.0
    */
   void onMessage(MessageDto message);
 
@@ -53,7 +53,7 @@ public interface AsyncNodeServer {
    * communication session with the client.
    *
    * @param sessionId The session id registered during the session opening process.
-   * @since 2.0
+   * @since 2.0.0
    */
   void onClose(String sessionId);
 
@@ -63,7 +63,7 @@ public interface AsyncNodeServer {
    *
    * @param sessionId The session id register during the session opening process.
    * @param error The unexpected error.
-   * @since 2.0
+   * @since 2.0.0
    */
   void onError(String sessionId, Throwable error);
 }

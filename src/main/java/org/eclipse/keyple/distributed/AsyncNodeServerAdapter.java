@@ -20,7 +20,7 @@ import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
  * (package-private)<br>
  * Async Node Server implementation.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncNodeServer {
 
@@ -35,7 +35,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
    * @param handler The associated handler.
    * @param endpoint The user server async endpoint.
    * @param timeoutSeconds The default timeout (in seconds) to use.
-   * @since 2.0
+   * @since 2.0.0
    */
   AsyncNodeServerAdapter(
       AbstractMessageHandlerAdapter handler, AsyncEndpointServerSpi endpoint, int timeoutSeconds) {
@@ -47,7 +47,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   MessageDto sendRequest(MessageDto message) {
@@ -59,7 +59,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   void sendMessage(MessageDto message) {
@@ -88,7 +88,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onMessage(MessageDto message) {
@@ -111,7 +111,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onError(String sessionId, Throwable error) {
@@ -124,7 +124,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   /**
    * {@inheritDoc}
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   @Override
   public void onClose(String sessionId) {
@@ -153,7 +153,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     /**
      * {@inheritDoc}
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     @Override
     void checkIfExternalErrorOccurred() {

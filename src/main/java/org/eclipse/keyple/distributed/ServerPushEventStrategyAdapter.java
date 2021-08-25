@@ -18,7 +18,7 @@ package org.eclipse.keyple.distributed;
  * <p>This internal class indicates the strategy to adopt in a client-server communication to allow
  * the client to receive events from the server.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 final class ServerPushEventStrategyAdapter {
 
@@ -31,7 +31,7 @@ final class ServerPushEventStrategyAdapter {
    *
    * @param type The strategy type to set.
    * @param durationMillis The duration in milliseconds (must be {@code >= 0}).
-   * @since 2.0
+   * @since 2.0.0
    */
   ServerPushEventStrategyAdapter(Type type, int durationMillis) {
     this.type = type;
@@ -42,7 +42,7 @@ final class ServerPushEventStrategyAdapter {
    * (package-private)<br>
    * Enumeration of the different strategies.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   enum Type {
 
@@ -52,7 +52,7 @@ final class ServerPushEventStrategyAdapter {
      * This mode is non-blocking server side and not very demanding on the server's resources
      * because if there are no events, then the server immediately responds to the client.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     POLLING,
 
@@ -63,7 +63,7 @@ final class ServerPushEventStrategyAdapter {
      * occurs before responds to the client.<br>
      * This mode has the advantage of being more reactive.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     LONG_POLLING
   }
@@ -73,7 +73,7 @@ final class ServerPushEventStrategyAdapter {
    * Gets the strategy type.
    *
    * @return a not null value.
-   * @since 2.0
+   * @since 2.0.0
    */
   Type getType() {
     return type;
@@ -84,7 +84,7 @@ final class ServerPushEventStrategyAdapter {
    * Gets the duration (in milliseconds).
    *
    * @return A positive int.
-   * @since 2.0
+   * @since 2.0.0
    */
   int getDurationMillis() {
     return durationMillis;

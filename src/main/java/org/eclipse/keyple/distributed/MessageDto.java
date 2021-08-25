@@ -25,7 +25,7 @@ package org.eclipse.keyple.distributed;
  * <p>Note that you can extend it or encapsulate it in another object if you need to transport other
  * technical information related to the network infrastructure for example.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public class MessageDto {
 
@@ -41,35 +41,35 @@ public class MessageDto {
    * (package-private)<br>
    * Enumeration of all possible actions.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   enum Action {
 
     /**
      * Executes a Keyple plugin/reader service remotely.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     CMD,
 
     /**
      * Contains the result of a Keyple plugin/reader service execution.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     RESP,
 
     /**
      * Message containing a plugin event.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     PLUGIN_EVENT,
 
     /**
      * Message containing a reader event.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     READER_EVENT,
 
@@ -77,7 +77,7 @@ public class MessageDto {
      * Checks for plugin event.<br>
      * Used for "Reader Server Side" use case with "synchronous" network protocol.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     CHECK_PLUGIN_EVENT,
 
@@ -85,7 +85,7 @@ public class MessageDto {
      * Checks for reader event.<br>
      * Used for "Reader Server Side" use case with "synchronous" network protocol.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     CHECK_READER_EVENT,
 
@@ -93,7 +93,7 @@ public class MessageDto {
      * Executes a ticketing application service remotely.<br>
      * Used for "Reader Client Side" use case.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     EXECUTE_REMOTE_SERVICE,
 
@@ -101,14 +101,14 @@ public class MessageDto {
      * Ends a remote ticketing application service.<br>
      * Used for "Reader Client Side" use case.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     END_REMOTE_SERVICE,
 
     /**
      * Message containing an error.
      *
-     * @since 2.0
+     * @since 2.0.0
      */
     ERROR
   }
@@ -117,36 +117,36 @@ public class MessageDto {
    * (package-private)<br>
    * Enumeration of all available common JSON properties.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   enum JsonProperty {
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     INITIAL_CARD_CONTENT,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     INITIAL_CARD_CONTENT_CLASS_NAME,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     INPUT_DATA,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     OUTPUT_DATA,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     SERVICE_ID,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     STRATEGY,
 
-    /** @since 2.0 */
+    /** @since 2.0.0 */
     DURATION
   }
 
   /**
    * Constructor.
    *
-   * @since 2.0
+   * @since 2.0.0
    */
   public MessageDto() {}
 
@@ -154,7 +154,7 @@ public class MessageDto {
    * Constructor by copy.
    *
    * @param from The source dto to copy.
-   * @since 2.0
+   * @since 2.0.0
    */
   public MessageDto(MessageDto from) {
     sessionId = from.getSessionId();
@@ -173,7 +173,7 @@ public class MessageDto {
    * This id is also useful for debugging.
    *
    * @return a not empty string.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getSessionId() {
     return sessionId;
@@ -184,7 +184,7 @@ public class MessageDto {
    *
    * @param sessionId The session id to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setSessionId(String sessionId) {
     this.sessionId = sessionId;
@@ -196,7 +196,7 @@ public class MessageDto {
    * performed in case of a response.
    *
    * @return a not empty string.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getAction() {
     return action;
@@ -207,7 +207,7 @@ public class MessageDto {
    *
    * @param action The action to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setAction(String action) {
     this.action = action;
@@ -218,7 +218,7 @@ public class MessageDto {
    * Gets the client node id.
    *
    * @return a not empty string.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getClientNodeId() {
     return clientNodeId;
@@ -229,7 +229,7 @@ public class MessageDto {
    *
    * @param clientNodeId The client node id to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setClientNodeId(String clientNodeId) {
     this.clientNodeId = clientNodeId;
@@ -242,7 +242,7 @@ public class MessageDto {
    * identify the target server to access.
    *
    * @return a null string in case of the first transaction call.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getServerNodeId() {
     return serverNodeId;
@@ -253,7 +253,7 @@ public class MessageDto {
    *
    * @param serverNodeId The server node id to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setServerNodeId(String serverNodeId) {
     this.serverNodeId = serverNodeId;
@@ -264,7 +264,7 @@ public class MessageDto {
    * Gets the name of the local reader name associated to the transaction.
    *
    * @return a null string in case of a discovering readers call.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getLocalReaderName() {
     return localReaderName;
@@ -275,7 +275,7 @@ public class MessageDto {
    *
    * @param localReaderName The local reader name to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setLocalReaderName(String localReaderName) {
     this.localReaderName = localReaderName;
@@ -286,7 +286,7 @@ public class MessageDto {
    * Gets the name of the remote reader associated to the transaction.
    *
    * @return a null string in case of a discovering readers call.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getRemoteReaderName() {
     return remoteReaderName;
@@ -297,7 +297,7 @@ public class MessageDto {
    *
    * @param remoteReaderName The remote reader name to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setRemoteReaderName(String remoteReaderName) {
     this.remoteReaderName = remoteReaderName;
@@ -308,7 +308,7 @@ public class MessageDto {
    * Gets the body content.
    *
    * @return a null string in case of an error message.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final String getBody() {
     return body;
@@ -319,7 +319,7 @@ public class MessageDto {
    *
    * @param body The body to set.
    * @return the object instance.
-   * @since 2.0
+   * @since 2.0.0
    */
   public final MessageDto setBody(String body) {
     this.body = body;

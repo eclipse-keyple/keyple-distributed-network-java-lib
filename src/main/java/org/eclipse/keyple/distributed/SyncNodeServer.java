@@ -32,7 +32,7 @@ import java.util.List;
  * Then, you can access it on the server's side from the using the <b>getSyncNode()</b> method of
  * the associated above distributed component.
  *
- * @since 2.0
+ * @since 2.0.0
  */
 public interface SyncNodeServer {
 
@@ -51,7 +51,7 @@ public interface SyncNodeServer {
    * @param message The message to process.
    * @return not null but empty list if there is no result.
    * @throws IllegalArgumentException if some arguments are incorrect.
-   * @since 2.0
+   * @since 2.0.0
    */
   List<MessageDto> onRequest(MessageDto message);
 }

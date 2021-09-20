@@ -1,0 +1,127 @@
+@startuml
+title
+    Keyple 2.0 - keyple-distributed-network-java-lib - 2.0.0 (10/06/2021)
+end title
+
+' == THEME ==
+
+'Couleurs issues de : https://htmlcolorcodes.com/fr/tableau-de-couleur/tableau-de-couleur-design-plat/
+!define C_GREY1 F8F9F9
+!define C_GREY2 F2F3F4
+!define C_GREY3 E5E7E9
+!define C_GREY4 D7DBDD
+!define C_GREY5 CACFD2
+!define C_GREY6 BDC3C7
+!define C_LINK 3498DB
+!define C_USE 27AE60
+
+skinparam Shadowing false
+skinparam ClassFontStyle italic
+skinparam ClassBorderColor #D4AC0D
+skinparam stereotypeABorderColor #A9DCDF
+skinparam stereotypeIBorderColor #B4A7E5
+skinparam stereotypeCBorderColor #ADD1B2
+skinparam stereotypeEBorderColor #EB93DF
+' Red
+skinparam ClassBackgroundColor<<red>> #FDEDEC
+skinparam ClassBorderColor<<red>> #E74C3C
+hide <<red>> stereotype
+' Purple
+skinparam ClassBackgroundColor<<purple>> #F4ECF7
+skinparam ClassBorderColor<<purple>> #8E44AD
+hide <<purple>> stereotype
+' blue
+skinparam ClassBackgroundColor<<blue>> #EBF5FB
+skinparam ClassBorderColor<<blue>> #3498DB
+hide <<blue>> stereotype
+' Green
+skinparam ClassBackgroundColor<<green>> #E9F7EF
+skinparam ClassBorderColor<<green>> #27AE60
+hide <<green>> stereotype
+' Grey
+skinparam ClassBackgroundColor<<grey>> #EAECEE
+skinparam ClassBorderColor<<grey>> #2C3E50
+hide <<grey>> stereotype
+
+' == CONTENT ==
+
+legend top
+    Legend : <back:lightGreen>**Sync Node API**</back> - <back:pink>**Async Node API**</back>
+end legend
+
+package "org.eclipse.keyple.distributed" as root {
+    ' Nodes & Senders
+    +interface AsyncNodeClient {
+        +void onOpen (String sessionId)
+        +void onMessage (MessageDto message)
+        +void onClose (String sessionId)
+        +void onError (String sessionId, Throwable error)
+    }
+    +interface AsyncNodeServer {
+        +void onMessage (MessageDto message)
+        +void onClose (String sessionId)
+        +void onError (String sessionId, Throwable error)
+    }
+    +interface SyncNodeClient {
+    }
+    +interface SyncNodeServer {
+        +List<MessageDto> onRequest (MessageDto message)
+    }
+    ' SPI
+    package spi {
+        +interface AsyncEndpointClientSpi {
+            +void openSession (String sessionId)
+            +void sendMessage (MessageDto message)
+            +void closeSession (String sessionId)
+        }
+        +interface AsyncEndpointServerSpi {
+            +void sendMessage (MessageDto message)
+        }
+        +interface SyncEndpointClientSpi {
+            +List<MessageDto> sendRequest (MessageDto message)
+        }
+    }
+    ' DTO
+    +class MessageDto {
+        + String sessionId
+        + String action
+        + String clientNodeId
+        + String serverNodeId
+        + String localReaderName
+        + String remoteReaderName
+        + String body
+        + getters()...
+        + setters()...
+    }
+    ' Exceptions
+    +class "<<RuntimeException>>\nNodeCommunicationException" as NodeCommunicationException {
+        +NodeCommunicationException (String message)
+        +NodeCommunicationException (String message, Throwable cause)
+    }
+}
+
+' Associations
+SyncNodeClient --> SyncEndpointClientSpi #C_USE : use >
+AsyncNodeClient --> AsyncEndpointClientSpi #C_USE : use >
+AsyncNodeServer --> AsyncEndpointServerSpi #C_USE : use >
+
+' == LAYOUT ==
+
+SyncEndpointClientSpi -[hidden]- MessageDto
+AsyncEndpointServerSpi -[hidden]- NodeCommunicationException
+
+' == STYLE ==
+
+package root #C_GREY1 {}
+package spi #C_GREY2 {}
+
+AsyncNodeClient <<red>>
+AsyncNodeServer <<red>>
+AsyncEndpointClientSpi <<red>>
+AsyncEndpointServerSpi <<red>>
+
+SyncNodeServer <<green>>
+SyncNodeClient <<green>>
+SyncEndpointClientSpi <<green>>
+
+@enduml

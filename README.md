@@ -8,9 +8,9 @@ The **Keyple Distributed Network Java Library** contains the common network elem
 
 The full documentation, including the **user guide**, **download information** and **contribution guide**, is available on the Keyple website [keyple.org](https://keyple.org).
 
-## Javadoc
+## API documentation
 
-The javadoc is available online: [eclipse.github.io/keyple-distributed-network-java-lib/](https://eclipse.github.io/keyple-distributed-network-java-lib/)
+API documentation & class diagram is available online: [eclipse.github.io/keyple-distributed-network-java-lib](https://eclipse.github.io/keyple-distributed-network-java-lib)
 
 ## Examples
 

@@ -1,0 +1,514 @@
+@startuml
+title
+    Keyple 2.0 - Adapter of Keyple Distributed Solution - 2.0.0 (07/07/2021)
+end title
+
+' == THEME ==
+
+'Couleurs issues de : https://htmlcolorcodes.com/fr/tableau-de-couleur/tableau-de-couleur-design-plat/
+!define C_GREY1 F8F9F9
+!define C_GREY2 F2F3F4
+!define C_GREY3 E5E7E9
+!define C_GREY4 D7DBDD
+!define C_GREY5 CACFD2
+!define C_GREY6 BDC3C7
+!define C_LINK 3498DB
+!define C_USE 27AE60
+
+skinparam Shadowing false
+skinparam ClassFontStyle italic
+skinparam ClassBorderColor #D4AC0D
+skinparam stereotypeABorderColor #A9DCDF
+skinparam stereotypeIBorderColor #B4A7E5
+skinparam stereotypeCBorderColor #ADD1B2
+skinparam stereotypeEBorderColor #EB93DF
+' Red
+skinparam ClassBackgroundColor<<red>> #FDEDEC
+skinparam ClassBorderColor<<red>> #E74C3C
+hide <<red>> stereotype
+' Purple
+skinparam ClassBackgroundColor<<purple>> #F4ECF7
+skinparam ClassBorderColor<<purple>> #8E44AD
+hide <<purple>> stereotype
+' blue
+skinparam ClassBackgroundColor<<blue>> #EBF5FB
+skinparam ClassBorderColor<<blue>> #3498DB
+hide <<blue>> stereotype
+' Green
+skinparam ClassBackgroundColor<<green>> #E9F7EF
+skinparam ClassBorderColor<<green>> #27AE60
+hide <<green>> stereotype
+' Grey
+skinparam ClassBackgroundColor<<grey>> #EAECEE
+skinparam ClassBorderColor<<grey>> #2C3E50
+hide <<grey>> stereotype
+
+' == CONTENT ==
+
+legend top
+    __Colors legend__ :
+    * __Elements location__ :
+    ** <back:lightBlue>**keyple-distributed-network-java-lib**</back>
+    ** <back:pink>**keyple-distributed-remote-java-lib**</back>
+    ** <back:lightGreen>**keyple-distributed-local-java-lib**</back>
+    * __External private API references__ :
+    ** <back:plum>**keyple-distributed-remote-java-api**</back>
+    ** <back:yellow>**keyple-distributed-local-java-api**</back>
+end legend
+
+package "org.eclipse.keyple.distributed" as packAdapter {
+
+    ' Handler
+    ~abstract AbstractMessageHandlerAdapter {
+        __
+        ~AbstractMessageHandlerAdapter ()
+
+        ~{static} String generateSessionId ()
+        ~{static} void checkError (MessageDto message)
+
+        ~**final** void bindSyncNodeClient (
+            \tSyncEndpointClientSpi endpoint,
+            \tServerPushEventStrategyAdapter pluginObservationStrategy,
+            \tServerPushEventStrategyAdapter readerObservationStrategy)
+        ~**final** void bindSyncNodeServer ()
+        ~**final** void bindAsyncNodeClient (
+            \tAsyncEndpointClientSpi endpoint,
+            \tint timeoutSeconds)
+        ~**final** void bindAsyncNodeServer (
+            \tAsyncEndpointServerSpi endpoint)
+        ~**final** AbstractNodeAdapter getNode ()
+        ~**final** Boolean isBoundToSyncNode ()
+
+        ~{abstract} **abstract** void onMessage (MessageDto message)
+    }
+
+    ' Node
+    ~abstract AbstractNodeAdapter {
+        __
+        ~AbstractNodeAdapter (
+            \tAbstractMessageHandlerAdapter handler,
+            \tint timeoutSeconds)
+
+        ~**final** String getNodeId ()
+        ~**final** AbstractMessageHandlerAdapter getHandler ()
+
+        ~void openSession (String sessionId)
+        ~{abstract} **abstract** MessageDto sendRequest (MessageDto message)
+        ~{abstract} **abstract** void sendMessage (MessageDto message)
+        ~void closeSession (String sessionId)
+
+        ~**final** void closeSessionSilently (String sessionId)
+
+        ~void onStartPluginsObservation ()
+        ~void onStopPluginsObservation ()
+        ~void onStartReaderObservation ()
+        ~void onStopReaderObservation ()
+    }
+    ' Async Node
+    ~class "<<AsyncNodeClient>>\n**final** AsyncNodeClientAdapter" as AsyncNodeClientAdapter extends AbstractNodeAdapter {
+        --
+        ~AsyncNodeClientAdapter (
+            \tAbstractMessageHandlerAdapter handler,
+            \tAsyncEndpointClientSpi endpoint,
+            \tint timeoutSeconds)
+        -- **AsyncNodeClient** --
+        +void onOpen (String sessionId)
+        +void onMessage (MessageDto message)
+        +void onClose (String sessionId)
+        +void onError (String sessionId, Throwable error)
+        -- **AbstractNodeAdapter** --
+        ~void openSession (String sessionId)
+        ~MessageDto sendRequest (MessageDto message)
+        ~void sendMessage (MessageDto message)
+        ~void closeSession (String sessionId)
+    }
+    ~class "<<AsyncNodeServer>>\n**final** AsyncNodeServerAdapter" as AsyncNodeServerAdapter extends AbstractNodeAdapter {
+        --
+        ~AsyncNodeServerAdapter (
+            \tAbstractMessageHandlerAdapter handler,
+            \tAsyncEndpointServerSpi endpoint,
+            \tint timeoutSeconds)
+        -- **AsyncNodeServer** --
+        +void onMessage (MessageDto message)
+        +void onError (String sessionId, Throwable error)
+        -- **AbstractNodeAdapter** --
+        ~MessageDto sendRequest (MessageDto message)
+        ~void sendMessage (MessageDto message)
+    }
+    ' Sync Node
+    ~class "<<SyncNodeClient>>\n**final** SyncNodeClientAdapter" as SyncNodeClientAdapter extends AbstractNodeAdapter {
+        --
+        ~SyncNodeClientAdapter (
+            \tAbstractMessageHandlerAdapter handler,
+            \tSyncEndpointClientSpi endpoint,
+            \tServerPushEventStrategyAdapter pluginObservationStrategy,
+            \tServerPushEventStrategyAdapter readerObservationStrategy)
+        -- **AbstractNodeAdapter** --
+        ~MessageDto sendRequest (MessageDto message)
+        ~void sendMessage (MessageDto message)
+        ~void onStartPluginsObservation ()
+        ~void onStopPluginsObservation ()
+        ~void onStartReaderObservation ()
+        ~void onStopReaderObservation ()
+    }
+    ~class "<<SyncNodeServer>>\n**final** SyncNodeServerAdapter" as SyncNodeServerAdapter extends AbstractNodeAdapter {
+        --
+        ~SyncNodeServerAdapter (
+            \tAbstractMessageHandlerAdapter handler,
+            \tint timeoutSeconds)
+        -- **SyncNodeServer** --
+        +List<MessageDto> onRequest (MessageDto message)
+        -- **AbstractNodeAdapter** --
+        ~MessageDto sendRequest (MessageDto message)
+        ~void sendMessage (MessageDto message)
+    }
+
+    ' Server Push Event Strategy
+    ~class "**final** ServerPushEventStrategyAdapter" as ServerPushEventStrategyAdapter {
+        --
+        ~ServerPushEventStrategyAdapter (Type type, int durationMillis)
+
+        ~Type getType ()
+        ~int getDurationMillis ()
+    }
+    ~enum Type {
+        POLLING
+        LONG_POLLING
+    }
+
+    ''''''''''''' Remote
+
+    together {
+
+        ~abstract class "<<<back:plum>RemotePluginFactorySpi</back>>>\nAbstractRemotePluginFactoryAdapter" as AbstractRemotePluginFactoryAdapter {
+            --
+            ~AbstractRemotePluginFactoryAdapter (String remotePluginName)
+            -- **RemotePluginFactorySpi** --
+            +**final** String getDistributedRemoteApiVersion ()
+            +**final** String getCommonApiVersion ()
+            +**final** String getRemotePluginName ()
+        }
+        ~class "<<RemotePluginClientFactory>>\n**final** RemotePluginClientFactoryAdapter" as RemotePluginClientFactoryAdapter extends AbstractRemotePluginFactoryAdapter {
+            --
+            ~RemotePluginClientFactoryAdapter (
+                \tString remotePluginName,
+                \tboolean isPoolPlugin,
+                \tboolean isPluginObservationEnabled,
+                \tboolean isReaderObservationEnabled,
+                \tSyncEndpointClientSpi syncEndpointClientSpi,
+                \tServerPushEventStrategyAdapter syncPluginObservationStrategy,
+                \tServerPushEventStrategyAdapter syncReaderObservationStrategy,
+                \tAsyncEndpointClientSpi asyncEndpointClientSpi,
+                \tint asyncNodeClientTimeoutSeconds)
+            -- **RemotePluginFactorySpi** --
+            +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
+        }
+        ~class "<<RemotePluginServerFactory>>\n**final** RemotePluginServerFactoryAdapter" as RemotePluginServerFactoryAdapter extends AbstractRemotePluginFactoryAdapter {
+            --
+            ~RemotePluginServerFactoryAdapter (
+                \tString remotePluginName,
+                \tAsyncEndpointServerSpi asyncEndpointServerSpi)
+            -- **RemotePluginFactorySpi** --
+            +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
+        }
+    }
+
+    together {
+
+        ' Remote Plugins
+        ~abstract "<<<back:plum>AbstractRemotePluginSpi</back>>>\nAbstractRemotePluginAdapter" as AbstractRemotePluginAdapter extends AbstractMessageHandlerAdapter {
+            --
+            ~AbstractRemotePluginAdapter (String remotePluginName)
+
+            ~**final** String executeRemotely (String jsonData, String sessionId)
+            -- **AbstractRemotePluginSpi** --
+            +**final** String getName ()
+        }
+
+        ~abstract class "<<RemotePluginClient>>\nAbstractRemotePluginClientAdapter" as AbstractRemotePluginClientAdapter extends AbstractRemotePluginAdapter {
+            --
+            ~AbstractRemotePluginClientAdapter (
+                \tString remotePluginName)
+
+            ~**final** String getGlobalSessionId ()
+            -- **RemotePluginClient** --
+            +**final** AsyncNodeClient getAsyncNode ()
+            -- **AbstractRemotePluginSpi** --
+            +**final** String executeRemotely (String jsonData)
+            +**final** void onUnregister ()
+        }
+        ~class "<<<back:plum>RemotePluginSpi</back>>>\nRemotePluginClientAdapter" as RemotePluginClientAdapter extends AbstractRemotePluginClientAdapter {
+            --
+            ~RemotePluginClientAdapter (
+                \tString remotePluginName,
+                \tboolean isReaderObservationEnabled)
+            -- **RemotePluginSpi** --
+            +void connect (<back:plum>RemotePluginApi</back> remotePluginApi)
+            +**final** <back:plum>RemoteReaderSpi</back> createRemoteReader (String localReaderName)
+            +**final** <back:plum>ObservableRemoteReaderSpi</back> createObservableRemoteReader (String localReaderName)
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+        ~class "<<<back:plum>ObservableRemotePluginSpi</back>>>\n**final** ObservableRemotePluginClientAdapter" as ObservableRemotePluginClientAdapter extends RemotePluginClientAdapter {
+            --
+            ~ObservableRemotePluginClientAdapter (
+                \tString remotePluginName,
+                \tboolean isReaderObservationEnabled)
+            -- **ObservableRemotePluginSpi** --
+            +void connect (<back:plum>ObservableRemotePluginApi</back> observableRemotePluginApi)
+            +void onStartObservation ()
+            +void onStopObservation ()
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+        ~class "<<<back:plum>RemotePoolPluginSpi</back>>>\n**final** RemotePoolPluginClientAdapter" as RemotePoolPluginClientAdapter extends AbstractRemotePluginClientAdapter {
+            --
+            ~RemotePoolPluginClientAdapter (
+                \tString remotePluginName)
+            -- **RemotePoolPluginSpi** --
+            +<back:plum>RemoteReaderSpi</back> createRemoteReader (String localReaderName)
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+        ~class "<<RemotePluginServer>>\n<<<back:plum>ObservableRemotePluginSpi</back>>>\n**final** ObservableRemotePluginServerAdapter" as ObservableRemotePluginServerAdapter extends AbstractRemotePluginAdapter {
+            --
+            ~ObservableRemotePluginServerAdapter (String remotePluginName)
+            -- **RemotePluginServer** --
+            +SyncNodeServer getSyncNode ()
+            +AsyncNodeServer getAsyncNode ()
+            +void endRemoteService (String remoteReaderName, Object outputData)
+            -- **AbstractRemotePluginSpi** --
+            +String executeRemotely (String jsonData)
+            +void onUnregister ()
+            -- **RemotePluginSpi** --
+            +void connect (<back:plum>RemotePluginApi</back> remotePluginApi)
+            +<back:plum>RemoteReaderSpi</back> createRemoteReader (String localReaderName)
+            +<back:plum>ObservableRemoteReaderSpi</back> createObservableRemoteReader (String localReaderName)
+            -- **ObservableRemotePluginSpi** --
+            +void connect (<back:plum>ObservableRemotePluginApi</back> observableRemotePluginApi)
+            +void onStartObservation ()
+            +void onStopObservation ()
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+
+    }
+
+    ' Remote Readers
+
+     together {
+
+        ~abstract class "<<<back:plum>RemoteReaderSpi</back>>>\nAbstractRemoteReaderAdapter" as AbstractRemoteReaderAdapter {
+            __
+            ~AbstractRemoteReaderAdapter (
+                \tString remoteReaderName,
+                \tString localReaderName,
+                \tString sessionId,
+                \tString clientNodeId,
+                \tAbstractNodeAdapter node)
+
+            ~**final** String getLocalReaderName()
+            ~**final** String getSessionId ()
+            ~**final** String getClientNodeId ()
+            ~**final** AbstractNodeAdapter getNode ()
+            -- **RemoteReaderSpi** --
+            +**final** String getName ()
+            +**final** String executeRemotely (String jsonData)
+        }
+        ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
+            __
+            ~RemoteReaderClientAdapter (
+                \tString remoteReaderName,
+                \tString localReaderName,
+                \tString sessionId,
+                \tString clientNodeId,
+                \tAbstractNodeAdapter node)
+        }
+        ~class "<<<back:plum>ObservableRemoteReaderSpi</back>>>\n**final** ObservableRemoteReaderClientAdapter" as ObservableRemoteReaderClientAdapter extends RemoteReaderClientAdapter {
+            __
+            ~RemoteReaderClientAdapter (
+                \tString remoteReaderName,
+                \tString localReaderName,
+                \tString sessionId,
+                \tString clientNodeId,
+                \tAbstractNodeAdapter node)
+            -- **ObservableRemoteReaderSpi** --
+            +void onStartObservation ()
+            +void onStopObservation ()
+        }
+        ~class "<<RemoteReaderServer>>\n**final** RemoteReaderServerAdapter" as RemoteReaderServerAdapter extends AbstractRemoteReaderAdapter {
+            __
+            ~RemoteReaderServerAdapter (
+                \tString remoteReaderName,
+                \tString localReaderName,
+                \tString sessionId,
+                \tString clientNodeId,
+                \tAbstractNodeAdapter node,
+                \tString serviceId,
+                \tString initialCardContentJson,
+                \tString initialCardContentClassName,
+                \tString inputDataJson)
+            -- **RemoteReaderServer** --
+            +String getServiceId ()
+            +Object getInitialCardContent ()
+            +<T> T getInputData (Class<T> inputDataClass)
+        }
+    }
+
+    ''''''''''''''' Local
+
+    together {
+        ' Factories
+        ~abstract class "<<<back:yellow>LocalServiceFactorySpi</back>>>\nAbstractLocalServiceFactoryAdapter" as AbstractLocalServiceFactoryAdapter {
+            --
+            ~AbstractLocalServiceFactoryAdapter (String localServiceName)
+            -- **LocalServiceFactorySpi** --
+            +**final** String getDistributedLocalApiVersion ()
+            +**final** String getCommonApiVersion ()
+            +**final** String getLocalServiceName ()
+        }
+        ~class "<<LocalServiceClientFactory>>\n**final** LocalServiceClientFactoryAdapter" as LocalServiceClientFactoryAdapter extends AbstractLocalServiceFactoryAdapter {
+            --
+            ~LocalServiceClientFactoryAdapter (
+                \tString localServiceName,
+                \tSyncEndpointClientSpi syncEndpointClientSpi,
+                \tAsyncEndpointClientSpi asyncEndpointClientSpi,
+                \tint asyncNodeClientTimeoutSeconds)
+            -- **LocalServiceFactorySpi** --
+            +<back:yellow>LocalServiceSpi</back> getLocalService ()
+        }
+        ~class "<<LocalServiceServerFactory>>\n**final** LocalServiceServerFactoryAdapter" as LocalServiceServerFactoryAdapter extends AbstractLocalServiceFactoryAdapter {
+            --
+            ~LocalServiceServerFactoryAdapter (
+                \tString localServiceName,
+                \tAsyncEndpointServerSpi asyncEndpointServerSpi,
+                \tString... poolPluginNames)
+            -- **LocalServiceFactorySpi** --
+            +<back:yellow>LocalServiceSpi</back> getLocalService ()
+        }
+    }
+
+    together {
+
+        ' Local services
+        ~abstract "<<<back:yellow>LocalServiceSpi</back>>>\nAbstractLocalServiceAdapter" as AbstractLocalServiceAdapter extends AbstractMessageHandlerAdapter {
+            --
+            ~AbstractLocalServiceAdapter (String localServiceName)
+
+            ~<back:yellow>LocalServiceApi</back> getLocalServiceApi ()
+            -- **LocalServiceSpi** --
+            +void connect (<back:yellow>LocalServiceApi</back> localServiceApi)
+            +**final** String getName ()
+        }
+        ~class "<<LocalServiceClient>>\n**final** LocalServiceClientAdapter" as LocalServiceClientAdapter extends AbstractLocalServiceAdapter {
+            --
+            ~LocalServiceClientAdapter (String localServiceName)
+            -- **LocalServiceClient** --
+            +AsyncNodeClient getAsyncNode ()
+            +<T> T executeRemoteService (
+                \tString serviceId,
+                \tString localReaderName,
+                \tObject initialCardContent,
+                \tObject inputData,
+                \tClass<T> outputDataClass)
+            -- **LocalServiceSpi** --
+            +void onPluginEvent (String readerName, String jsonData)
+            +void onReaderEvent (String readerName, String jsonData)
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+        ~class "<<LocalServiceServer>>\n**final** LocalServiceServerAdapter" as LocalServiceServerAdapter extends AbstractLocalServiceAdapter {
+            --
+            ~LocalServiceServerAdapter (
+                \tString localServiceName,
+                \tString... poolPluginNames)
+            -- **LocalServiceServer** --
+            +SyncNodeServer getSyncNode ()
+            +AsyncNodeServer getAsyncNode ()
+            -- **LocalServiceSpi** --
+            +void connect (<back:yellow>LocalServiceApi</back> localServiceApi)
+            +void onPluginEvent (String readerName, String jsonData)
+            +void onReaderEvent (String readerName, String jsonData)
+            -- **AbstractMessageHandlerAdapter** --
+            ~void onMessage (MessageDto message)
+        }
+
+    }
+
+}
+
+' Associations
+
+AbstractMessageHandlerAdapter "1" -- "1" AbstractNodeAdapter #C_LINK
+
+ServerPushEventStrategyAdapter +-right- Type #C_LINK
+ServerPushEventStrategyAdapter *-right-> "type" Type #C_LINK
+
+LocalServiceClientFactoryAdapter ..> LocalServiceClientAdapter #C_LINK : create >
+
+LocalServiceServerFactoryAdapter ..> LocalServiceServerAdapter #C_LINK : create >
+
+RemotePluginClientFactoryAdapter ..> RemotePluginClientAdapter #C_LINK : create >
+RemotePluginClientFactoryAdapter ..> RemotePoolPluginClientAdapter #C_LINK : create >
+
+RemotePluginServerFactoryAdapter ..> ObservableRemotePluginServerAdapter #C_LINK : create >
+
+RemotePluginClientAdapter ..> RemoteReaderClientAdapter #C_LINK : create >
+RemotePluginClientAdapter ..> ObservableRemoteReaderClientAdapter #C_LINK : create >
+
+RemotePoolPluginClientAdapter ..> RemoteReaderClientAdapter #C_LINK : create >
+
+ObservableRemotePluginServerAdapter ..> RemoteReaderServerAdapter #C_LINK : create >
+
+AbstractRemoteReaderAdapter *-- "1" AbstractNodeAdapter #C_LINK
+
+SyncNodeClientAdapter ..> ServerPushEventStrategyAdapter #C_USE : use >
+
+SyncNodeServerAdapter ..> ServerPushEventStrategyAdapter #C_USE : use >
+
+' == LAYOUT ==
+
+'LocalServiceClientFactoryAdapter -[hidden]- AbstractLocalServiceAdapter
+
+'RemotePluginClientFactoryAdapter -[hidden]- AbstractRemotePluginAdapter
+
+'AbstractRemotePluginAdapter -[hidden]right- AbstractRemotePluginClientAdapter
+'RemotePluginClientAdapter -[hidden]right- ObservableRemotePluginClientAdapter
+
+'ObservableRemotePluginClientAdapter -[hidden]- AbstractRemoteReaderAdapter
+
+' == STYLE ==
+
+package packAdapter #C_GREY1 {}
+
+abstract AbstractMessageHandlerAdapter <<blue>>
+abstract AbstractNodeAdapter <<blue>>
+class AsyncNodeClientAdapter <<blue>>
+class AsyncNodeServerAdapter <<blue>>
+class SyncNodeClientAdapter <<blue>>
+class SyncNodeServerAdapter <<blue>>
+class ServerPushEventStrategyAdapter <<blue>>
+enum Type <<blue>>
+
+abstract AbstractLocalServiceFactoryAdapter <<green>>
+class LocalServiceClientFactoryAdapter <<green>>
+class LocalServiceServerFactoryAdapter <<green>>
+abstract AbstractLocalServiceAdapter <<green>>
+class LocalServiceClientAdapter <<green>>
+class LocalServiceServerAdapter <<green>>
+
+abstract AbstractRemotePluginFactoryAdapter <<red>>
+class RemotePluginClientFactoryAdapter <<red>>
+class RemotePluginServerFactoryAdapter <<red>>
+abstract AbstractRemotePluginAdapter <<red>>
+class AbstractRemotePluginClientAdapter <<red>>
+class RemotePluginClientAdapter <<red>>
+class ObservableRemotePluginClientAdapter <<red>>
+class RemotePoolPluginClientAdapter <<red>>
+class ObservableRemotePluginServerAdapter <<red>>
+abstract AbstractRemoteReaderAdapter <<red>>
+class RemoteReaderClientAdapter <<red>>
+class ObservableRemoteReaderClientAdapter <<red>>
+class RemoteReaderServerAdapter <<red>>
+
+@enduml

@@ -1,6 +1,6 @@
 @startuml
 title
-    Keyple 2.0 - keyple-distributed-network-java-lib - 2.0.0 (10/06/2021)
+    Keyple - keyple-distributed-network-java-lib - 2.0.+ (10/06/2021)
 end title
 
 ' == THEME ==

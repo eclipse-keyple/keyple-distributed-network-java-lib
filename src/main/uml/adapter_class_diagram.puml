@@ -1,6 +1,9 @@
 @startuml
 title
-    Keyple 2.0 - Adapter of Keyple Distributed Solution - 2.0.0 (07/07/2021)
+    Keyple - Adapters of Keyple Distributed solution - (07/07/2021)
+    keyple-distributed-local-java-lib - 2.0.0
+    keyple-distributed-network-java-lib - 2.0.0
+    keyple-distributed-remote-java-lib - 2.0.0
 end title
 
 ' == THEME ==

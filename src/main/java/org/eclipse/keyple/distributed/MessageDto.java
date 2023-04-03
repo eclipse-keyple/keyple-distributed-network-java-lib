@@ -38,7 +38,6 @@ public class MessageDto {
   private String body;
 
   /**
-   * (package-private)<br>
    * Enumeration of all possible actions.
    *
    * @since 2.0.0
@@ -114,7 +113,6 @@ public class MessageDto {
   }
 
   /**
-   * (package-private)<br>
    * Enumeration of all available common JSON properties.
    *
    * @since 2.0.0
@@ -122,25 +120,43 @@ public class MessageDto {
   enum JsonProperty {
 
     /** @since 2.0.0 */
-    INITIAL_CARD_CONTENT,
+    INITIAL_CARD_CONTENT("initialCardContent"),
 
     /** @since 2.0.0 */
-    INITIAL_CARD_CONTENT_CLASS_NAME,
+    INITIAL_CARD_CONTENT_CLASS_NAME("initialCardContentClassName"),
 
     /** @since 2.0.0 */
-    INPUT_DATA,
+    INPUT_DATA("inputData"),
 
     /** @since 2.0.0 */
-    OUTPUT_DATA,
+    OUTPUT_DATA("outputData"),
 
     /** @since 2.0.0 */
-    SERVICE_ID,
+    SERVICE_ID("serviceId"),
 
     /** @since 2.0.0 */
-    STRATEGY,
+    STRATEGY("strategy"),
 
     /** @since 2.0.0 */
-    DURATION
+    DURATION("duration");
+
+    private final String key;
+
+    /**
+     * @param key The key of the JSON property.
+     * @since 2.0.1
+     */
+    JsonProperty(String key) {
+      this.key = key;
+    }
+
+    /**
+     * @return The key of the JSON property.
+     * @since 2.0.1
+     */
+    public String getKey() {
+      return key;
+    }
   }
 
   /**

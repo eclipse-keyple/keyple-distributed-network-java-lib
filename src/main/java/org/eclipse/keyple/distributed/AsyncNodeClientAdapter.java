@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * (package-private)<br>
  * Async Node Client implementation.
  *
  * @since 2.0.0
@@ -33,8 +32,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   private final Map<String, SessionManager> sessionManagers;
 
   /**
-   * (package-private)<br>
-   *
    * @param handler The associated handler.
    * @param endpoint The user client async endpoint.
    * @param timeoutSeconds The default timeout (in seconds) to use.
@@ -170,7 +167,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   }
 
   /**
-   * (private)<br>
    * Get the manager associated to the provided session id and log a session not found message if
    * manager does not exists.
    *
@@ -187,14 +183,12 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   }
 
   /**
-   * (private)<br>
    * The inner session manager class.<br>
    * There is one manager by session id.
    */
   private class SessionManager extends AbstractSessionManager {
 
     /**
-     * (private)<br>
      * Constructor
      *
      * @param sessionId The session id to manage.
@@ -217,7 +211,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to open the session by calling the endpoint and awaiting the result.
      */
     private synchronized void openSession() {
@@ -227,7 +220,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint and notify the awaiting thread if necessary.
      *
      * @throws IllegalStateException in case of bad use.
@@ -239,7 +231,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a request to the endpoint and await a response.
      *
      * @param message The message to send.
@@ -255,7 +246,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint and notify the awaiting thread if necessary.
      *
      * @param message The response received from the endpoint.
@@ -269,7 +259,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint to transmit an event to the handler.
      *
      * @param message The event received from the endpoint.
@@ -279,7 +268,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a message to the endpoint.
      *
      * @param message The message to send.
@@ -293,7 +281,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler or by the node to close the current session by calling the endpoint
      * and awaiting the result.
      */
@@ -305,7 +292,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint and notify the awaiting thread if necessary.<br>
      *
      * @throws IllegalStateException in case of bad use.
@@ -317,7 +303,6 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint in case of endpoint error and notify the awaiting thread if
      * necessary.
      *

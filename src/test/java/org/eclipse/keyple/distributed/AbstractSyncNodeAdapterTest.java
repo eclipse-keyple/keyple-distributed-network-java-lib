@@ -24,19 +24,19 @@ public abstract class AbstractSyncNodeAdapterTest extends AbstractNodeAdapterTes
   {
     JsonObject body = new JsonObject();
     body.addProperty(
-        JsonProperty.STRATEGY.name(), ServerPushEventStrategyAdapter.Type.POLLING.name());
+        JsonProperty.STRATEGY.getKey(), ServerPushEventStrategyAdapter.Type.POLLING.name());
     bodyPolling = body.toString();
 
     body = new JsonObject();
     body.addProperty(
-        JsonProperty.STRATEGY.name(), ServerPushEventStrategyAdapter.Type.LONG_POLLING.name());
-    body.addProperty(JsonProperty.DURATION.name(), 1000);
+        JsonProperty.STRATEGY.getKey(), ServerPushEventStrategyAdapter.Type.LONG_POLLING.name());
+    body.addProperty(JsonProperty.DURATION.getKey(), 1000);
     bodyLongPolling = body.toString();
 
     body = new JsonObject();
     body.addProperty(
-        JsonProperty.STRATEGY.name(), ServerPushEventStrategyAdapter.Type.LONG_POLLING.name());
-    body.addProperty(JsonProperty.DURATION.name(), 5000);
+        JsonProperty.STRATEGY.getKey(), ServerPushEventStrategyAdapter.Type.LONG_POLLING.name());
+    body.addProperty(JsonProperty.DURATION.getKey(), 5000);
     bodyLongPollingLongTimeout = body.toString();
   }
 

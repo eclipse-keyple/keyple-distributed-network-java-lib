@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * (package-private)<br>
  * Abstract Node.
  *
  * @since 2.0.0
@@ -27,27 +26,16 @@ abstract class AbstractNodeAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractNodeAdapter.class);
 
-  /**
-   * (private)<br>
-   * The node ID.
-   */
+  /** The node ID. */
   private final String nodeId;
 
-  /**
-   * (private)<br>
-   * The associated handler.
-   */
+  /** The associated handler. */
   private final AbstractMessageHandlerAdapter handler;
 
-  /**
-   * (private)<br>
-   * Timeout used during awaiting (in milliseconds)
-   */
+  /** Timeout used during awaiting (in milliseconds) */
   private final int timeoutMillis;
 
   /**
-   * (package-private)<br>
-   *
    * @param handler The associated handler.
    * @param timeoutSeconds The default timeout (in seconds) to use.
    * @since 2.0.0
@@ -59,7 +47,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Gets the node ID.
    *
    * @return A not empty string.
@@ -70,7 +57,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Gets the associated handler.
    *
    * @return A not null reference.
@@ -81,7 +67,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Opens a new session on the endpoint (for internal use only).
    *
    * @param sessionId The session id.
@@ -92,7 +77,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Sends a request and return a response (for internal use only).
    *
    * @param message The message to send.
@@ -102,7 +86,6 @@ abstract class AbstractNodeAdapter {
   abstract MessageDto sendRequest(MessageDto message);
 
   /**
-   * (package-private)<br>
    * Sends a message (for internal use only).
    *
    * @param message The message to send.
@@ -111,7 +94,6 @@ abstract class AbstractNodeAdapter {
   abstract void sendMessage(MessageDto message);
 
   /**
-   * (package-private)<br>
    * Closes the session having the provided session id (for internal use only).
    *
    * @param sessionId The session id.
@@ -122,7 +104,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Closes the session silently (without throwing exceptions)
    *
    * @param sessionId The session id.
@@ -141,7 +122,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Starts if needed the background observation of all remote plugins events using the configured
    * strategy.
    *
@@ -152,7 +132,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Stops the background observation of all remote plugins events.
    *
    * @since 2.0.0
@@ -162,7 +141,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Starts if needed the background observation of all remote readers events using the configured
    * strategy.
    *
@@ -173,7 +151,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Stops the background observation of all remote readers events.
    *
    * @since 2.0.0
@@ -183,7 +160,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * The session manager state enum.
    *
    * @since 2.0.0
@@ -276,7 +252,6 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
-   * (package-private)<br>
    * The inner session manager abstract class.<br>
    * There is one manager by session id.
    *
@@ -284,36 +259,19 @@ abstract class AbstractNodeAdapter {
    */
   abstract class AbstractSessionManager {
 
-    /**
-     * (package-private)<br>
-     *
-     * @since 2.0.0
-     */
+    /** @since 2.0.0 */
     final String sessionId;
 
-    /**
-     * (package-private)<br>
-     *
-     * @since 2.0.0
-     */
+    /** @since 2.0.0 */
     volatile SessionManagerState state;
 
-    /**
-     * (package-private)<br>
-     *
-     * @since 2.0.0
-     */
+    /** @since 2.0.0 */
     MessageDto response;
 
-    /**
-     * (package-private)<br>
-     *
-     * @since 2.0.0
-     */
+    /** @since 2.0.0 */
     Throwable error;
 
     /**
-     * (package-private)<br>
      * Constructor
      *
      * @param sessionId The session id to manage.
@@ -327,7 +285,6 @@ abstract class AbstractNodeAdapter {
     }
 
     /**
-     * (package-private)<br>
      * Checks if the current state is equal to the target state, else wait until a timeout or to be
      * wake up by another thread.<br>
      *
@@ -363,7 +320,6 @@ abstract class AbstractNodeAdapter {
     }
 
     /**
-     * (package-private)<br>
      * Checks if an external error was received from the endpoint or the handler, regardless to the
      * current state, and then request the cancelling of the session and throws an exception.
      *
@@ -373,7 +329,6 @@ abstract class AbstractNodeAdapter {
     abstract void checkIfExternalErrorOccurred();
 
     /**
-     * (package-private)<br>
      * Checks if the current state is one of the provided target states.
      *
      * @param targetStates The target states to test.
@@ -393,7 +348,6 @@ abstract class AbstractNodeAdapter {
     }
 
     /**
-     * (package-private)<br>
      * The timeout case : request the cancelling of the session and throws an exception.
      *
      * @throws NodeCommunicationException the thrown exception.

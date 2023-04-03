@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * (package-private)<br>
  * Sync Node Client implementation.
  *
  * @since 2.0.0
@@ -43,8 +42,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   private volatile int nbOfObservedReaders;
 
   /**
-   * (package-private)<br>
-   *
    * @param handler The associated handler.
    * @param endpoint The user client sync endpoint.
    * @param pluginObservationStrategy The server push event strategy associated to the plugin
@@ -184,7 +181,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Event Observer inner class.<br>
    * This class can be used only for <b>Reader Server Side</b> use case.
    */
@@ -196,7 +192,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     private final Thread thread;
 
     /**
-     * (private)<br>
      * Constructor.
      *
      * @param strategy The server push event strategy.
@@ -216,16 +211,15 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Builds the message to send to server for event observation.
      *
      * @return A not null reference.
      */
     private MessageDto buildMessage() {
       JsonObject body = new JsonObject();
-      body.addProperty(JsonProperty.STRATEGY.name(), strategy.getType().name());
+      body.addProperty(JsonProperty.STRATEGY.getKey(), strategy.getType().name());
       if (strategy.getType() == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
-        body.addProperty(JsonProperty.DURATION.name(), strategy.getDurationMillis());
+        body.addProperty(JsonProperty.DURATION.getKey(), strategy.getDurationMillis());
       }
       return new MessageDto()
           .setSessionId(AbstractMessageHandlerAdapter.generateSessionId())
@@ -234,10 +228,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
           .setBody(body.toString());
     }
 
-    /**
-     * (private)<br>
-     * Polling Event Observer inner thread.
-     */
+    /** Polling Event Observer inner thread. */
     private class PollingEventObserver extends Thread {
       @Override
       public void run() {
@@ -254,10 +245,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       }
     }
 
-    /**
-     * (private)<br>
-     * Long Polling Event Observer inner thread.
-     */
+    /** Long Polling Event Observer inner thread. */
     private class LongPollingEventObserver extends Thread {
       @Override
       public void run() {
@@ -267,10 +255,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       }
     }
 
-    /**
-     * (private)<br>
-     * Event Observer Uncaught Exception Handler inner class.
-     */
+    /** Event Observer Uncaught Exception Handler inner class. */
     private class EventObserverUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
       @Override
       public void uncaughtException(Thread t, Throwable e) {
@@ -279,7 +264,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Checks if server has some events to push.<br>
      * If so, then forward the events to the handler.
      */
@@ -299,7 +283,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Retries to send the request to the server in case of server connection error until the server
      * communication is reestablished or the thread is interrupted.<br>
      * The timing of the attempts is based on the Fibonacci sequence.
@@ -333,7 +316,6 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Tries to sends a request silently without throwing an exception.
      *
      * @return null if the sending has failed.
@@ -346,18 +328,12 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       }
     }
 
-    /**
-     * (private)<br>
-     * Starts the thread.
-     */
+    /** Starts the thread. */
     private void start() {
       thread.start();
     }
 
-    /**
-     * (private)<br>
-     * Stops the thread.
-     */
+    /** Stops the thread. */
     private void stop() {
       thread.interrupt();
     }

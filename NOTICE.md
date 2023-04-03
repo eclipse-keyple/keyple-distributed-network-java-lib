@@ -31,12 +31,12 @@ SPDX-License-Identifier: EPL-2.0
    
 ## Third-party Content
 
-GSON (2.8.8)
+GSON
 
 * License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
 * Project: https://github.com/google/gson/gson
 
-SLF4J API (1.7.32)
+SLF4J API
 
 * License: [MIT](https://spdx.org/licenses/MIT.html)
 * Project: http://www.slf4j.org

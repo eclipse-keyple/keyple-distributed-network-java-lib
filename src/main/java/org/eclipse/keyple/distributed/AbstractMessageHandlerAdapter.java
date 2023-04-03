@@ -19,7 +19,6 @@ import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 import org.eclipse.keyple.distributed.spi.SyncEndpointClientSpi;
 
 /**
- * (package-private)<br>
  * Abstract Message Handler.
  *
  * @since 2.0.0
@@ -29,15 +28,10 @@ abstract class AbstractMessageHandlerAdapter {
   private AbstractNodeAdapter node;
   private boolean isBoundToSyncNode;
 
-  /**
-   * (package-private)<br>
-   *
-   * @since 2.0.0
-   */
+  /** @since 2.0.0 */
   AbstractMessageHandlerAdapter() {}
 
   /**
-   * (package-private)<br>
    * Generates a unique session ID.
    *
    * @return A not empty value.
@@ -48,7 +42,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Checks if the provided message contains an error.
    *
    * @param message The message to check.
@@ -62,7 +55,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Builds and bind a {@link SyncNodeClient} with the handler.<br>
    * It must be invoked by the factory during the initialization phase.
    *
@@ -84,7 +76,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Builds and bind a {@link SyncNodeServer} with the handler.<br>
    * It must be invoked by the factory during the initialization phase.
    *
@@ -96,7 +87,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Builds and bind a {@link AsyncNodeClient} with the handler.<br>
    * It must be invoked by the factory during the initialization phase.
    *
@@ -110,7 +100,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Builds and bind a {@link AsyncNodeServer} with the handler.<br>
    * It must be invoked by the factory during the initialization phase.
    *
@@ -123,7 +112,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Gets the bound {@link AbstractNodeAdapter}.
    *
    * @return Null if no one of the "bind...()" methods has been invoked.
@@ -134,7 +122,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Is handler bound to a synchronous node ?
    *
    * @return false by default until the binding of the node.
@@ -145,7 +132,6 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Processes an incoming message.<br>
    * It should be invoked by a node following the reception of a {@link MessageDto}.
    *

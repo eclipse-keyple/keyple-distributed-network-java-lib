@@ -6,8 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- "CHANGELOG.md" file (issue [eclipse/keyple#6]).
+- `CHANGELOG.md` file (issue [eclipse/keyple#6]).
 - CI: Forbid the publication of a version already released (issue [#6])
+### Changed
+- All JSON property names are now "lowerCamelCase" formatted.
+### Upgraded
+- "Keyple Util Library" to version `2.3.0`.
+- "Google Gson Library" (com.google.code.gson) to version `2.10.1`.
 
 ## [2.0.0] - 2021-10-06
 This is the initial release.

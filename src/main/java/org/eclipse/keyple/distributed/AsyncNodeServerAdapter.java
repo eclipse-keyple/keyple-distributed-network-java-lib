@@ -17,7 +17,6 @@ import org.eclipse.keyple.core.util.Assert;
 import org.eclipse.keyple.distributed.spi.AsyncEndpointServerSpi;
 
 /**
- * (package-private)<br>
  * Async Node Server implementation.
  *
  * @since 2.0.0
@@ -30,8 +29,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   private final Map<String, SessionManager> sessionManagers;
 
   /**
-   * (package-private)<br>
-   *
    * @param handler The associated handler.
    * @param endpoint The user server async endpoint.
    * @param timeoutSeconds The default timeout (in seconds) to use.
@@ -69,7 +66,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   }
 
   /**
-   * (private)<br>
    * Check if the session is active and get the associated session manager.
    *
    * @param sessionId The session id (must be not empty).
@@ -134,14 +130,12 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   }
 
   /**
-   * (private)<br>
    * The inner session manager class.<br>
    * There is one manager by session id.
    */
   private class SessionManager extends AbstractSessionManager {
 
     /**
-     * (private)<br>
      * Constructor
      *
      * @param sessionId The session id to manage.
@@ -164,7 +158,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint and notify the awaiting thread if necessary.
      *
      * @param message The message received from the endpoint.
@@ -188,7 +181,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a request to the endpoint and await a response.
      *
      * @param message The message to send.
@@ -204,7 +196,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a message to the endpoint.
      *
      * @param message The message to send.
@@ -217,7 +208,6 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint in case of endpoint error and notify the awaiting thread if
      * necessary.
      *

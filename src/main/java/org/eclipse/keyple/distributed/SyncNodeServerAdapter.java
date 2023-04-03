@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * (package-private)<br>
  * Sync Node Server implementation.
  *
  * @since 2.0.0
@@ -41,8 +40,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   private final Object cleanMonitor;
 
   /**
-   * (package-private)<br>
-   *
    * @param handler The associated handler.
    * @param timeoutSeconds The default timeout (in seconds) to use.
    * @since 2.0.0
@@ -87,7 +84,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Check on client request if some events are present in the associated sandbox.
    *
    * @param message The client message containing all client info (node id, strategy, ...)
@@ -101,7 +97,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Processes onRequest for standard transaction call.<br>
    * Create a new session manager if needed.
    *
@@ -157,7 +152,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Post an event into the sandbox, analyse the client strategy, and eventually try to wake up the
    * pending client task in case of long polling strategy.
    *
@@ -171,7 +165,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Check and clean the old unused event managers.
    *
    * @param eventManagers The event manager map.
@@ -209,7 +202,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Get or create an event manager associated to a client node id.
    *
    * @param message The message containing the client's information
@@ -227,7 +219,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * Processes sendMessage for standard transaction call.<br>
    * Note that the associated session is also closed.
    *
@@ -246,14 +237,12 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   }
 
   /**
-   * (private)<br>
    * The inner session manager class.<br>
    * There is one manager by session id.
    */
   private class SessionManager extends AbstractSessionManager {
 
     /**
-     * (private)<br>
      * Constructor
      *
      * @param sessionId The session id to manage.
@@ -273,7 +262,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Invoked by the endpoint when a new client request is received.
      *
      * @param message The message to process.
@@ -295,7 +283,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a request to the endpoint and await a response.
      *
      * @param message The message to send.
@@ -308,7 +295,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Invoked by the handler to send a message to the endpoint.
      *
      * @param message The message to send.
@@ -318,7 +304,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Posts a message and try to wake up the waiting task.
      *
      * @param message The message to post.
@@ -332,10 +317,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
   }
 
-  /**
-   * (private)<br>
-   * This inner class is a manager for server push events.
-   */
+  /** This inner class is a manager for server push events. */
   private class ServerPushEventManager {
 
     private final String clientNodeId;
@@ -345,7 +327,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     private long lastCheckDatetime;
 
     /**
-     * (private)<br>
      * Constructor
      *
      * @param clientNodeId The client node id to manage.
@@ -358,7 +339,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Posts an event into the sandbox, analyse the client strategy, and eventually try to wake up
      * the pending client task in case of long polling strategy.
      *
@@ -381,7 +361,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Checks on client request if some events are present in the associated sandbox.
      *
      * @param message The client message containing all client info (node id, strategy, ...)
@@ -410,7 +389,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Registers the client strategy in case of first client invocation.
      *
      * @param message The client message containing all client info (node id, strategy, ...)
@@ -428,7 +406,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
           body = jsonParser.parse(message.getBody()).getAsJsonObject();
           type =
               ServerPushEventStrategyAdapter.Type.valueOf(
-                  body.get(JsonProperty.STRATEGY.name()).getAsString());
+                  body.get(JsonProperty.STRATEGY.getKey()).getAsString());
         } catch (Exception e) {
           throw new IllegalArgumentException("body", e);
         }
@@ -436,7 +414,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
         int durationSeconds = 0;
         if (type == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
           try {
-            durationSeconds = body.get(JsonProperty.DURATION.name()).getAsInt();
+            durationSeconds = body.get(JsonProperty.DURATION.getKey()).getAsInt();
           } catch (Exception e) {
             throw new IllegalArgumentException("long polling duration", e);
           }
@@ -447,7 +425,6 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     }
 
     /**
-     * (private)<br>
      * Wait a most the provided max awaiting time (in milliseconds).
      *
      * @param maxAwaitingTimeMillis The max awaiting time (in milliseconds).

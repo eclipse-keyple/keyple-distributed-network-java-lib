@@ -12,7 +12,6 @@
 package org.eclipse.keyple.distributed;
 
 /**
- * (package-private)<br>
  * Server Push Event Strategy
  *
  * <p>This internal class indicates the strategy to adopt in a client-server communication to allow
@@ -26,7 +25,6 @@ final class ServerPushEventStrategyAdapter {
   private final int durationMillis;
 
   /**
-   * (package-private)<br>
    * Creates a new instance with a initial duration set to 0.
    *
    * @param type The strategy type to set.
@@ -39,7 +37,6 @@ final class ServerPushEventStrategyAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Enumeration of the different strategies.
    *
    * @since 2.0.0
@@ -69,7 +66,6 @@ final class ServerPushEventStrategyAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Gets the strategy type.
    *
    * @return a not null value.
@@ -80,7 +76,6 @@ final class ServerPushEventStrategyAdapter {
   }
 
   /**
-   * (package-private)<br>
    * Gets the duration (in milliseconds).
    *
    * @return A positive int.

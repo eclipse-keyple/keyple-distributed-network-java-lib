@@ -1,9 +1,9 @@
 @startuml
 title
-    Keyple - Adapters of Keyple Distributed solution - (07/07/2021)
-    keyple-distributed-local-java-lib - 2.0.0
-    keyple-distributed-network-java-lib - 2.0.0
-    keyple-distributed-remote-java-lib - 2.0.0
+    Keyple - Adapters of Keyple Distributed solution - (2023-05-04)
+    keyple-distributed-local-java-lib - 2.2.0
+    keyple-distributed-network-java-lib - 2.2.0
+    keyple-distributed-remote-java-lib - 2.2.1
 end title
 
 ' == THEME ==
@@ -18,13 +18,19 @@ end title
 !define C_LINK 3498DB
 !define C_USE 27AE60
 
-skinparam Shadowing false
-skinparam ClassFontStyle italic
-skinparam ClassBorderColor #D4AC0D
+' -- Styles that don't work with new version of plantuml --
 skinparam stereotypeABorderColor #A9DCDF
 skinparam stereotypeIBorderColor #B4A7E5
 skinparam stereotypeCBorderColor #ADD1B2
 skinparam stereotypeEBorderColor #EB93DF
+' -- END --
+
+skinparam ClassBorderThickness 2
+skinparam ArrowThickness 2
+
+' Yellow
+skinparam ClassBackgroundColor #FEFECE
+skinparam ClassBorderColor #D4AC0D
 ' Red
 skinparam ClassBackgroundColor<<red>> #FDEDEC
 skinparam ClassBorderColor<<red>> #E74C3C
@@ -211,6 +217,10 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~RemotePluginServerFactoryAdapter (
                 \tString remotePluginName,
                 \tAsyncEndpointServerSpi asyncEndpointServerSpi)
+            ~RemotePluginServerFactoryAdapter (
+                \tString remotePluginName,
+                \tExecutorService executorService,
+                \tAsyncEndpointServerSpi asyncEndpointServerSpi)
             -- **RemotePluginFactorySpi** --
             +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
         }
@@ -259,6 +269,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tboolean isReaderObservationEnabled)
             -- **ObservableRemotePluginSpi** --
             +void connect (<back:plum>ObservableRemotePluginApi</back> observableRemotePluginApi)
+            +ExecutorService getExecutorService ()
             +void onStartObservation ()
             +void onStopObservation ()
             -- **AbstractMessageHandlerAdapter** --
@@ -276,6 +287,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<RemotePluginServer>>\n<<<back:plum>ObservableRemotePluginSpi</back>>>\n**final** ObservableRemotePluginServerAdapter" as ObservableRemotePluginServerAdapter extends AbstractRemotePluginAdapter {
             --
             ~ObservableRemotePluginServerAdapter (String remotePluginName)
+            ~ObservableRemotePluginServerAdapter (String remotePluginName, ExecutorService executorService)
             -- **RemotePluginServer** --
             +SyncNodeServer getSyncNode ()
             +AsyncNodeServer getAsyncNode ()
@@ -289,6 +301,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             +<back:plum>ObservableRemoteReaderSpi</back> createObservableRemoteReader (String localReaderName)
             -- **ObservableRemotePluginSpi** --
             +void connect (<back:plum>ObservableRemotePluginApi</back> observableRemotePluginApi)
+            +ExecutorService getExecutorService ()
             +void onStartObservation ()
             +void onStopObservation ()
             -- **AbstractMessageHandlerAdapter** --
@@ -350,7 +363,10 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tString serviceId,
                 \tString initialCardContentJson,
                 \tString initialCardContentClassName,
-                \tString inputDataJson)
+                \tString inputDataJson,
+                \tboolean isLegacyMode)
+
+            ~boolean isLegacyMode ()
             -- **RemoteReaderServer** --
             +String getServiceId ()
             +Object getInitialCardContent ()
@@ -484,34 +500,34 @@ SyncNodeServerAdapter ..> ServerPushEventStrategyAdapter #C_USE : use >
 
 package packAdapter #C_GREY1 {}
 
-abstract AbstractMessageHandlerAdapter <<blue>>
-abstract AbstractNodeAdapter <<blue>>
-class AsyncNodeClientAdapter <<blue>>
-class AsyncNodeServerAdapter <<blue>>
-class SyncNodeClientAdapter <<blue>>
-class SyncNodeServerAdapter <<blue>>
-class ServerPushEventStrategyAdapter <<blue>>
-enum Type <<blue>>
+abstract packAdapter.AbstractMessageHandlerAdapter <<blue>>
+abstract packAdapter.AbstractNodeAdapter <<blue>>
+class packAdapter.AsyncNodeClientAdapter <<blue>>
+class packAdapter.AsyncNodeServerAdapter <<blue>>
+class packAdapter.SyncNodeClientAdapter <<blue>>
+class packAdapter.SyncNodeServerAdapter <<blue>>
+class packAdapter.ServerPushEventStrategyAdapter <<blue>>
+enum packAdapter.Type <<blue>>
 
-abstract AbstractLocalServiceFactoryAdapter <<green>>
-class LocalServiceClientFactoryAdapter <<green>>
-class LocalServiceServerFactoryAdapter <<green>>
-abstract AbstractLocalServiceAdapter <<green>>
-class LocalServiceClientAdapter <<green>>
-class LocalServiceServerAdapter <<green>>
+abstract packAdapter.AbstractLocalServiceFactoryAdapter <<green>>
+class packAdapter.LocalServiceClientFactoryAdapter <<green>>
+class packAdapter.LocalServiceServerFactoryAdapter <<green>>
+abstract packAdapter.AbstractLocalServiceAdapter <<green>>
+class packAdapter.LocalServiceClientAdapter <<green>>
+class packAdapter.LocalServiceServerAdapter <<green>>
 
-abstract AbstractRemotePluginFactoryAdapter <<red>>
-class RemotePluginClientFactoryAdapter <<red>>
-class RemotePluginServerFactoryAdapter <<red>>
-abstract AbstractRemotePluginAdapter <<red>>
-class AbstractRemotePluginClientAdapter <<red>>
-class RemotePluginClientAdapter <<red>>
-class ObservableRemotePluginClientAdapter <<red>>
-class RemotePoolPluginClientAdapter <<red>>
-class ObservableRemotePluginServerAdapter <<red>>
-abstract AbstractRemoteReaderAdapter <<red>>
-class RemoteReaderClientAdapter <<red>>
-class ObservableRemoteReaderClientAdapter <<red>>
-class RemoteReaderServerAdapter <<red>>
+abstract packAdapter.AbstractRemotePluginFactoryAdapter <<red>>
+class packAdapter.RemotePluginClientFactoryAdapter <<red>>
+class packAdapter.RemotePluginServerFactoryAdapter <<red>>
+abstract packAdapter.AbstractRemotePluginAdapter <<red>>
+class packAdapter.AbstractRemotePluginClientAdapter <<red>>
+class packAdapter.RemotePluginClientAdapter <<red>>
+class packAdapter.ObservableRemotePluginClientAdapter <<red>>
+class packAdapter.RemotePoolPluginClientAdapter <<red>>
+class packAdapter.ObservableRemotePluginServerAdapter <<red>>
+abstract packAdapter.AbstractRemoteReaderAdapter <<red>>
+class packAdapter.RemoteReaderClientAdapter <<red>>
+class packAdapter.ObservableRemoteReaderClientAdapter <<red>>
+class packAdapter.RemoteReaderServerAdapter <<red>>
 
 @enduml

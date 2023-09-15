@@ -27,6 +27,7 @@ abstract class AbstractMessageHandlerAdapter {
 
   private AbstractNodeAdapter node;
   private boolean isBoundToSyncNode;
+  private int coreApiLevel;
 
   /** @since 2.0.0 */
   AbstractMessageHandlerAdapter() {}
@@ -52,6 +53,26 @@ abstract class AbstractMessageHandlerAdapter {
       throw new RuntimeException( // NOSONAR
           JsonUtil.getParser().fromJson(message.getBody(), BodyError.class).getException());
     }
+  }
+
+  /**
+   * Sets the Core API level.
+   *
+   * @param coreApiLevel The API level to be set.
+   * @since 2.3.0
+   */
+  final void setCoreApiLevel(int coreApiLevel) {
+    this.coreApiLevel = coreApiLevel;
+  }
+
+  /**
+   * Returns the Core API level.
+   *
+   * @return A positive value.
+   * @since 2.3.0
+   */
+  final int getCoreApiLevel() {
+    return coreApiLevel;
   }
 
   /**

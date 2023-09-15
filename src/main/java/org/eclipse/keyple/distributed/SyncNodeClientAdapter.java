@@ -217,6 +217,13 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
      */
     private MessageDto buildMessage() {
       JsonObject body = new JsonObject();
+      // API level:
+      // The API level is retrieved from the wrapper, as the body content has been created by the
+      // Distributed client layer.
+      // In this particular case, the API level contained in the body does not reflect the version
+      // of
+      // the body, but that of the Core client layer.
+      body.addProperty(JsonProperty.CORE_API_LEVEL.getKey(), getHandler().getCoreApiLevel());
       body.addProperty(JsonProperty.STRATEGY.getKey(), strategy.getType().name());
       if (strategy.getType() == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
         body.addProperty(JsonProperty.DURATION.getKey(), strategy.getDurationMillis());

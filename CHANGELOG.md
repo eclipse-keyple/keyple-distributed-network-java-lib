@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Added project status badges on `README.md` file.
+- Added a property indicating the Distributed JSON API level in exchanged JSON data (current value: `"apiLevel": 2`).
 ### Fixed
 - CI: code coverage report when releasing.
+### Upgraded
+- Keyple Util Library `2.3.0` -> `2.3.1` (source code not impacted)
 
 ## [2.2.0] - 2023-04-04
 ### Added

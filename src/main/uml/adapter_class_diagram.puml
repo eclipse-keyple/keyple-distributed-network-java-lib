@@ -1,9 +1,9 @@
 @startuml
 title
-    Keyple - Adapters of Keyple Distributed solution - (2023-05-04)
-    keyple-distributed-local-java-lib - 2.2.0
-    keyple-distributed-network-java-lib - 2.2.0
-    keyple-distributed-remote-java-lib - 2.2.1
+    Keyple - Adapters of Keyple Distributed solution - (2023-09-12)
+    keyple-distributed-local-java-lib - 2.3.0
+    keyple-distributed-network-java-lib - 2.3.0
+    keyple-distributed-remote-java-lib - 2.3.0
 end title
 
 ' == THEME ==
@@ -74,6 +74,9 @@ package "org.eclipse.keyple.distributed" as packAdapter {
 
         ~{static} String generateSessionId ()
         ~{static} void checkError (MessageDto message)
+
+        ~<color:blue>**final** void setCoreApiLevel(int coreApiLevel)
+        ~<color:blue>**final** int getCoreApiLevel()
 
         ~**final** void bindSyncNodeClient (
             \tSyncEndpointClientSpi endpoint,
@@ -236,6 +239,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~**final** String executeRemotely (String jsonData, String sessionId)
             -- **AbstractRemotePluginSpi** --
             +**final** String getName ()
+            +<color:blue>**final** int exchangeApiLevel (int coreApiLevel)
         }
 
         ~abstract class "<<RemotePluginClient>>\nAbstractRemotePluginClientAdapter" as AbstractRemotePluginClientAdapter extends AbstractRemotePluginAdapter {
@@ -317,13 +321,17 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~abstract class "<<<back:plum>RemoteReaderSpi</back>>>\nAbstractRemoteReaderAdapter" as AbstractRemoteReaderAdapter {
             __
             ~AbstractRemoteReaderAdapter (
+                \t<color:blue>int clientDistributedApiLevel</color>,
+                \t<color:blue>int clientCoreApiLevel</color>,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node)
 
-            ~**final** String getLocalReaderName()
+            ~<color:blue>**final** int getClientDistributedApiLevel ()
+            ~<color:blue>**final** int getClientCoreApiLevel ()
+            ~**final** String getLocalReaderName ()
             ~**final** String getSessionId ()
             ~**final** String getClientNodeId ()
             ~**final** AbstractNodeAdapter getNode ()
@@ -334,6 +342,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
             __
             ~RemoteReaderClientAdapter (
+                \t<color:blue>int clientCoreApiLevel</color>,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -343,6 +352,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<<back:plum>ObservableRemoteReaderSpi</back>>>\n**final** ObservableRemoteReaderClientAdapter" as ObservableRemoteReaderClientAdapter extends RemoteReaderClientAdapter {
             __
             ~RemoteReaderClientAdapter (
+                \t<color:blue>int clientCoreApiLevel</color>,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -355,6 +365,8 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<RemoteReaderServer>>\n**final** RemoteReaderServerAdapter" as RemoteReaderServerAdapter extends AbstractRemoteReaderAdapter {
             __
             ~RemoteReaderServerAdapter (
+                \t<color:blue>int clientDistributedApiLevel</color>,
+                \t<color:blue>int clientCoreApiLevel</color>,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -363,10 +375,8 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tString serviceId,
                 \tString initialCardContentJson,
                 \tString initialCardContentClassName,
-                \tString inputDataJson,
-                \tboolean isLegacyMode)
+                \tString inputDataJson)
 
-            ~boolean isLegacyMode ()
             -- **RemoteReaderServer** --
             +String getServiceId ()
             +Object getInitialCardContent ()
@@ -414,10 +424,11 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             --
             ~AbstractLocalServiceAdapter (String localServiceName)
 
-            ~<back:yellow>LocalServiceApi</back> getLocalServiceApi ()
+            ~**final** <back:yellow>LocalServiceApi</back> getLocalServiceApi ()
             -- **LocalServiceSpi** --
             +void connect (<back:yellow>LocalServiceApi</back> localServiceApi)
             +**final** String getName ()
+            +<color:blue>**final** int exchangeApiLevel (int coreApiLevel)
         }
         ~class "<<LocalServiceClient>>\n**final** LocalServiceClientAdapter" as LocalServiceClientAdapter extends AbstractLocalServiceAdapter {
             --

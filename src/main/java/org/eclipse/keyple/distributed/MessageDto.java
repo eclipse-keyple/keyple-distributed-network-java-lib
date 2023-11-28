@@ -14,7 +14,7 @@ package org.eclipse.keyple.distributed;
 /**
  * This POJO contains data exchanged between <b>Local</b> and <b>Remote</b> components.
  *
- * <p>It is built and processed by the main distributed components and you don't have to modify it.
+ * <p>It is built and processed by the main distributed components, and you don't have to modify it.
  *
  * <p>You only need to transfer it via the network by serializing and deserializing it on your own.
  *
@@ -29,6 +29,14 @@ package org.eclipse.keyple.distributed;
  */
 public class MessageDto {
 
+  /**
+   * The API level of the Distributed layer: {@value}
+   *
+   * @since 2.3.0
+   */
+  static final int API_LEVEL = 2;
+
+  private int apiLevel;
   private String sessionId;
   private String action;
   private String clientNodeId;
@@ -119,6 +127,9 @@ public class MessageDto {
    */
   enum JsonProperty {
 
+    /** @since 2.3.0 */
+    CORE_API_LEVEL("coreApiLevel"),
+
     /** @since 2.0.0 */
     INITIAL_CARD_CONTENT("initialCardContent"),
 
@@ -164,7 +175,9 @@ public class MessageDto {
    *
    * @since 2.0.0
    */
-  public MessageDto() {}
+  public MessageDto() {
+    apiLevel = API_LEVEL;
+  }
 
   /**
    * Constructor by copy.
@@ -173,6 +186,7 @@ public class MessageDto {
    * @since 2.0.0
    */
   public MessageDto(MessageDto from) {
+    apiLevel = from.getApiLevel();
     sessionId = from.getSessionId();
     action = from.getAction();
     clientNodeId = from.getClientNodeId();
@@ -183,7 +197,31 @@ public class MessageDto {
   }
 
   /**
-   * Gets the session id.<br>
+   * Returns the API level or 0 if the message is received from a system using a version of this
+   * library lower than {@code 2.3.0}
+   *
+   * @return A positive value or 0 if the message is received from a system using a version of this
+   *     library lower than {@code 2.3.0}
+   * @since 2.3.0
+   */
+  public final int getApiLevel() {
+    return apiLevel;
+  }
+
+  /**
+   * This setter method must only be used during the deserialization process.
+   *
+   * @param apiLevel The API level to set.
+   * @return the object instance.
+   * @since 2.3.0
+   */
+  public final MessageDto setApiLevel(int apiLevel) {
+    this.apiLevel = apiLevel;
+    return this;
+  }
+
+  /**
+   * Returns the session id.<br>
    * In case of a full duplex communication, this field will permit to client and server to identify
    * the socket.<br>
    * This id is also useful for debugging.
@@ -208,7 +246,7 @@ public class MessageDto {
   }
 
   /**
-   * Gets the name of the internal action to perform in case of a request, or the original action
+   * Returns the name of the internal action to perform in case of a request, or the original action
    * performed in case of a response.
    *
    * @return a not empty string.
@@ -231,7 +269,7 @@ public class MessageDto {
   }
 
   /**
-   * Gets the client node id.
+   * Returns the client node id.
    *
    * @return a not empty string.
    * @since 2.0.0
@@ -253,8 +291,8 @@ public class MessageDto {
   }
 
   /**
-   * Gets the server node id.<br>
-   * In case of a multi-server environment, this field will permit to client or load balancer to
+   * Returns the server node id.<br>
+   * In case of a multi-servers environment, this field will permit to client or load balancer to
    * identify the target server to access.
    *
    * @return a null string in case of the first transaction call.
@@ -277,7 +315,7 @@ public class MessageDto {
   }
 
   /**
-   * Gets the name of the local reader name associated to the transaction.
+   * Returns the name of the local reader name associated to the transaction.
    *
    * @return a null string in case of a discovering readers call.
    * @since 2.0.0
@@ -299,7 +337,7 @@ public class MessageDto {
   }
 
   /**
-   * Gets the name of the remote reader associated to the transaction.
+   * Returns the name of the remote reader associated to the transaction.
    *
    * @return a null string in case of a discovering readers call.
    * @since 2.0.0
@@ -321,7 +359,7 @@ public class MessageDto {
   }
 
   /**
-   * Gets the body content.
+   * Returns the body content.
    *
    * @return a null string in case of an error message.
    * @since 2.0.0

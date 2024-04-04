@@ -14,7 +14,7 @@ package org.eclipse.keyple.distributed;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -299,7 +299,7 @@ public class SyncNodeClientAdapterTest extends AbstractSyncNodeAdapterTest {
   public void openSession_shouldDoNothing() {
     SyncNodeClientAdapter node = new SyncNodeClientAdapter(handler, endpoint, null, null);
     node.openSession(SESSION_ID);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
     assertThat(endpoint.messages).isEmpty();
   }
 
@@ -311,7 +311,7 @@ public class SyncNodeClientAdapterTest extends AbstractSyncNodeAdapterTest {
     assertThat(endpoint.messages.get(0)).isSameAs(msg);
     assertThat(endpoint.messages.get(0)).isEqualToComparingFieldByField(msg);
     assertThat(result).isSameAs(response).isEqualToComparingFieldByField(response);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test
@@ -321,14 +321,14 @@ public class SyncNodeClientAdapterTest extends AbstractSyncNodeAdapterTest {
     assertThat(endpoint.messages).hasSize(1);
     assertThat(endpoint.messages.get(0)).isSameAs(msg);
     assertThat(endpoint.messages.get(0)).isEqualToComparingFieldByField(msg);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test
   public void closeSession_shouldDoNothing() {
     SyncNodeClientAdapter node = new SyncNodeClientAdapter(handler, endpoint, null, null);
     node.closeSession(SESSION_ID);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
     assertThat(endpoint.messages).isEmpty();
   }
 }

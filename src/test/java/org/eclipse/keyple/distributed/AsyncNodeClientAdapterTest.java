@@ -206,7 +206,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     node.openSession(SESSION_ID);
     verify(endpoint).openSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = NodeCommunicationException.class)
@@ -235,8 +235,8 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
   @Test
   public void onOpen_whenSessionIdIsUnknown_shouldDoNothing() {
     node.onOpen(sessionIdUnknown);
-    verifyZeroInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(endpoint);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -252,7 +252,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     node.openSession(SESSION_ID);
     verify(endpoint).openSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test
@@ -261,7 +261,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     node.openSession(SESSION_ID);
     verify(endpoint).openSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test
@@ -272,7 +272,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).sendMessage(msg);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
     assertThat(result).isSameAs(response).isEqualToComparingFieldByField(response);
   }
 
@@ -299,7 +299,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).sendMessage(msg);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = RuntimeException.class)
@@ -367,8 +367,8 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
   public void onMessage_whenSessionIdIsUnknown_shouldDoNothing() {
     MessageDto message = new MessageDto(response).setSessionId(sessionIdUnknown);
     node.onMessage(message);
-    verifyZeroInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(endpoint);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -428,7 +428,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).sendMessage(msg);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
     assertThat(result).isSameAs(response).isEqualToComparingFieldByField(response);
   }
 
@@ -441,7 +441,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).sendMessage(msg);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
     assertThat(result).isSameAs(response).isEqualToComparingFieldByField(response);
   }
 
@@ -453,7 +453,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).closeSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = NodeCommunicationException.class)
@@ -484,8 +484,8 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
   @Test
   public void onClose_whenSessionIdIsUnknown_shouldDoNothing() {
     node.onClose(sessionIdUnknown);
-    verifyZeroInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(endpoint);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = IllegalStateException.class)
@@ -503,7 +503,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).closeSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test
@@ -515,7 +515,7 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
     verify(endpoint).openSession(SESSION_ID);
     verify(endpoint).closeSession(SESSION_ID);
     verifyNoMoreInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(handler);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -536,8 +536,8 @@ public class AsyncNodeClientAdapterTest extends AbstractAsyncNodeAdapterTest {
   @Test
   public void onError_whenSessionIdIsUnknown_shouldDoNothing() {
     node.onError(sessionIdUnknown, error);
-    verifyZeroInteractions(endpoint);
-    verifyZeroInteractions(handler);
+    verifyNoInteractions(endpoint);
+    verifyNoInteractions(handler);
   }
 
   @Test

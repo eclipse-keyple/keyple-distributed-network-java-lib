@@ -127,28 +127,44 @@ public class MessageDto {
    */
   enum JsonProperty {
 
-    /** @since 2.3.0 */
+    /**
+     * @since 2.3.0
+     */
     CORE_API_LEVEL("coreApiLevel"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     INITIAL_CARD_CONTENT("initialCardContent"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     INITIAL_CARD_CONTENT_CLASS_NAME("initialCardContentClassName"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     INPUT_DATA("inputData"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     OUTPUT_DATA("outputData"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     SERVICE_ID("serviceId"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     STRATEGY("strategy"),
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     DURATION("duration");
 
     private final String key;

@@ -29,7 +29,9 @@ abstract class AbstractMessageHandlerAdapter {
   private boolean isBoundToSyncNode;
   private int coreApiLevel;
 
-  /** @since 2.0.0 */
+  /**
+   * @since 2.0.0
+   */
   AbstractMessageHandlerAdapter() {}
 
   /**

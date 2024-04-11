@@ -259,16 +259,24 @@ abstract class AbstractNodeAdapter {
    */
   abstract class AbstractSessionManager {
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     final String sessionId;
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     volatile SessionManagerState state;
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     MessageDto response;
 
-    /** @since 2.0.0 */
+    /**
+     * @since 2.0.0
+     */
     Throwable error;
 
     /**

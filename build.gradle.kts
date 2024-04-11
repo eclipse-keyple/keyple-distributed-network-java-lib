@@ -3,14 +3,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 plugins {
     java
-    id("com.diffplug.spotless") version "5.10.2"
+    id("com.diffplug.spotless") version "6.25.0"
     id("org.sonarqube") version "3.1"
     jacoco
 }
 buildscript {
     repositories {
         mavenLocal()
-        maven(url = "https://repo.eclipse.org/service/local/repositories/maven_central/content")
         mavenCentral()
     }
     dependencies {
@@ -24,19 +23,20 @@ apply(plugin = "org.eclipse.keyple")
 ///////////////////////////////////////////////////////////////////////////////
 repositories {
     mavenLocal()
-    maven(url = "https://repo.eclipse.org/service/local/repositories/maven_central/content")
     mavenCentral()
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
-    implementation("org.eclipse.keyple:keyple-util-java-lib:2.3.1")
+    implementation("org.eclipse.keyple:keyple-util-java-lib:2.3.2-SNAPSHOT") {isChanging=true}
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.slf4j:slf4j-api:1.7.32")
     testImplementation("org.slf4j:slf4j-simple:1.7.32")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.assertj:assertj-core:3.15.0")
-    testImplementation("org.mockito:mockito-core:2.28.2")
-    testImplementation("org.awaitility:awaitility:4.0.3")
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.vintage:junit-vintage-engine")
+    testImplementation("org.assertj:assertj-core:3.25.3")
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.awaitility:awaitility:4.2.1")
 }
 
 val javaSourceLevel: String by project

@@ -27,7 +27,7 @@ repositories {
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
 }
 dependencies {
-    implementation("org.eclipse.keyple:keyple-util-java-lib:2.3.2-SNAPSHOT") {isChanging=true}
+    implementation("org.eclipse.keyple:keyple-util-java-lib:2.4.0")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.slf4j:slf4j-api:1.7.32")
     testImplementation("org.slf4j:slf4j-simple:1.7.32")

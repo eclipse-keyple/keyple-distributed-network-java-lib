@@ -41,7 +41,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
       AbstractMessageHandlerAdapter handler, AsyncEndpointClientSpi endpoint, int timeoutSeconds) {
     super(handler, timeoutSeconds);
     this.endpoint = endpoint;
-    this.sessionManagers = new ConcurrentHashMap<String, SessionManager>();
+    this.sessionManagers = new ConcurrentHashMap<>();
   }
 
   /**
@@ -168,7 +168,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
 
   /**
    * Get the manager associated to the provided session id and log a session not found message if
-   * manager does not exists.
+   * manager does not exist.
    *
    * @param sessionId The session id (must be not empty).
    * @return a nullable reference.
@@ -176,8 +176,7 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   private SessionManager getManagerForEndpoint(String sessionId) {
     SessionManager manager = sessionManagers.get(sessionId);
     if (manager == null) {
-      logger.warn(
-          "The node's session '{}' is not found. It was maybe closed due to a timeout.", sessionId);
+      logger.warn("Node's session not found [{}]. It was maybe closed due to a timeout", sessionId);
     }
     return manager;
   }

@@ -38,7 +38,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
       AbstractMessageHandlerAdapter handler, AsyncEndpointServerSpi endpoint, int timeoutSeconds) {
     super(handler, timeoutSeconds);
     this.endpoint = endpoint;
-    this.sessionManagers = new ConcurrentHashMap<String, SessionManager>();
+    this.sessionManagers = new ConcurrentHashMap<>();
   }
 
   /**
@@ -76,7 +76,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
     SessionManager manager = sessionManagers.get(sessionId);
     if (manager == null) {
       throw new IllegalStateException(
-          String.format("The node's session '%s' is closed.", sessionId));
+          String.format("The node's session [%s] is closed", sessionId));
     }
     return manager;
   }

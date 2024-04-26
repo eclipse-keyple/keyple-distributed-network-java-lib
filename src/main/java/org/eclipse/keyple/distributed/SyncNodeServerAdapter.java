@@ -47,9 +47,9 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
   SyncNodeServerAdapter(AbstractMessageHandlerAdapter handler, int timeoutSeconds) {
     super(handler, timeoutSeconds);
     this.jsonParser = new JsonParser();
-    this.sessionManagers = new ConcurrentHashMap<String, SessionManager>();
-    this.pluginManagers = new ConcurrentHashMap<String, ServerPushEventManager>();
-    this.readerManagers = new ConcurrentHashMap<String, ServerPushEventManager>();
+    this.sessionManagers = new ConcurrentHashMap<>();
+    this.pluginManagers = new ConcurrentHashMap<>();
+    this.readerManagers = new ConcurrentHashMap<>();
     this.cleanMonitor = new Object();
   }
 
@@ -175,7 +175,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
       Map<String, ServerPushEventManager> eventManagers, String clientNodeId) {
 
     // Clean if needed all managers no longer used.
-    Set<String> unusedClientNodeIds = new HashSet<String>();
+    Set<String> unusedClientNodeIds = new HashSet<>();
     if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
       synchronized (cleanMonitor) {
         if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
@@ -197,7 +197,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     if (unusedClientNodeIds.contains(clientNodeId)) {
       throw new IllegalStateException(
           String.format(
-              "Client node ID '%s' removed because not used for at least 1 day", clientNodeId));
+              "Client node ID [%s] removed because not used for at least 1 day", clientNodeId));
     }
   }
 
@@ -348,7 +348,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
       // Post the event
       if (events == null) {
-        events = new ArrayList<MessageDto>(1);
+        events = new ArrayList<>(1);
       }
       events.add(message);
 

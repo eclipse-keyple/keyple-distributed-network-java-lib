@@ -25,7 +25,7 @@ final class ServerPushEventStrategyAdapter {
   private final int durationMillis;
 
   /**
-   * Creates a new instance with a initial duration set to 0.
+   * Creates a new instance with an initial duration set to 0.
    *
    * @param type The strategy type to set.
    * @param durationMillis The duration in milliseconds (must be {@code >= 0}).
@@ -57,7 +57,7 @@ final class ServerPushEventStrategyAdapter {
      * Long polling : The client requests continuously the server to check for events.<br>
      * This mode is blocking server side and more costly in resource for the server because if there
      * is no event, then the server keeps the hand during X milliseconds in case an event would
-     * occurs before responds to the client.<br>
+     * occur before responds to the client.<br>
      * This mode has the advantage of being more reactive.
      *
      * @since 2.0.0

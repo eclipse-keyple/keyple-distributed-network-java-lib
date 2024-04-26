@@ -45,10 +45,10 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
    * @param handler The associated handler.
    * @param endpoint The user client sync endpoint.
    * @param pluginObservationStrategy The server push event strategy associated to the plugin
-   *     observation (null if must not be activate).<br>
+   *     observation (null if it must not be activated).<br>
    *     This parameter can be used only for <b>Reader Server Side</b> use case.
    * @param readerObservationStrategy The server push event strategy associated to the reader
-   *     observation (null if must not be activate).<br>
+   *     observation (null if it must not be activated).<br>
    *     This parameter can be used only for <b>Reader Server Side</b> use case.
    * @since 2.0.0
    */
@@ -92,7 +92,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     } else {
       throw new IllegalStateException(
           String.format(
-              "The list returned by the client endpoint should have contained a single element but contains %s elements.",
+              "The list returned by the client endpoint should have contained a single element but contains %s elements",
               responses.size()));
     }
   }
@@ -116,7 +116,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   @Override
   void onStartPluginsObservation() {
     if (pluginObservationStrategy == null) {
-      throw new IllegalStateException("The plugin observation strategy is not set.");
+      throw new IllegalStateException("The plugin observation strategy is not set");
     }
     synchronized (pluginMonitor) {
       if (pluginEventObserver == null) {
@@ -150,7 +150,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
   @Override
   void onStartReaderObservation() {
     if (readerObservationStrategy == null) {
-      throw new IllegalStateException("The reader observation strategy is not set.");
+      throw new IllegalStateException("The reader observation strategy is not set");
     }
     synchronized (readerMonitor) {
       nbOfObservedReaders++;
@@ -319,11 +319,11 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
           Thread.currentThread().interrupt();
         }
       }
-      return new ArrayList<MessageDto>();
+      return new ArrayList<>();
     }
 
     /**
-     * Tries to sends a request silently without throwing an exception.
+     * Tries to send a request silently without throwing an exception.
      *
      * @return null if the sending has failed.
      */

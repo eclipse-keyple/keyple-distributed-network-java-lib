@@ -114,7 +114,7 @@ abstract class AbstractNodeAdapter {
       closeSession(sessionId);
     } catch (RuntimeException e) {
       logger.error(
-          "Error during the silent closing of node's session [{}] : {}",
+          "Error during the silent closing of node's session [{}]: {}",
           sessionId,
           e.getMessage(),
           e);
@@ -351,7 +351,7 @@ abstract class AbstractNodeAdapter {
       }
       throw new IllegalStateException(
           String.format(
-              "The status of the node's session manager '%s' should have been one of %s, but is currently '%s'",
+              "The status of the node's session manager [%s] should have been one of %s, but is currently [%s]",
               sessionId, Arrays.toString(targetStates), state));
     }
 
@@ -364,10 +364,10 @@ abstract class AbstractNodeAdapter {
     void timeoutOccurred() {
       state = SessionManagerState.ABORTED_SESSION;
       logger.error(
-          "Timeout occurs for the task associated with the node's session '{}'", sessionId);
+          "Timeout occurs for the task associated with the node's session [{}]", sessionId);
       throw new NodeCommunicationException(
           String.format(
-              "Timeout occurs for the task associated with the node's session '%s'", sessionId));
+              "Timeout occurs for the task associated with the node's session [%s]", sessionId));
     }
   }
 }

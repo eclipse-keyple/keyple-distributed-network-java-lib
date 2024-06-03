@@ -1,6 +1,6 @@
 @startuml
 title
-    Keyple - keyple-distributed-network-java-lib - 2.3.+ (2023-09-12)
+    Keyple - keyple-distributed-network-java-lib - 2.4.+ (2024-06-03)
 end title
 
 ' == THEME ==
@@ -89,7 +89,7 @@ package "org.eclipse.keyple.distributed" as root {
     }
     ' DTO
     +class MessageDto {
-        + <color:blue>int apiLevel
+        + int apiLevel
         + String sessionId
         + String action
         + String clientNodeId

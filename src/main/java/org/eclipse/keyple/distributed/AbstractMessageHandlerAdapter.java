@@ -105,8 +105,7 @@ abstract class AbstractMessageHandlerAdapter {
    * @since 2.0.0
    */
   final void bindSyncNodeServer() {
-    node = new SyncNodeServerAdapter(this, 20);
-    isBoundToSyncNode = true;
+    bindSyncNodeServer(20);
   }
 
   /**
@@ -142,8 +141,7 @@ abstract class AbstractMessageHandlerAdapter {
    * @since 2.0.0
    */
   final void bindAsyncNodeServer(AsyncEndpointServerSpi endpoint) {
-    node = new AsyncNodeServerAdapter(this, endpoint, 20);
-    isBoundToSyncNode = false;
+    bindAsyncNodeServer(endpoint, 20);
   }
 
   /**

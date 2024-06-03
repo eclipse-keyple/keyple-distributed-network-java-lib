@@ -1,9 +1,9 @@
 @startuml
 title
-    Keyple - Adapters of Keyple Distributed solution - (2023-09-12)
-    keyple-distributed-local-java-lib - 2.3.0
-    keyple-distributed-network-java-lib - 2.3.0
-    keyple-distributed-remote-java-lib - 2.3.0
+    Keyple - Adapters of Keyple Distributed solution - (2024-06-03)
+    keyple-distributed-local-java-lib - 2.3.+
+    keyple-distributed-network-java-lib - 2.4.+
+    keyple-distributed-remote-java-lib - 2.4.+
 end title
 
 ' == THEME ==
@@ -75,19 +75,21 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~{static} String generateSessionId ()
         ~{static} void checkError (MessageDto message)
 
-        ~<color:blue>**final** void setCoreApiLevel(int coreApiLevel)
-        ~<color:blue>**final** int getCoreApiLevel()
+        ~**final** void setCoreApiLevel(int coreApiLevel)
+        ~**final** int getCoreApiLevel()
 
-        ~**final** void bindSyncNodeClient (
-            \tSyncEndpointClientSpi endpoint,
+        ~**final** void bindSyncNodeClient (SyncEndpointClientSpi endpoint,
             \tServerPushEventStrategyAdapter pluginObservationStrategy,
             \tServerPushEventStrategyAdapter readerObservationStrategy)
+
         ~**final** void bindSyncNodeServer ()
-        ~**final** void bindAsyncNodeClient (
-            \tAsyncEndpointClientSpi endpoint,
-            \tint timeoutSeconds)
-        ~**final** void bindAsyncNodeServer (
-            \tAsyncEndpointServerSpi endpoint)
+        ~<color:blue>**final** void bindSyncNodeServer (int timeoutSeconds)
+
+        ~**final** void bindAsyncNodeClient (AsyncEndpointClientSpi endpoint, int timeoutSeconds)
+
+        ~**final** void bindAsyncNodeServer (AsyncEndpointServerSpi endpoint)
+        ~<color:blue>**final** void bindAsyncNodeServer (AsyncEndpointServerSpi endpoint, int timeoutSeconds)
+
         ~**final** AbstractNodeAdapter getNode ()
         ~**final** Boolean isBoundToSyncNode ()
 
@@ -219,11 +221,9 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             --
             ~RemotePluginServerFactoryAdapter (
                 \tString remotePluginName,
-                \tAsyncEndpointServerSpi asyncEndpointServerSpi)
-            ~RemotePluginServerFactoryAdapter (
-                \tString remotePluginName,
                 \tExecutorService executorService,
-                \tAsyncEndpointServerSpi asyncEndpointServerSpi)
+                \tAsyncEndpointServerSpi asyncEndpointServerSpi,
+                \t<color:blue>Integer timeoutSeconds</color>)
             -- **RemotePluginFactorySpi** --
             +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
         }
@@ -239,7 +239,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~**final** String executeRemotely (String jsonData, String sessionId)
             -- **AbstractRemotePluginSpi** --
             +**final** String getName ()
-            +<color:blue>**final** int exchangeApiLevel (int coreApiLevel)
+            +**final** int exchangeApiLevel (int coreApiLevel)
         }
 
         ~abstract class "<<RemotePluginClient>>\nAbstractRemotePluginClientAdapter" as AbstractRemotePluginClientAdapter extends AbstractRemotePluginAdapter {
@@ -321,16 +321,16 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~abstract class "<<<back:plum>RemoteReaderSpi</back>>>\nAbstractRemoteReaderAdapter" as AbstractRemoteReaderAdapter {
             __
             ~AbstractRemoteReaderAdapter (
-                \t<color:blue>int clientDistributedApiLevel</color>,
-                \t<color:blue>int clientCoreApiLevel</color>,
+                \tint clientDistributedApiLevel,
+                \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node)
 
-            ~<color:blue>**final** int getClientDistributedApiLevel ()
-            ~<color:blue>**final** int getClientCoreApiLevel ()
+            ~**final** int getClientDistributedApiLevel ()
+            ~**final** int getClientCoreApiLevel ()
             ~**final** String getLocalReaderName ()
             ~**final** String getSessionId ()
             ~**final** String getClientNodeId ()
@@ -342,7 +342,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
             __
             ~RemoteReaderClientAdapter (
-                \t<color:blue>int clientCoreApiLevel</color>,
+                \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -352,7 +352,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<<back:plum>ObservableRemoteReaderSpi</back>>>\n**final** ObservableRemoteReaderClientAdapter" as ObservableRemoteReaderClientAdapter extends RemoteReaderClientAdapter {
             __
             ~RemoteReaderClientAdapter (
-                \t<color:blue>int clientCoreApiLevel</color>,
+                \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -365,8 +365,8 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~class "<<RemoteReaderServer>>\n**final** RemoteReaderServerAdapter" as RemoteReaderServerAdapter extends AbstractRemoteReaderAdapter {
             __
             ~RemoteReaderServerAdapter (
-                \t<color:blue>int clientDistributedApiLevel</color>,
-                \t<color:blue>int clientCoreApiLevel</color>,
+                \tint clientDistributedApiLevel,
+                \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
                 \tString sessionId,
@@ -428,7 +428,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             -- **LocalServiceSpi** --
             +void connect (<back:yellow>LocalServiceApi</back> localServiceApi)
             +**final** String getName ()
-            +<color:blue>**final** int exchangeApiLevel (int coreApiLevel)
+            +**final** int exchangeApiLevel (int coreApiLevel)
         }
         ~class "<<LocalServiceClient>>\n**final** LocalServiceClientAdapter" as LocalServiceClientAdapter extends AbstractLocalServiceAdapter {
             --

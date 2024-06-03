@@ -1,0 +1,115 @@
+@startuml
+title
+    Sync Node Server
+end title
+
+participant "Client" as client
+participant "Endpoint Server" as endpoint
+participant "Sync Node Server" as node
+participant "Keyple Server Handler" as handler
+participant "Server Ticketing Application" as server
+
+activate client
+
+== Reader Client Side ==
+
+client -> endpoint : HTTP request (messageDto1)
+activate endpoint
+
+endpoint -> node : onRequest (messageDto1)
+activate node
+
+node -> handler : onMessage (messageDto1)
+activate handler
+
+handler ->> server : ASYNC process message (messageDto1)
+activate server
+
+node <-- handler
+deactivate handler
+
+note over node
+    await timeout
+    until server process messageDto1
+end note
+
+handler <- server : messageDto2
+activate handler
+
+node <- handler : sendRequest (messageDto2)
+
+endpoint <-- node : messageDto2
+
+client <-- endpoint : messageDto2
+deactivate endpoint
+
+note over node
+    await timeout
+    until client transmit next message
+end note
+
+client -> endpoint : HTTP request (messageDto3)
+activate endpoint
+
+endpoint -> node : onRequest (messageDto3)
+
+node --> handler : messageDto3
+
+handler --> server : messageDto3
+deactivate handler
+
+note over node
+    await timeout
+    until server process messageDto3
+end note
+
+handler <- server : messageDto4
+activate handler
+
+node <- handler : sendMessage (messageDto4)
+node --> handler
+handler --> server
+deactivate handler
+
+deactivate server
+
+endpoint <-- node : messageDto4
+deactivate node
+
+client <-- endpoint : messageDto4
+deactivate endpoint
+
+== Reader Server Side ==
+
+client -> endpoint : HTTP request (messageDto1)
+activate endpoint
+
+endpoint -> node : onRequest (messageDto1)
+activate node
+
+node -> handler : onMessage (messageDto1)
+activate handler
+
+handler -> server : SYNC process message (messageDto1)
+activate server
+handler <-- server : messageDto2
+deactivate server
+
+node <- handler : sendMessage (messageDto2)
+node --> handler
+
+node <-- handler
+deactivate handler
+
+note over node
+    await 0 seconds
+end note
+
+endpoint <-- node : messageDto2
+deactivate node
+
+client <-- endpoint : messageDto2
+deactivate endpoint
+
+
+@enduml

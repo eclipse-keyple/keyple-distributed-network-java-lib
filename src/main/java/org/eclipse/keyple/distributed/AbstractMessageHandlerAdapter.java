@@ -110,6 +110,18 @@ abstract class AbstractMessageHandlerAdapter {
   }
 
   /**
+   * Builds and bind a {@link SyncNodeServer} with the handler.<br>
+   * It must be invoked by the factory during the initialization phase.
+   *
+   * @param timeoutSeconds The timeout (in seconds).
+   * @since 2.4.0
+   */
+  final void bindSyncNodeServer(int timeoutSeconds) {
+    node = new SyncNodeServerAdapter(this, timeoutSeconds);
+    isBoundToSyncNode = true;
+  }
+
+  /**
    * Builds and bind a {@link AsyncNodeClient} with the handler.<br>
    * It must be invoked by the factory during the initialization phase.
    *
@@ -131,6 +143,19 @@ abstract class AbstractMessageHandlerAdapter {
    */
   final void bindAsyncNodeServer(AsyncEndpointServerSpi endpoint) {
     node = new AsyncNodeServerAdapter(this, endpoint, 20);
+    isBoundToSyncNode = false;
+  }
+
+  /**
+   * Builds and bind a {@link AsyncNodeServer} with the handler.<br>
+   * It must be invoked by the factory during the initialization phase.
+   *
+   * @param endpoint The {@link AsyncEndpointServerSpi} endpoint.
+   * @param timeoutSeconds The timeout (in seconds).
+   * @since 2.4.0
+   */
+  final void bindAsyncNodeServer(AsyncEndpointServerSpi endpoint, int timeoutSeconds) {
+    node = new AsyncNodeServerAdapter(this, endpoint, timeoutSeconds);
     isBoundToSyncNode = false;
   }
 

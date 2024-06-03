@@ -223,7 +223,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tString remotePluginName,
                 \tExecutorService executorService,
                 \tAsyncEndpointServerSpi asyncEndpointServerSpi,
-                \t<color:blue>Integer timeoutSeconds</color>)
+                \t<color:blue>int timeoutSeconds</color>)
             -- **RemotePluginFactorySpi** --
             +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
         }

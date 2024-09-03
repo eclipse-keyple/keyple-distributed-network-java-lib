@@ -1,9 +1,9 @@
 @startuml
 title
-    Keyple - Adapters of Keyple Distributed solution - (2024-06-03)
-    keyple-distributed-local-java-lib - 2.3.+
-    keyple-distributed-network-java-lib - 2.4.+
-    keyple-distributed-remote-java-lib - 2.4.+
+    Keyple - Adapters of Keyple Distributed solution - (2024-09-02)
+    keyple-distributed-local-java-lib - 2.5.+
+    keyple-distributed-network-java-lib - 2.5.+
+    keyple-distributed-remote-java-lib - 2.5.+
 end title
 
 ' == THEME ==
@@ -83,12 +83,12 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             \tServerPushEventStrategyAdapter readerObservationStrategy)
 
         ~**final** void bindSyncNodeServer ()
-        ~<color:blue>**final** void bindSyncNodeServer (int timeoutSeconds)
+        ~**final** void bindSyncNodeServer (int timeoutSeconds)
 
         ~**final** void bindAsyncNodeClient (AsyncEndpointClientSpi endpoint, int timeoutSeconds)
 
         ~**final** void bindAsyncNodeServer (AsyncEndpointServerSpi endpoint)
-        ~<color:blue>**final** void bindAsyncNodeServer (AsyncEndpointServerSpi endpoint, int timeoutSeconds)
+        ~**final** void bindAsyncNodeServer (AsyncEndpointServerSpi endpoint, int timeoutSeconds)
 
         ~**final** AbstractNodeAdapter getNode ()
         ~**final** Boolean isBoundToSyncNode ()
@@ -223,7 +223,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tString remotePluginName,
                 \tExecutorService executorService,
                 \tAsyncEndpointServerSpi asyncEndpointServerSpi,
-                \t<color:blue>int timeoutSeconds</color>)
+                \tint timeoutSeconds)
             -- **RemotePluginFactorySpi** --
             +<back:plum>AbstractRemotePluginSpi</back> getRemotePlugin ()
         }
@@ -325,6 +325,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
+                \t<color:blue>Boolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node)
@@ -337,6 +338,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~**final** AbstractNodeAdapter getNode ()
             -- **RemoteReaderSpi** --
             +**final** String getName ()
+            +<color:blue>**final** Boolean isContactless ()
             +**final** String executeRemotely (String jsonData)
         }
         ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
@@ -369,6 +371,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
+                \t<color:blue>Boolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node,

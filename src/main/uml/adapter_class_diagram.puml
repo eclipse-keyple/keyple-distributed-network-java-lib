@@ -325,7 +325,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
-                \t<color:blue>Boolean isLocalReaderContactless,
+                \t<color:blue>Boolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node)
@@ -338,7 +338,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~**final** AbstractNodeAdapter getNode ()
             -- **RemoteReaderSpi** --
             +**final** String getName ()
-            +<color:blue>**final** Boolean isLocalReaderContactless ()
+            +<color:blue>**final** Boolean isContactless ()
             +**final** String executeRemotely (String jsonData)
         }
         ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
@@ -371,7 +371,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
-                \t<color:blue>Boolean isLocalReaderContactless,
+                \t<color:blue>Boolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node,

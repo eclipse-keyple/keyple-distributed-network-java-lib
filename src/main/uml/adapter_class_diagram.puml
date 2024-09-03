@@ -1,7 +1,7 @@
 @startuml
 title
     Keyple - Adapters of Keyple Distributed solution - (2024-09-02)
-    keyple-distributed-local-java-lib - 2.4.+
+    keyple-distributed-local-java-lib - 2.5.+
     keyple-distributed-network-java-lib - 2.5.+
     keyple-distributed-remote-java-lib - 2.5.+
 end title

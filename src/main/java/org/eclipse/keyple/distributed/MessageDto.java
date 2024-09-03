@@ -34,7 +34,7 @@ public class MessageDto {
    *
    * @since 2.3.0
    */
-  static final int API_LEVEL = 2;
+  static final int API_LEVEL = 3;
 
   private int apiLevel;
   private String sessionId;
@@ -156,6 +156,11 @@ public class MessageDto {
      * @since 2.0.0
      */
     SERVICE_ID("serviceId"),
+
+    /**
+     * @since 2.5.0
+     */
+    IS_READER_CONTACTLESS("isReaderContactless"),
 
     /**
      * @since 2.0.0

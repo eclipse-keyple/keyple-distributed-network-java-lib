@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.5.0] - 2024-09-06
+:warning: API level: `3`
 ### Added
-- Added a property indicating if the local reader is contactless or not (current value: `"apiLevel": 3`).
+- Added a property indicating if a local reader is contactless or not.
 
 ## [2.4.0] - 2024-06-03
 ### Added
@@ -45,7 +48,8 @@ This is the initial release.
 It follows the extraction of Keyple 1.0 components contained in the `eclipse-keyple/keyple-java` repository to dedicated repositories.
 It also brings many major API changes.
 
-[unreleased]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.4.0...HEAD
+[unreleased]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.5.0...HEAD
+[2.5.0]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.3.1...2.4.0
 [2.3.1]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.3.0...2.3.1
 [2.3.0]: https://github.com/eclipse-keyple/keyple-distributed-network-java-lib/compare/2.2.0...2.3.0

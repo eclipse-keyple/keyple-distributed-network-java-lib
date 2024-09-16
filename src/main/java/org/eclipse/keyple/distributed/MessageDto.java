@@ -196,9 +196,7 @@ public class MessageDto {
    *
    * @since 2.0.0
    */
-  public MessageDto() {
-    apiLevel = API_LEVEL;
-  }
+  public MessageDto() {}
 
   /**
    * Constructor by copy.

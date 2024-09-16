@@ -11,6 +11,7 @@
  ************************************************************************************** */
 package org.eclipse.keyple.distributed;
 
+import static org.eclipse.keyple.distributed.MessageDto.API_LEVEL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -29,6 +30,7 @@ public abstract class AbstractNodeAdapterTest {
   {
     msg =
         new MessageDto()
+            .setApiLevel(API_LEVEL)
             .setSessionId(SESSION_ID)
             .setAction(MessageDto.Action.EXECUTE_REMOTE_SERVICE.name())
             .setClientNodeId("clientNodeId")

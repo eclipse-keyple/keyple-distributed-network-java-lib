@@ -229,6 +229,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
         body.addProperty(JsonProperty.DURATION.getKey(), strategy.getDurationMillis());
       }
       return new MessageDto()
+          .setApiLevel(API_LEVEL)
           .setSessionId(AbstractMessageHandlerAdapter.generateSessionId())
           .setAction(action.name())
           .setClientNodeId(getNodeId())

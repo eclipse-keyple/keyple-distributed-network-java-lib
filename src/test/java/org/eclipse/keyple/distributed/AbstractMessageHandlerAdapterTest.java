@@ -12,6 +12,7 @@
 package org.eclipse.keyple.distributed;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.eclipse.keyple.distributed.MessageDto.API_LEVEL;
 
 import com.google.gson.Gson;
 import org.eclipse.keyple.core.util.json.BodyError;
@@ -22,15 +23,18 @@ public class AbstractMessageHandlerAdapterTest {
 
   Gson parser = JsonUtil.getParser();
 
-  MessageDto response = new MessageDto().setAction(MessageDto.Action.RESP.name());
+  MessageDto response =
+      new MessageDto().setApiLevel(API_LEVEL).setAction(MessageDto.Action.RESP.name());
 
   MessageDto responseWithRuntimeException =
       new MessageDto()
+          .setApiLevel(API_LEVEL)
           .setAction(MessageDto.Action.ERROR.name())
           .setBody(parser.toJson(new BodyError(new RuntimeException("Test runtime exception"))));
 
   MessageDto responseWithException =
       new MessageDto()
+          .setApiLevel(API_LEVEL)
           .setAction(MessageDto.Action.ERROR.name())
           .setBody(parser.toJson(new BodyError(new Exception("Test exception"))));
 

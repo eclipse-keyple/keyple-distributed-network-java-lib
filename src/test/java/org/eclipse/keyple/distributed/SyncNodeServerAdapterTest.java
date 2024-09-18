@@ -13,6 +13,7 @@ package org.eclipse.keyple.distributed;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.eclipse.keyple.distributed.MessageDto.API_LEVEL;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -84,13 +85,14 @@ public class SyncNodeServerAdapterTest extends AbstractSyncNodeAdapterTest {
 
   MessageDto buildCheckEventMessage(
       String clientNodeId, boolean isPlugin, boolean isLongPolling, boolean withLongTimeout) {
-    return new MessageDto() //
-        .setSessionId(isPlugin ? pluginSessionId : readerSessionId) //
+    return new MessageDto()
+        .setApiLevel(API_LEVEL)
+        .setSessionId(isPlugin ? pluginSessionId : readerSessionId)
         .setAction(
             isPlugin
                 ? MessageDto.Action.CHECK_PLUGIN_EVENT.name()
-                : MessageDto.Action.CHECK_READER_EVENT.name()) //
-        .setClientNodeId(clientNodeId) //
+                : MessageDto.Action.CHECK_READER_EVENT.name())
+        .setClientNodeId(clientNodeId)
         .setBody(
             isLongPolling
                 ? withLongTimeout ? bodyLongPollingLongTimeout : bodyLongPolling
@@ -98,18 +100,20 @@ public class SyncNodeServerAdapterTest extends AbstractSyncNodeAdapterTest {
   }
 
   MessageDto buildEventMessage(String clientNodeId, boolean isPlugin) {
-    return new MessageDto() //
+    return new MessageDto()
+        .setApiLevel(API_LEVEL)
         .setAction(
             isPlugin
                 ? MessageDto.Action.PLUGIN_EVENT.name()
-                : MessageDto.Action.READER_EVENT.name()) //
+                : MessageDto.Action.READER_EVENT.name())
         .setClientNodeId(clientNodeId);
   }
 
   MessageDto buildMinimalMessage() {
-    return new MessageDto() //
-        .setSessionId(sessionId1) //
-        .setAction(MessageDto.Action.EXECUTE_REMOTE_SERVICE.name()) //
+    return new MessageDto()
+        .setApiLevel(API_LEVEL)
+        .setSessionId(sessionId1)
+        .setAction(MessageDto.Action.EXECUTE_REMOTE_SERVICE.name())
         .setClientNodeId(clientNodeId1);
   }
 

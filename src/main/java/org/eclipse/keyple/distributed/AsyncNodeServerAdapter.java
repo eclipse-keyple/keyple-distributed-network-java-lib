@@ -75,8 +75,7 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   private SessionManager getManagerForHandler(String sessionId) {
     SessionManager manager = sessionManagers.get(sessionId);
     if (manager == null) {
-      throw new IllegalStateException(
-          String.format("The node's session [%s] is closed", sessionId));
+      throw new IllegalStateException("The node's session '" + sessionId + "' is closed");
     }
     return manager;
   }

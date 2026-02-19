@@ -196,8 +196,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     // Check the current client node ID.
     if (unusedClientNodeIds.contains(clientNodeId)) {
       throw new IllegalStateException(
-          String.format(
-              "Client node ID [%s] removed because not used for at least 1 day", clientNodeId));
+          "Client node ID '" + clientNodeId + "' removed because not used for at least 1 day");
     }
   }
 
@@ -436,10 +435,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
           wait(maxAwaitingTimeMillis);
         }
       } catch (InterruptedException e) {
-        logger.error(
-            "Unexpected interruption of the task associated with the node's id {}",
-            clientNodeId,
-            e);
+        logger.error("Unexpected node task interruption [clientNodeId={}]", clientNodeId, e);
         Thread.currentThread().interrupt();
       }
     }

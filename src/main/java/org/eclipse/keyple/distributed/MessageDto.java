@@ -398,4 +398,38 @@ public class MessageDto {
     this.body = body;
     return this;
   }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @since 2.5.2
+   */
+  @Override
+  public String toString() {
+    return "MessageDto{"
+        + "apiLevel="
+        + apiLevel
+        + ", sessionId='"
+        + sessionId
+        + '\''
+        + ", action='"
+        + action
+        + '\''
+        + ", clientNodeId='"
+        + clientNodeId
+        + '\''
+        + ", serverNodeId='"
+        + serverNodeId
+        + '\''
+        + ", localReaderName='"
+        + localReaderName
+        + '\''
+        + ", remoteReaderName='"
+        + remoteReaderName
+        + '\''
+        + ", body='"
+        + body
+        + '\''
+        + '}';
+  }
 }

@@ -91,9 +91,9 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       return response;
     } else {
       throw new IllegalStateException(
-          String.format(
-              "The list returned by the client endpoint should have contained a single element but contains %s elements",
-              responses.size()));
+          "The list returned by the client endpoint should have contained a single element but contains "
+              + responses.size()
+              + " elements");
     }
   }
 
@@ -246,7 +246,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
           try {
             Thread.sleep(requestFrequencyMillis);
           } catch (InterruptedException e) {
-            logger.error("Unexpected interruption of thread {}", getName(), e);
+            logger.error("Unexpected thread interruption [thread={}]", getName(), e);
             Thread.currentThread().interrupt();
           }
         }
@@ -267,7 +267,10 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     private class EventObserverUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
       @Override
       public void uncaughtException(Thread t, Throwable e) {
-        logger.error("Interruption of thread {} caused by an unhandled exception", t.getName(), e);
+        logger.error(
+            "Unexpected thread interruption caused by an unhandled exception [thread={}]",
+            t.getName(),
+            e);
       }
     }
 
@@ -306,7 +309,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
         try {
           timer = timer1 + timer2;
           Thread.sleep(timer);
-          logger.info("Retry to send request after {} seconds...", timer / 1000);
+          logger.info("Retrying to send request after {} seconds", timer / 1000);
           responses = sendRequestSilently();
           if (responses != null) {
             logger.info("Server connection retrieved");
@@ -316,7 +319,8 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
             timer2 = timer;
           }
         } catch (InterruptedException e) {
-          logger.error("Unexpected interruption of thread {}", Thread.currentThread().getName(), e);
+          logger.error(
+              "Unexpected thread interruption [thread={}]", Thread.currentThread().getName(), e);
           Thread.currentThread().interrupt();
         }
       }

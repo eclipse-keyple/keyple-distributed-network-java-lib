@@ -113,11 +113,7 @@ abstract class AbstractNodeAdapter {
     try {
       closeSession(sessionId);
     } catch (RuntimeException e) {
-      logger.error(
-          "Error during the silent closing of node's session [{}]: {}",
-          sessionId,
-          e.getMessage(),
-          e);
+      logger.error("Failed to close node session safely [sessionId={}]", sessionId, e);
     }
   }
 
@@ -319,10 +315,7 @@ abstract class AbstractNodeAdapter {
         }
         timeoutOccurred();
       } catch (InterruptedException e) {
-        logger.error(
-            "Unexpected interruption of the task associated with the node's session {}",
-            sessionId,
-            e);
+        logger.error("Unexpected node session task interruption [sessionId={}]", sessionId, e);
         Thread.currentThread().interrupt();
       }
     }
@@ -350,9 +343,12 @@ abstract class AbstractNodeAdapter {
         }
       }
       throw new IllegalStateException(
-          String.format(
-              "The status of the node's session manager [%s] should have been one of %s, but is currently [%s]",
-              sessionId, Arrays.toString(targetStates), state));
+          "The status of the node's session manager '"
+              + sessionId
+              + "' should have been one of "
+              + Arrays.toString(targetStates)
+              + ", but is currently "
+              + state);
     }
 
     /**
@@ -363,11 +359,9 @@ abstract class AbstractNodeAdapter {
      */
     void timeoutOccurred() {
       state = SessionManagerState.ABORTED_SESSION;
-      logger.error(
-          "Timeout occurs for the task associated with the node's session [{}]", sessionId);
+      logger.error("Node session task timed out [sessionId={}]", sessionId);
       throw new NodeCommunicationException(
-          String.format(
-              "Timeout occurs for the task associated with the node's session [%s]", sessionId));
+          "Timeout occurs for the task associated with the node's session '" + sessionId + "'");
     }
   }
 }

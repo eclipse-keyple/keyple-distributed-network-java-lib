@@ -176,7 +176,9 @@ final class AsyncNodeClientAdapter extends AbstractNodeAdapter implements AsyncN
   private SessionManager getManagerForEndpoint(String sessionId) {
     SessionManager manager = sessionManagers.get(sessionId);
     if (manager == null) {
-      logger.warn("Node's session not found [{}]. It was maybe closed due to a timeout", sessionId);
+      logger.warn(
+          "Node session not found. It was maybe closed due to a timeout event [sessionId={}]",
+          sessionId);
     }
     return manager;
   }

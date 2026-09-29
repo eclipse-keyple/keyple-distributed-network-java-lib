@@ -331,4 +331,25 @@ public class SyncNodeClientAdapterTest extends AbstractSyncNodeAdapterTest {
     verifyNoInteractions(handler);
     assertThat(endpoint.messages).isEmpty();
   }
+
+  @Test
+  public void nextRetryDelayMillis_shouldFollowFibonacciSequence() {
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(0, 1000)).isEqualTo(1000);
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(1000, 1000)).isEqualTo(2000);
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(1000, 2000)).isEqualTo(3000);
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(21000, 34000)).isEqualTo(55000);
+  }
+
+  @Test
+  public void nextRetryDelayMillis_whenSumExceedsMax_shouldReturnMax() {
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(34000, 55000))
+        .isEqualTo(SyncNodeClientAdapter.MAX_RETRY_DELAY_MILLIS);
+    assertThat(
+            SyncNodeClientAdapter.nextRetryDelayMillis(
+                SyncNodeClientAdapter.MAX_RETRY_DELAY_MILLIS,
+                SyncNodeClientAdapter.MAX_RETRY_DELAY_MILLIS))
+        .isEqualTo(SyncNodeClientAdapter.MAX_RETRY_DELAY_MILLIS);
+    assertThat(SyncNodeClientAdapter.nextRetryDelayMillis(Integer.MAX_VALUE, Integer.MAX_VALUE))
+        .isEqualTo(SyncNodeClientAdapter.MAX_RETRY_DELAY_MILLIS);
+  }
 }

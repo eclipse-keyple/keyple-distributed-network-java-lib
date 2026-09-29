@@ -376,4 +376,23 @@ public class AsyncNodeServerAdapterTest extends AbstractAsyncNodeAdapterTest {
     } catch (IllegalStateException e) {
     }
   }
+
+  @Test
+  public void isClientActive_whenSessionIsOpen_shouldReturnTrue() {
+    initSession();
+    assertThat(node.isClientActive(msg.getClientNodeId(), msg.getSessionId())).isTrue();
+  }
+
+  @Test
+  public void isClientActive_whenSessionIsUnknown_shouldReturnFalse() {
+    assertThat(node.isClientActive(msg.getClientNodeId(), msg.getSessionId())).isFalse();
+    assertThat(node.isClientActive(msg.getClientNodeId(), null)).isFalse();
+  }
+
+  @Test
+  public void isClientActive_whenSessionIsClosed_shouldReturnFalse() {
+    initSession();
+    node.onClose(msg.getSessionId());
+    assertThat(node.isClientActive(msg.getClientNodeId(), msg.getSessionId())).isFalse();
+  }
 }

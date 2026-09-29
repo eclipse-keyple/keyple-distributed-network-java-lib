@@ -1,9 +1,9 @@
 @startuml
 title
-    Keyple - Adapters of Keyple Distributed solution - (2024-09-02)
-    keyple-distributed-local-java-lib - 2.5.+
-    keyple-distributed-network-java-lib - 2.5.+
-    keyple-distributed-remote-java-lib - 2.5.+
+    Keyple - Adapters of Keyple Distributed solution - (2026-09-28)
+    keyple-distributed-local-java-lib - 2.6.+
+    keyple-distributed-network-java-lib - 2.6.+
+    keyple-distributed-remote-java-lib - 2.6.+
 end title
 
 ' == THEME ==
@@ -104,6 +104,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             \tint timeoutSeconds)
 
         ~**final** String getNodeId ()
+        ~<color:blue>**final** int getTimeoutMillis ()
         ~**final** AbstractMessageHandlerAdapter getHandler ()
 
         ~void openSession (String sessionId)
@@ -112,6 +113,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         ~void closeSession (String sessionId)
 
         ~**final** void closeSessionSilently (String sessionId)
+        ~<color:blue>boolean isClientActive (String clientNodeId, String sessionId)
 
         ~void onStartPluginsObservation ()
         ~void onStopPluginsObservation ()
@@ -148,6 +150,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         -- **AbstractNodeAdapter** --
         ~MessageDto sendRequest (MessageDto message)
         ~void sendMessage (MessageDto message)
+        ~<color:blue>boolean isClientActive (String clientNodeId, String sessionId)
     }
     ' Sync Node
     ~class "<<SyncNodeClient>>\n**final** SyncNodeClientAdapter" as SyncNodeClientAdapter extends AbstractNodeAdapter {
@@ -157,6 +160,8 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             \tSyncEndpointClientSpi endpoint,
             \tServerPushEventStrategyAdapter pluginObservationStrategy,
             \tServerPushEventStrategyAdapter readerObservationStrategy)
+
+        ~<color:blue>{static} int nextRetryDelayMillis (int previousDelayMillis, int currentDelayMillis)
         -- **AbstractNodeAdapter** --
         ~MessageDto sendRequest (MessageDto message)
         ~void sendMessage (MessageDto message)
@@ -175,6 +180,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
         -- **AbstractNodeAdapter** --
         ~MessageDto sendRequest (MessageDto message)
         ~void sendMessage (MessageDto message)
+        ~<color:blue>boolean isClientActive (String clientNodeId, String sessionId)
     }
 
     ' Server Push Event Strategy
@@ -325,7 +331,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
-                \t<color:blue>Boolean isContactless,
+                \tBoolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node)
@@ -338,7 +344,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
             ~**final** AbstractNodeAdapter getNode ()
             -- **RemoteReaderSpi** --
             +**final** String getName ()
-            +<color:blue>**final** Boolean isContactless ()
+            +**final** Boolean isContactless ()
             +**final** String executeRemotely (String jsonData)
         }
         ~class "<<RemoteReaderClient>>\nRemoteReaderClientAdapter" as RemoteReaderClientAdapter extends AbstractRemoteReaderAdapter {
@@ -371,7 +377,7 @@ package "org.eclipse.keyple.distributed" as packAdapter {
                 \tint clientCoreApiLevel,
                 \tString remoteReaderName,
                 \tString localReaderName,
-                \t<color:blue>Boolean isContactless,
+                \tBoolean isContactless,
                 \tString sessionId,
                 \tString clientNodeId,
                 \tAbstractNodeAdapter node,
@@ -382,7 +388,8 @@ package "org.eclipse.keyple.distributed" as packAdapter {
 
             -- **RemoteReaderServer** --
             +String getServiceId ()
-            +Object getInitialCardContent ()
+            +<s>Object getInitialCardContent ()
+            +<color:blue><T> T getInitialCardContent (Class<T> initialCardContentClass)
             +<T> T getInputData (Class<T> inputDataClass)
         }
     }

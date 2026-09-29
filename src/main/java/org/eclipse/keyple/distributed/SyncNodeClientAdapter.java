@@ -30,6 +30,9 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
 
   private static final Logger logger = LoggerFactory.getLogger(SyncNodeClientAdapter.class);
 
+  /** Max delay between two attempts to reconnect to the server (in milliseconds). */
+  static final int MAX_RETRY_DELAY_MILLIS = 60000;
+
   private final SyncEndpointClientSpi endpoint;
 
   private final ServerPushEventStrategyAdapter pluginObservationStrategy;
@@ -307,7 +310,7 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
       int timer;
       while (!Thread.currentThread().isInterrupted()) {
         try {
-          timer = timer1 + timer2;
+          timer = nextRetryDelayMillis(timer1, timer2);
           Thread.sleep(timer);
           logger.info("Retrying to send request after {} seconds", timer / 1000);
           responses = sendRequestSilently();
@@ -349,5 +352,18 @@ final class SyncNodeClientAdapter extends AbstractNodeAdapter implements SyncNod
     private void stop() {
       thread.interrupt();
     }
+  }
+
+  /**
+   * Computes the delay before the next attempt to reconnect to the server, following the Fibonacci
+   * sequence capped with {@link #MAX_RETRY_DELAY_MILLIS}, so that the client resumes quickly once
+   * the server is available again.
+   *
+   * @param previousDelayMillis The delay before the previous attempt (in milliseconds).
+   * @param currentDelayMillis The delay before the current attempt (in milliseconds).
+   * @return The delay before the next attempt (in milliseconds).
+   */
+  static int nextRetryDelayMillis(int previousDelayMillis, int currentDelayMillis) {
+    return (int) Math.min((long) previousDelayMillis + currentDelayMillis, MAX_RETRY_DELAY_MILLIS);
   }
 }

@@ -57,6 +57,31 @@ abstract class AbstractNodeAdapter {
   }
 
   /**
+   * Gets the timeout used during awaiting.
+   *
+   * @return A positive or zero value (in milliseconds).
+   * @since 2.6.0
+   */
+  final int getTimeoutMillis() {
+    return timeoutMillis;
+  }
+
+  /**
+   * Checks if a client is still active, i.e. if it is still able to receive the messages sent by
+   * the server (for internal use only).
+   *
+   * <p>By default, the client is considered as active.
+   *
+   * @param clientNodeId The client node ID.
+   * @param sessionId The ID of the session through which the client is reached.
+   * @return True if the client is active.
+   * @since 2.6.0
+   */
+  boolean isClientActive(String clientNodeId, String sessionId) {
+    return true;
+  }
+
+  /**
    * Gets the associated handler.
    *
    * @return A not null reference.

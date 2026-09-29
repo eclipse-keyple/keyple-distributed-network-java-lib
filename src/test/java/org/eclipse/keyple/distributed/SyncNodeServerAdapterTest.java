@@ -12,12 +12,16 @@
 package org.eclipse.keyple.distributed;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 import static org.eclipse.keyple.distributed.MessageDto.API_LEVEL;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+import com.google.gson.JsonObject;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
@@ -301,6 +305,156 @@ public class SyncNodeServerAdapterTest extends AbstractSyncNodeAdapterTest {
     scheduleSendMessage(pluginEvent1Client1);
     List<MessageDto> events = node.onRequest(pluginCheckLongPollingLongTimeoutClient1);
     assertThat(events).containsExactly(pluginEvent1Client1);
+  }
+
+  @Test(timeout = 5000)
+  public void
+      onRequest_whenActionIsCheckPluginEventUsingLongPollingWithHugeDuration_shouldAwaitAtMostServerTimeout() {
+    node = new SyncNodeServerAdapter(handler, 1);
+    long start = System.currentTimeMillis();
+    List<MessageDto> events =
+        node.onRequest(buildLongPollingCheckPluginEventMessage(Integer.MAX_VALUE));
+    assertThat(events).isEmpty();
+    assertThat(System.currentTimeMillis() - start).isLessThan(3000);
+  }
+
+  @Test
+  public void
+      onRequest_whenActionIsCheckPluginEventUsingLongPollingWithNegativeDuration_shouldThrowIAEAndNotRegisterStrategy() {
+    assertThatThrownBy(() -> node.onRequest(buildLongPollingCheckPluginEventMessage(-1)))
+        .isInstanceOf(IllegalArgumentException.class);
+    node.sendMessage(pluginEvent1Client1);
+    List<MessageDto> events = node.onRequest(pluginCheckLongPollingClient1);
+    assertThat(events).containsExactly(pluginEvent1Client1);
+  }
+
+  private MessageDto buildLongPollingCheckPluginEventMessage(int durationMillis) {
+    JsonObject body = new JsonObject();
+    body.addProperty(MessageDto.JsonProperty.CORE_API_LEVEL.getKey(), 0);
+    body.addProperty(
+        MessageDto.JsonProperty.STRATEGY.getKey(),
+        ServerPushEventStrategyAdapter.Type.LONG_POLLING.name());
+    body.addProperty(MessageDto.JsonProperty.DURATION.getKey(), durationMillis);
+    return buildMinimalMessage()
+        .setAction(MessageDto.Action.CHECK_PLUGIN_EVENT.name())
+        .setBody(body.toString());
+  }
+
+  @Test
+  public void
+      onRequest_whenActionIsCheckPluginEventAndMaxObservingClientsIsReached_shouldRejectOnlyNewClients()
+          throws Exception {
+    for (int i = 0; i < SyncNodeServerAdapter.MAX_OBSERVING_CLIENTS; i++) {
+      node.onRequest(buildCheckEventMessage("client" + i, true, false, false));
+    }
+    assertThatThrownBy(
+            () -> node.onRequest(buildCheckEventMessage("newClient", true, false, false)))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("Max number of observing clients reached");
+    assertThat(node.onRequest(buildCheckEventMessage("client0", true, false, false))).isEmpty();
+    assertThat(getEventManagers("pluginManagers"))
+        .hasSize(SyncNodeServerAdapter.MAX_OBSERVING_CLIENTS)
+        .doesNotContainKey("newClient");
+  }
+
+  @Test
+  public void
+      onRequest_whenActionIsCheckPluginEventAndAnotherClientIsInactive_shouldRemoveInactiveClient()
+          throws Exception {
+    node.onRequest(pluginCheckPollingClient1);
+    makeInactive(getEventManagers("pluginManagers").get(clientNodeId1));
+    resetLastCleanDatetime();
+
+    node.onRequest(buildCheckEventMessage(clientNodeId2, true, false, false));
+
+    assertThat(getEventManagers("pluginManagers"))
+        .containsOnlyKeys(clientNodeId2)
+        .doesNotContainKey(clientNodeId1);
+  }
+
+  @Test
+  public void
+      onRequest_whenActionIsCheckReaderEventAndAPluginClientIsInactive_shouldRemoveInactivePluginClient()
+          throws Exception {
+    node.onRequest(pluginCheckPollingClient1);
+    makeInactive(getEventManagers("pluginManagers").get(clientNodeId1));
+    resetLastCleanDatetime();
+
+    node.onRequest(readerCheckPollingClient1);
+
+    assertThat(getEventManagers("pluginManagers")).isEmpty();
+    assertThat(getEventManagers("readerManagers")).containsOnlyKeys(clientNodeId1);
+  }
+
+  @Test
+  public void sendMessage_whenPluginEventForInactiveClient_shouldThrowISEAndRemoveClient()
+      throws Exception {
+    node.onRequest(pluginCheckPollingClient1);
+    makeInactive(getEventManagers("pluginManagers").get(clientNodeId1));
+
+    assertThatThrownBy(() -> node.sendMessage(pluginEvent1Client1))
+        .isInstanceOf(IllegalStateException.class)
+        .hasMessageContaining("removed because not used for at least 10 minutes");
+    assertThat(getEventManagers("pluginManagers")).doesNotContainKey(clientNodeId1);
+  }
+
+  @Test
+  public void
+      sendMessage_whenPluginEventAfterInactiveClientRemovalAndClientChecksAgain_shouldDeliverEvent()
+          throws Exception {
+    node.onRequest(pluginCheckPollingClient1);
+    makeInactive(getEventManagers("pluginManagers").get(clientNodeId1));
+    resetLastCleanDatetime();
+    node.onRequest(buildCheckEventMessage(clientNodeId2, true, false, false));
+
+    node.onRequest(pluginCheckPollingClient1);
+    node.sendMessage(pluginEvent1Client1);
+
+    assertThat(node.onRequest(pluginCheckPollingClient1)).containsExactly(pluginEvent1Client1);
+  }
+
+  @Test
+  public void isClientActive_whenClientHasNeverCheckedEvents_shouldReturnFalse() {
+    assertThat(node.isClientActive(clientNodeId1, null)).isFalse();
+  }
+
+  @Test
+  public void isClientActive_whenClientHasRecentlyCheckedPluginEvents_shouldReturnTrue() {
+    node.onRequest(pluginCheckPollingClient1);
+    assertThat(node.isClientActive(clientNodeId1, null)).isTrue();
+    assertThat(node.isClientActive(clientNodeId2, null)).isFalse();
+  }
+
+  @Test
+  public void isClientActive_whenClientHasRecentlyCheckedReaderEvents_shouldReturnTrue() {
+    node.onRequest(readerCheckPollingClient1);
+    assertThat(node.isClientActive(clientNodeId1, null)).isTrue();
+  }
+
+  @Test
+  public void isClientActive_whenClientNoLongerChecksEvents_shouldReturnFalse() throws Exception {
+    node.onRequest(pluginCheckPollingClient1);
+    makeInactive(getEventManagers("pluginManagers").get(clientNodeId1));
+    assertThat(node.isClientActive(clientNodeId1, null)).isFalse();
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, Object> getEventManagers(String fieldName) throws Exception {
+    Field field = SyncNodeServerAdapter.class.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return (Map<String, Object>) field.get(node);
+  }
+
+  private static void makeInactive(Object eventManager) throws Exception {
+    Field field = eventManager.getClass().getDeclaredField("lastCheckDatetime");
+    field.setAccessible(true);
+    field.setLong(eventManager, System.currentTimeMillis() - TimeUnit.MINUTES.toMillis(11));
+  }
+
+  private void resetLastCleanDatetime() throws Exception {
+    Field field = SyncNodeServerAdapter.class.getDeclaredField("lastCleanDatetime");
+    field.setAccessible(true);
+    field.setLong(node, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)

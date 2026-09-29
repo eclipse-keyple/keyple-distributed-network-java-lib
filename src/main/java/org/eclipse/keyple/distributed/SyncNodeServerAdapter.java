@@ -31,12 +31,25 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
   private static final Logger logger = LoggerFactory.getLogger(SyncNodeServerAdapter.class);
 
+  /** Max long polling duration used when the node timeout is zero (in milliseconds). */
+  private static final int DEFAULT_MAX_LONG_POLLING_DURATION_MILLIS = 20000;
+
+  /** Min inactivity duration after which an observing client is removed (in milliseconds). */
+  private static final long MIN_MAX_INACTIVITY_MILLIS = TimeUnit.MINUTES.toMillis(10);
+
+  /** Min duration between two cleanings of the inactive observing clients (in milliseconds). */
+  private static final long CLEANING_PERIOD_MILLIS = TimeUnit.MINUTES.toMillis(1);
+
+  /** Max number of observing clients, for each type of observation (plugin or reader). */
+  static final int MAX_OBSERVING_CLIENTS = 10000;
+
   private final Map<String, SessionManager> sessionManagers;
   private final Map<String, ServerPushEventManager> pluginManagers;
   private final Map<String, ServerPushEventManager> readerManagers;
   private final JsonParser jsonParser;
 
-  private long lastCleanDatetime;
+  private final long maxInactivityMillis;
+  private volatile long lastCleanDatetime;
   private final Object cleanMonitor;
 
   /**
@@ -50,6 +63,9 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
     this.sessionManagers = new ConcurrentHashMap<>();
     this.pluginManagers = new ConcurrentHashMap<>();
     this.readerManagers = new ConcurrentHashMap<>();
+    // An observing client checks its events continuously, at least once per long polling duration
+    // (capped with the node timeout).
+    this.maxInactivityMillis = Math.max(MIN_MAX_INACTIVITY_MILLIS, 2L * getTimeoutMillis());
     this.cleanMonitor = new Object();
   }
 
@@ -80,7 +96,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
       default:
         responses = processOnRequest(message);
     }
-    return responses != null ? responses : Collections.<MessageDto>emptyList();
+    return responses != null ? responses : Collections.emptyList();
   }
 
   /**
@@ -92,6 +108,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    */
   private List<MessageDto> checkEvents(
       MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
+    cleanEventManagers();
     ServerPushEventManager manager = getEventManager(message, eventManagers);
     return manager.checkEvents(message);
   }
@@ -159,45 +176,80 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @param eventManagers The event managers map.
    */
   private void postEvent(MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
-    checkEventManagers(eventManagers, message.getClientNodeId());
-    ServerPushEventManager manager = getEventManager(message, eventManagers);
-    manager.postEvent(message);
+    String clientNodeId = message.getClientNodeId();
+    ServerPushEventManager manager = eventManagers.get(clientNodeId);
+    if (manager != null && isInactive(manager, System.currentTimeMillis())) {
+      // The client no longer checks its events: the exception notifies the caller to stop
+      // referencing it.
+      eventManagers.remove(clientNodeId, manager);
+      throw new IllegalStateException(
+          "Client node ID '"
+              + clientNodeId
+              + "' removed because not used for at least "
+              + TimeUnit.MILLISECONDS.toMinutes(maxInactivityMillis)
+              + " minutes");
+    }
+    cleanEventManagers();
+    getEventManager(message, eventManagers).postEvent(message);
   }
 
   /**
-   * Check and clean the old unused event managers.
+   * {@inheritDoc}
    *
-   * @param eventManagers The event manager map.
-   * @param clientNodeId The current client node ID.
-   * @throws IllegalStateException If the current client node ID is removed.
+   * <p>The client is active if it has checked its plugin or reader events recently.
+   *
+   * @since 2.6.0
    */
-  private void checkEventManagers(
-      Map<String, ServerPushEventManager> eventManagers, String clientNodeId) {
+  @Override
+  boolean isClientActive(String clientNodeId, String sessionId) {
+    long now = System.currentTimeMillis();
+    ServerPushEventManager pluginManager = pluginManagers.get(clientNodeId);
+    ServerPushEventManager readerManager = readerManagers.get(clientNodeId);
+    return (pluginManager != null && !isInactive(pluginManager, now))
+        || (readerManager != null && !isInactive(readerManager, now));
+  }
 
-    // Clean if needed all managers no longer used.
-    Set<String> unusedClientNodeIds = new HashSet<>();
-    if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
-      synchronized (cleanMonitor) {
-        if (System.currentTimeMillis() > lastCleanDatetime + TimeUnit.DAYS.toMillis(1)) {
-          long limitDatetime = lastCleanDatetime;
-          lastCleanDatetime = System.currentTimeMillis();
-          for (Map.Entry<String, ServerPushEventManager> entry : eventManagers.entrySet()) {
-            if (entry.getValue().lastCheckDatetime < limitDatetime) {
-              unusedClientNodeIds.add(entry.getKey());
-            }
-          }
-          for (String key : unusedClientNodeIds) {
-            eventManagers.remove(key);
-          }
-        }
+  /**
+   * Removes the event managers of the clients which no longer check their events, at most once per
+   * cleaning period.
+   */
+  private void cleanEventManagers() {
+    long now = System.currentTimeMillis();
+    if (now < lastCleanDatetime + CLEANING_PERIOD_MILLIS) {
+      return;
+    }
+    synchronized (cleanMonitor) {
+      if (now < lastCleanDatetime + CLEANING_PERIOD_MILLIS) {
+        return;
       }
+      lastCleanDatetime = now;
     }
+    removeInactiveEventManagers(pluginManagers, now);
+    removeInactiveEventManagers(readerManagers, now);
+  }
 
-    // Check the current client node ID.
-    if (unusedClientNodeIds.contains(clientNodeId)) {
-      throw new IllegalStateException(
-          "Client node ID '" + clientNodeId + "' removed because not used for at least 1 day");
-    }
+  /**
+   * Removes the inactive event managers of the provided map.
+   *
+   * @param eventManagers The event managers map.
+   * @param now The current datetime (in milliseconds).
+   */
+  private void removeInactiveEventManagers(
+      Map<String, ServerPushEventManager> eventManagers, long now) {
+    eventManagers
+        .values()
+        .removeIf(serverPushEventManager -> isInactive(serverPushEventManager, now));
+  }
+
+  /**
+   * Checks if the client associated to the provided event manager no longer checks its events.
+   *
+   * @param manager The event manager.
+   * @param now The current datetime (in milliseconds).
+   * @return True if the client is inactive.
+   */
+  private boolean isInactive(ServerPushEventManager manager, long now) {
+    return now - manager.lastCheckDatetime > maxInactivityMillis;
   }
 
   /**
@@ -206,13 +258,26 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
    * @param message The message containing the client's information
    * @param eventManagers The event managers map.
    * @return a not null reference.
+   * @throws IllegalStateException If the max number of observing clients is reached.
    */
   private ServerPushEventManager getEventManager(
       MessageDto message, Map<String, ServerPushEventManager> eventManagers) {
-    ServerPushEventManager manager = eventManagers.get(message.getClientNodeId());
+    String clientNodeId = message.getClientNodeId();
+    ServerPushEventManager manager = eventManagers.get(clientNodeId);
     if (manager == null) {
-      manager = new ServerPushEventManager(message.getClientNodeId());
-      eventManagers.put(message.getClientNodeId(), manager);
+      if (eventManagers.size() >= MAX_OBSERVING_CLIENTS) {
+        throw new IllegalStateException(
+            "Max number of observing clients reached ("
+                + MAX_OBSERVING_CLIENTS
+                + "): client node ID '"
+                + clientNodeId
+                + "' rejected");
+      }
+      manager = new ServerPushEventManager(clientNodeId);
+      ServerPushEventManager existingManager = eventManagers.putIfAbsent(clientNodeId, manager);
+      if (existingManager != null) {
+        manager = existingManager;
+      }
     }
     return manager;
   }
@@ -323,7 +388,7 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
 
     private List<MessageDto> events;
     private ServerPushEventStrategyAdapter strategy;
-    private long lastCheckDatetime;
+    private volatile long lastCheckDatetime;
 
     /**
      * Constructor
@@ -410,16 +475,26 @@ final class SyncNodeServerAdapter extends AbstractNodeAdapter implements SyncNod
           throw new IllegalArgumentException("body", e);
         }
 
-        int durationSeconds = 0;
+        int durationMillis = 0;
         if (type == ServerPushEventStrategyAdapter.Type.LONG_POLLING) {
           try {
-            durationSeconds = body.get(JsonProperty.DURATION.getKey()).getAsInt();
+            durationMillis = body.get(JsonProperty.DURATION.getKey()).getAsInt();
           } catch (Exception e) {
             throw new IllegalArgumentException("long polling duration", e);
           }
+          if (durationMillis < 0) {
+            throw new IllegalArgumentException(
+                "Long polling duration is negative: " + durationMillis);
+          }
+          // The long polling duration is limited to the server timeout.
+          int maxDurationMillis =
+              getTimeoutMillis() > 0
+                  ? getTimeoutMillis()
+                  : DEFAULT_MAX_LONG_POLLING_DURATION_MILLIS;
+          durationMillis = Math.min(durationMillis, maxDurationMillis);
         }
 
-        strategy = new ServerPushEventStrategyAdapter(type, durationSeconds);
+        strategy = new ServerPushEventStrategyAdapter(type, durationMillis);
       }
     }
 

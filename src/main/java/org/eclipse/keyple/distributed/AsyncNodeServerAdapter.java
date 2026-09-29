@@ -66,6 +66,18 @@ final class AsyncNodeServerAdapter extends AbstractNodeAdapter implements AsyncN
   }
 
   /**
+   * {@inheritDoc}
+   *
+   * <p>The client is active if the session through which it is reached is still open.
+   *
+   * @since 2.6.0
+   */
+  @Override
+  boolean isClientActive(String clientNodeId, String sessionId) {
+    return sessionId != null && sessionManagers.containsKey(sessionId);
+  }
+
+  /**
    * Check if the session is active and get the associated session manager.
    *
    * @param sessionId The session id (must be not empty).
